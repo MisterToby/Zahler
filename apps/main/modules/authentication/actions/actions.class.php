@@ -17,6 +17,12 @@ class authenticationActions extends sfActions
 	 */
 	public function executeIndex(sfWebRequest $request)
 	{
-		 
+			
+	}
+	public function executeAuthenticate() {
+		$response = array();
+		$response['success'] = true;
+		$response['msg'] = 'Successful authentication';
+		return $this->renderText(json_encode($response));
 	}
 }

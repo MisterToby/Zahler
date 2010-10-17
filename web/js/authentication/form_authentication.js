@@ -129,19 +129,14 @@ function login_autenticar(){
         success: function(response, action){
             obj = Ext.util.JSON.decode(response.responseText);
             if (obj.success) {
-                // Perfil 'Prestador'
-                if (obj.mensaje == '2') {
-                    window.location = getAbsoluteUrl('periodoprestadorservicio', 'index');
-                }
+                window.location = getAbsoluteUrl('workspace', 'index');
             }
-            else 
-                if (obj.success == false) {
-                    Ext.example.msg('Error', obj.errors.reason);
-                }
+            else {
+                Ext.Msg.alert('Error', obj.msg);
+            }
         },
         failure: function(response){
-            var result = response.responseText;
-            Ext.example.msg('Error', 'no se pudo conectar a la base de datos intente mas tarde');
+            Ext.Msg.alert('Error', 'It was not possible to establish a connection to the server. Try again later');
         }
     });
 }
