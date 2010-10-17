@@ -9,6 +9,11 @@
     <?php include_javascripts() ?>
   </head>
   <body>
+  <script>
+  <?php require_once '../config/generalVariables.php'; ?>
+  var webUrlFolder = '<?php echo $webUrlFolder ?>';
+  var urlPrefix = '<?php echo url_for('default/index'); ?>';
+  </script>
     <?php echo $sf_content ?>
   </body>
 </html>
