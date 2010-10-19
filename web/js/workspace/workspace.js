@@ -10,7 +10,8 @@ var workspace = function(){
             tabTip: 'Assets management',
             style: 'padding: 10px;',
             items: [{
-                frame: true,
+                frame: true
+                //                ,
                 //                autoLoad: {
                 //                    url: webUrlFolder + 'assets',
                 //                    scripts: true,
@@ -205,7 +206,18 @@ var workspace = function(){
         text: 'Logout',
         renderTo: 'logout_button',
         handler: function(){
-            window.location = getAbsoluteUrl('authentication', 'index');
+            Ext.Ajax.request({
+                url: getAbsoluteUrl('authentication', 'logOut'),
+                success: function(response, action){
+                    obj = Ext.util.JSON.decode(response.responseText);
+                    if (obj.success) {
+                        window.location = getAbsoluteUrl('authentication', 'index');
+                    }
+                },
+                failure: function(response){
+                    Ext.Msg.alert('Error', 'It was not possible to establish a connection to the server. Try again later');
+                }
+            });
         }
     });
 };

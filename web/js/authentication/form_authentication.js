@@ -34,9 +34,9 @@ var login_panel = new Ext.form.FormPanel({
         },
         emptyText: 'User name',
         anchor: '100%',
-        id: 'usu_login',
-        name: 'usu_login',
-        maxLength: 30,
+        id: 'user_name',
+        name: 'user_name',
+        maxLength: 20,
         minLength: 4,
         vtype: 'alphanum',
         allowBlank: false,
@@ -68,13 +68,13 @@ var login_panel = new Ext.form.FormPanel({
         minLength: 4,
         emptyText: 'Contraseña',
         anchor: '100%',
-        id: 'usu_clave',
-        name: 'usu_clave',
+        id: 'password',
+        name: 'password',
         allowBlank: false,
         listeners: {
             specialkey: function(field, e){
                 if (e.getKey() == e.ENTER) {
-                    if (Ext.getCmp('usu_login').isValid() && Ext.getCmp('usu_clave').isValid()) {
+                    if (Ext.getCmp('user_name').isValid() && Ext.getCmp('password').isValid()) {
                         login_autenticar();
                     }
                     else {
@@ -123,8 +123,8 @@ function login_autenticar(){
         waitMsg: 'Espere por favor',
         url: getAbsoluteUrl('authentication', 'authenticate'),
         params: {
-            usu_login: Ext.getCmp('usu_login').getValue(),
-            usu_clave_encriptada: Ext.getCmp('usu_clave').getValue()
+            user_name: Ext.getCmp('user_name').getValue(),
+            password: Ext.getCmp('password').getValue()
         },
         success: function(response, action){
             obj = Ext.util.JSON.decode(response.responseText);

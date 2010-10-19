@@ -1,0 +1,8 @@
+propel:
+  _attributes:
+    package: lib.model
+    defaultIdMethod: native
+  system_user:
+    _attributes: { phpName: User }
+    sus_user_name: { type: VARCHAR, size: 20, required: true, unique: true, primaryKey: true }
+    sus_password: { type: VARCHAR, size: 40, required: true, unique: true }
