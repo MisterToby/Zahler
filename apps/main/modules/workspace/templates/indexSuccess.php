@@ -4,7 +4,9 @@
 <?php echo javascript_include_tag( 'extjs/ux/BubblePanel.js') ?>
 <?php echo javascript_include_tag( 'extjs/ux/GroupTab.js') ?>
 <?php echo javascript_include_tag( 'extjs/ux/GroupTabPanel.js') ?>
+<?php echo javascript_include_tag( 'extjs/ux/RowEditor.js') ?>
 <?php echo javascript_include_tag( 'workspace/workspace.js') ?>
+<?php echo javascript_include_tag( 'workspace/register.js') ?>
 <script type="text/javascript">
 Ext.onReady(workspace);
 </script>

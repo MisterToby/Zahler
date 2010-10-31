@@ -10,75 +10,13 @@ var workspace = function(){
             tabTip: 'Assets management',
             style: 'padding: 10px;',
             items: [{
-                frame: true
-                //                ,
-                //                autoLoad: {
-                //                    url: webUrlFolder + 'assets',
-                //                    scripts: true,
-                //                    scope: this
-                //                }
+                frame: true,
+                autoWidth: true,
+                layout: 'form',
+                padding: '10px 10px 10px 10px',
+                items: [generateRegister(ASSETS_ACCOUNT)]
             }]
-        } //        , {
-        //            title: 'Informaci&oacute;n Financiera',
-        //            id: 'acueducto_financiera',
-        //            iconCls: 'x-icon-templates',
-        //            tabTip: 'Informaci&oacute;n Financiera',
-        //            style: 'padding: 10px; ',
-        //            items: [{
-        //                frame: true,
-        //                autoLoad: {
-        //                    url: webUrlFolder + 'acueducto_administrativafinanciera',
-        //                    scripts: true,
-        //                    scope: this
-        //                }
-        //            }]
-        //        }, {
-        //            title: 'Informaci&oacute;n Comercial',
-        //            iconCls: 'x-icon-templates',
-        //            id: 'acueducto_comercial',
-        //            tabTip: 'Informaci&oacute;n Comercial',
-        //            style: 'padding: 10px;',
-        //            items: [{
-        //                autoScroll: true,
-        //                frame: true,
-        //                autoLoad: {
-        //                    url: webUrlFolder + 'acueducto_comercial',
-        //                    scripts: true,
-        //                    scope: this
-        //                }
-        //            }]
-        //        }, {
-        //            title: 'T&eacute;cnico-Operativa',
-        //            iconCls: 'x-icon-templates',
-        //            id: 'acueducto_tecnicooperativa',
-        //            tabTip: 'Informaci&oacute;n <br/>T&eacute;cnico-Operativa',
-        //            style: 'padding: 10px;',
-        //            items: [{
-        //                autoScroll: true,
-        //                frame: true,
-        //                autoLoad: {
-        //                    url: webUrlFolder + 'acueducto_tecnicooperativa',
-        //                    scripts: true,
-        //                    scope: this
-        //                }
-        //            }]
-        //        }, {
-        //            title: 'Microcuencas',
-        //            iconCls: 'x-icon-templates',
-        //            id: 'acueducto_microcuenca',
-        //            tabTip: 'Microcuencas',
-        //            style: 'padding: 10px;',
-        //            items: [{
-        //                autoScroll: true,
-        //                frame: true,
-        //                autoLoad: {
-        //                    url: webUrlFolder + 'acueducto_microcuencasporperiodoporprestadorservicio',
-        //                    scripts: true,
-        //                    scope: this
-        //                }
-        //            }]
-        //        }
-        ],
+        }],
         listeners: {
             'activate': function(){
                 this.setActiveTab(0);
@@ -98,32 +36,10 @@ var workspace = function(){
             style: 'padding: 10px;',
             items: [{
                 frame: true,
-                //                autoLoad: {
-                //                    url: webUrlFolder + 'assets',
-                //                    scripts: true,
-                //                    scope: this
-                //                }
-            }]
-        }]
-    });
-    
-    var income_grouptab = new Ext.ux.GroupTab({
-        id: 'income',
-        expanded: true,
-        border: false,
-        items: [{
-            title: 'Income',
-            id: 'income_general',
-            iconCls: 'x-icon-configuration',
-            tabTip: 'Income management',
-            style: 'padding: 10px;',
-            items: [{
-                frame: true,
-                //                autoLoad: {
-                //                    url: webUrlFolder + 'assets',
-                //                    scripts: true,
-                //                    scope: this
-                //                }
+                autoWidth: true,
+                layout: 'form',
+                padding: '10px 10px 10px 10px',
+                items: [generateRegister(EQUITY_ACCOUNT)]
             }]
         }]
     });
@@ -140,11 +56,30 @@ var workspace = function(){
             style: 'padding: 10px;',
             items: [{
                 frame: true,
-                //                autoLoad: {
-                //                    url: webUrlFolder + 'assets',
-                //                    scripts: true,
-                //                    scope: this
-                //                }
+                autoWidth: true,
+                layout: 'form',
+                padding: '10px 10px 10px 10px',
+                items: [generateRegister(EXPENSES_ACCOUNT)]
+            }]
+        }]
+    });
+    
+    var income_grouptab = new Ext.ux.GroupTab({
+        id: 'income',
+        expanded: true,
+        border: false,
+        items: [{
+            title: 'Income',
+            id: 'income_general',
+            iconCls: 'x-icon-configuration',
+            tabTip: 'Income management',
+            style: 'padding: 10px;',
+            items: [{
+                frame: true,
+                autoWidth: true,
+                layout: 'form',
+                padding: '10px 10px 10px 10px',
+                items: [generateRegister(INCOME_ACCOUNT)]
             }]
         }]
     });
@@ -161,11 +96,10 @@ var workspace = function(){
             style: 'padding: 10px;',
             items: [{
                 frame: true,
-                //                autoLoad: {
-                //                    url: webUrlFolder + 'assets',
-                //                    scripts: true,
-                //                    scope: this
-                //                }
+                autoWidth: true,
+                layout: 'form',
+                padding: '10px 10px 10px 10px',
+                items: [generateRegister(LIABILITIES_ACCOUNT)]
             }]
         }]
     });

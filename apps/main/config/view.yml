@@ -12,9 +12,9 @@ default:
     #language:     en
     #robots:       index, follow
 
-  stylesheets:    [main.css, ../js/extjs/resources/css/ext-all.css, ../js/extjs/resources/css/xtheme-tp.css]
+  stylesheets:    [main.css, ../js/extjs/resources/css/ext-all.css]
 
-  javascripts:    [extjs/adapter/ext/ext-base.js, extjs/ext-all-debug.js, generalFunctions.js]
+  javascripts:    [extjs/adapter/ext/ext-base.js, extjs/ext-all-debug.js, generalFunctions.js, generalVariables.js]
 
   has_layout:     true
   layout:         layout
