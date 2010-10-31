@@ -10,6 +10,19 @@
  */
 class accountActions extends sfActions
 {
+	public function executeCreate(sfWebRequest $request) {
+		try {
+			$account = new Account();
+			$account->setAccName($request->getParameter('account_name'));
+			$account->setAccActId($request->getParameter('account_type'));
+			$account->setAccDebit(0);
+			$account->setAccCredit(0);
+			$account->save();
+		} catch(Exception $e) {
+			return $this->renderText($e);
+		}
+		return $this->renderText('ok');
+	}
 	public function executeGetAccountList(sfWebRequest $request) {
 		$criteria = new Criteria();
 		if($request->hasParameter('account_type')) {
@@ -22,7 +35,7 @@ class accountActions extends sfActions
 
 		foreach($accounts as $account) {
 			$fields = array();
-				
+
 			$fields['account_id'] = $account->getAccId();
 			$fields['account_name'] = $account->getAccName();
 

@@ -161,7 +161,41 @@ var generateRegister = function(accountType){
         height: 400,
         autoWidth: true,
         layout: 'form',
-        items: [combobox, {
+        items: [{
+            layout: 'column',
+            items: [{
+                layout: 'form',
+                width: 350,
+                items: [combobox]
+            }, {
+                layout: 'form',
+                bodyStyle: 'padding-left: 10px;',
+                items: [{
+                    xtype: 'button',
+                    text: 'Add',
+                    width: 80,
+                    handler: function(){
+                        Ext.Msg.prompt('Create account', "Input the account's name", function(idButton, text){
+                            if (idButton = 'ok' && text != '') {
+                                Ext.Ajax.request({
+                                    url: getAbsoluteUrl('account', 'create'),
+                                    params: {
+                                        'account_name': text,
+                                        'account_type': accountType
+                                    },
+                                    success: function(response){
+                                        if (response.responseText == 'ok') {
+                                            accounts_datastore.load();
+                                            alert('Account created');
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }]
+            }]
+        }, {
             layout: 'form',
             bodyStyle: 'padding-top: 10px;',
             items: [gridpanel],
