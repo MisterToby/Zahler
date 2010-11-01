@@ -19,7 +19,7 @@ var generateRegister = function(accountType){
             name: 'description',
             type: 'string'
         }, {
-            name: 'transfer',
+            name: 'target_account_id',
             type: 'string'
         }, {
             name: 'debit',
@@ -28,95 +28,6 @@ var generateRegister = function(accountType){
             name: 'credit',
             type: 'string'
         }])
-    });
-    
-    var roweditor = new Ext.ux.grid.RowEditor({
-        saveText: 'Save',
-        cancelText: 'Cancel',
-        listeners: {
-            'afteredit': function(){
-                //                registro = acu_tanque_almacenamiento_gridpanel.getSelectionModel().getSelected();
-                //                Ext.Ajax.request({
-                //                    url: getAbsoluteUrl('acueducto_tanque_almacenamiento', 'actualizarTanque'),
-                //                    failure: function(){
-                //                        acu_tanque_almacenamiento_datastore.load();
-                //                    },
-                //                    params: {
-                //                        tan_id: registro.get('tan_id'),
-                //                        tan_volumen: registro.get('tan_volumen'),
-                //                        tan_estado_id: registro.get('tan_estado_id'),
-                //                        tan_bypass_directo_red: registro.get('tan_bypass_directo_red'),
-                //                        tan_presencia_valvula_control: registro.get('tan_presencia_valvula_control'),
-                //                        tan_proteccion_tapa: registro.get('tan_proteccion_tapa'),
-                //                        tan_cerramiento_lote: registro.get('tan_cerramiento_lote'),
-                //                        tan_ventosa_salida: registro.get('tan_ventosa_salida'),
-                //                        tan_macro_medidor: registro.get('tan_macro_medidor')
-                //                    }
-                //                });
-            },
-            'canceledit': function(){
-                //                acu_tanque_almacenamiento_datastore.load();
-            }
-        }
-    });
-    
-    var gridpanel = new Ext.grid.GridPanel({
-        store: datastore,
-        frame: true,
-        plugins: [roweditor],
-        border: false,
-        selModel: new Ext.grid.RowSelectionModel({
-            singleSelect: true
-        }),
-        columns: [{
-            header: 'Id',
-            width: 110,
-            dataIndex: 'id'
-        }, {
-            id: 'date',
-            header: "Date",
-            width: 80,
-            dataIndex: 'date',
-            editor: new Ext.form.DateField({
-                emptyText: false
-            })
-        }, {
-            header: 'Reference',
-            width: 95,
-            dataIndex: 'reference',
-            editor: new Ext.form.TextField({})
-        }, {
-            header: 'Description',
-            width: 180,
-            dataIndex: 'description',
-            editor: new Ext.form.TextField({})
-        }, {
-            header: 'Transfer',
-            width: 200,
-            dataIndex: 'transfer',
-            editor: new Ext.form.ComboBox({
-                allowBlank: false
-            })
-        }, {
-            header: 'Debit',
-            width: 110,
-            dataIndex: 'debit',
-            editor: new Ext.form.NumberField({
-                allowBlank: false
-            })
-        }, {
-            header: 'Credit',
-            width: 110,
-            dataIndex: 'credit',
-            editor: new Ext.form.NumberField({
-                allowBlank: false
-            })
-        }],
-        width: '100%',
-        height: 240,
-        wrap: true,
-        stripeRows: true,
-        clicksToEdit: 1
     });
     
     var accounts_datastore = new Ext.data.Store({
@@ -142,19 +53,129 @@ var generateRegister = function(accountType){
     
     var combobox = new Ext.form.ComboBox({
         fieldLabel: 'Account',
+        id: 'accounts_combobox',
         store: accounts_datastore,
         displayField: 'account_name',
         valueField: 'account_id',
         mode: 'local',
+        forceSelection: true,
         listeners: {
             select: function(){
                 datastore.load({
                     params: {
                         account_id: combobox.getValue()
+                    },
+                    callback: function(){
+                        gridpanel.enable();
                     }
                 });
             }
         }
+    });
+    
+    var roweditor = new Ext.ux.grid.RowEditor({
+        saveText: 'Save',
+        cancelText: 'Cancel',
+        listeners: {
+            'afteredit': function(){
+                var record = gridpanel.getSelectionModel().getSelected();
+                var accountId = combobox.getValue();
+                Ext.Ajax.request({
+                    url: getAbsoluteUrl('transaction', 'create'),
+                    failure: function(){
+                        datastore.load({
+                            params: {
+                                account_id: accountId
+                            }
+                        });
+                    },
+                    params: {
+                        date: record.get('date'),
+                        reference: record.get('reference'),
+                        description: record.get('description'),
+                        'account1_id': combobox.getValue(),
+                        'account2_id': record.get('target_account_id'),
+                        debit: record.get('debit'),
+                        credit: record.get('credit')
+                    }
+                });
+            },
+            'canceledit': function(){
+                var accountId = combobox.getValue();
+                datastore.load({
+                    params: {
+                        account_id: accountId
+                    }
+                });
+            }
+        }
+    });
+    
+    var gridpanel = new Ext.grid.GridPanel({
+        store: datastore,
+        frame: true,
+        plugins: [roweditor],
+        border: false,
+        disabled: true,
+        selModel: new Ext.grid.RowSelectionModel({
+            singleSelect: true
+        }),
+        columns: [{
+            header: 'Id',
+            width: 110,
+            dataIndex: 'id'
+        }, {
+            id: 'date',
+            header: "Date",
+            width: 90,
+            dataIndex: 'date',
+            renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+            editor: new Ext.form.DateField({
+                format: 'd-m-Y',
+                allowBlank: false
+            })
+        }, {
+            header: 'Reference',
+            width: 95,
+            dataIndex: 'reference',
+            editor: new Ext.form.TextField({})
+        }, {
+            header: 'Description',
+            width: 180,
+            dataIndex: 'description',
+            editor: new Ext.form.TextField({})
+        }, {
+            header: 'Transfer',
+            width: 200,
+            dataIndex: 'target_account_id',
+            editor: new Ext.form.ComboBox({
+                store: accounts_datastore,
+                displayField: 'account_name',
+                valueField: 'account_id',
+                mode: 'local',
+                forceSelection: true,
+                allowBlank: false
+            })
+        }, {
+            header: 'Debit',
+            width: 110,
+            dataIndex: 'debit',
+            editor: new Ext.form.NumberField({
+                allowBlank: false
+            })
+        }, {
+            header: 'Credit',
+            width: 110,
+            dataIndex: 'credit',
+            editor: new Ext.form.NumberField({
+                allowBlank: false
+            })
+        }],
+        width: '100%',
+        height: 240,
+        wrap: true,
+        stripeRows: true,
+        clicksToEdit: 1
     });
     
     return {
@@ -208,7 +229,7 @@ var generateRegister = function(accountType){
                         'date': '',
                         'reference': '',
                         'description': '',
-                        'transfer': '',
+                        'target_account_id': '',
                         'debit': '',
                         'credit': '',
                         'balance': ''

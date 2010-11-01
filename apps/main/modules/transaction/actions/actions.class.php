@@ -10,14 +10,37 @@
  */
 class transactionActions extends sfActions
 {
+	public function executeCreate(sfWebRequest $request) {
+		try {
+			$transaction = new Transaction();
+			$transaction->setAtrDate($request->getParameter('date'));
+			$transaction->setAtrReference($request->getParameter('reference'));
+			$transaction->setAtrDescription($request->getParameter('description'));
+
+			$entry1 = new Entry();
+			$entry1->setAceAccId($request->getParameter('account1_id'));
+			$entry1->setAceDebit($request->getParameter('debit'));
+			$entry1->setAceCredit($request->getParameter('credit'));
+
+			$entry2 = new Entry();
+			$entry2->setAceAccId($request->getParameter('account2_id'));
+			$entry2->setAceDebit($request->getParameter('debit'));
+			$entry2->setAceCredit($request->getParameter('credit'));
+
+			$transaction->addEntry($entry1);
+			$transaction->addEntry($entry2);
+
+			$transaction->save();
+		} catch(Exception $e) {
+			return $this->renderText($e);
+		}
+		return $this->renderText('ok');
+	}
 	public function executeGetTransactionList(sfWebRequest $request) {
 		$criteria = new Criteria();
 		if($request->hasParameter('account_id')) {
-			$accountId = $request->hasParameter('account_id');
-			$criterion1 = $criteria->getNewCriterion(TransactionPeer::ATR_ACC_ID_SOURCE, $accountId, Criteria::EQUAL);
-			$criteria->addOr($criterion1);
-			$criterion2 = $criteria->getNewCriterion(TransactionPeer::ATR_ACC_ID_TARGET, $accountId, Criteria::EQUAL);
-			$criteria->addOr($criterion2);
+			$criteria->addJoin(TransactionPeer::ATR_ID, EntryPeer::ACE_ATR_ID);
+			$criteria->add(EntryPeer::ACE_ACC_ID, $request->getParameter('account_id'));
 		}
 		$transactions = TransactionPeer::doSelect($criteria);
 
@@ -27,8 +50,12 @@ class transactionActions extends sfActions
 		foreach($transactions as $transaction) {
 			$fields = array();
 
-			$fields['id'] = $transaction->setTraId();
-			$fields['description'] = $transaction->setTraDescription();
+			//			$transaction = new Transaction();
+
+			$fields['id'] = $transaction->getAtrId();
+			$fields['date'] = $transaction->getAtrDate();
+			$fields['reference'] = $transaction->getAtrReference();
+			$fields['description'] = $transaction->getAtrDescription();
 
 			$data[] = $fields;
 		}

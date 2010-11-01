@@ -17,13 +17,18 @@ propel:
     _attributes: { phpName: AccountType }
     act_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
     act_name: { type: VARCHAR, size: 20, required: true, unique: true }
+  account_entry:
+    _attributes: { phpName: Entry }
+    ace_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
+    ace_acc_id: { type: INTEGER, required: true, foreignTable: account, foreignReference: acc_id }
+    ace_atr_id: { type: INTEGER, required: true, foreignTable: account_transaction, foreignReference: atr_id }
+    ace_debit: { type: REAL, required: true }
+    ace_credit: { type: REAL, required: true }
   account_transaction:
     _attributes: { phpName: Transaction }
     atr_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
     atr_date: { type: DATE, required: true }
-    atr_acc_id_source: { type: INTEGER, required: true, foreignTable: account, foreignReference: acc_id }
-    atr_acc_id_target: { type: INTEGER, required: true, foreignTable: account, foreignReference: acc_id }
-    atr_value: { type: REAL, required: true }
     atr_reference: { type: VARCHAR, size: 20, required: true }
     atr_description: { type: VARCHAR, size: 255, required: true }
+    
     
