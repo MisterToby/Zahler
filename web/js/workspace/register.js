@@ -11,7 +11,8 @@ var generateRegister = function(accountType){
             type: 'string'
         }, {
             name: 'date',
-            type: 'string'
+            type: 'date',
+            dateFormat: 'd-m-Y'
         }, {
             name: 'reference',
             type: 'string'
@@ -19,7 +20,7 @@ var generateRegister = function(accountType){
             name: 'description',
             type: 'string'
         }, {
-            name: 'target_account_id',
+            name: 'to_from_account_id',
             type: 'string'
         }, {
             name: 'debit',
@@ -53,10 +54,10 @@ var generateRegister = function(accountType){
     
     var combobox = new Ext.form.ComboBox({
         fieldLabel: 'Account',
-        id: 'accounts_combobox',
         store: accounts_datastore,
         displayField: 'account_name',
         valueField: 'account_id',
+        triggerAction: 'all',
         mode: 'local',
         forceSelection: true,
         listeners: {
@@ -80,6 +81,19 @@ var generateRegister = function(accountType){
             'afteredit': function(){
                 var record = gridpanel.getSelectionModel().getSelected();
                 var accountId = combobox.getValue();
+                var debit = record.get('debit');
+                var credit = record.get('credit');
+                var value = debit - credit;
+                if (value < 0) {
+                    value = -value;
+                    var toAccountId = record.get('to_from_account_id');
+                    var fromAccountId = accountId;
+                }
+                else {
+                    var toAccountId = accountId;
+                    var fromAccountId = record.get('to_from_account_id');
+                }
+                var date = new Date(record.get('date'));
                 Ext.Ajax.request({
                     url: getAbsoluteUrl('transaction', 'create'),
                     failure: function(){
@@ -89,14 +103,20 @@ var generateRegister = function(accountType){
                             }
                         });
                     },
+                    success: function(){
+                        datastore.load({
+                            params: {
+                                account_id: accountId
+                            }
+                        });
+                    },
                     params: {
-                        date: record.get('date'),
+                        date: date.format('d-m-Y'),
                         reference: record.get('reference'),
                         description: record.get('description'),
-                        'account1_id': combobox.getValue(),
-                        'account2_id': record.get('target_account_id'),
-                        debit: record.get('debit'),
-                        credit: record.get('credit')
+                        'to_account_id': toAccountId,
+                        'from_account_id': fromAccountId,
+                        value: value
                     }
                 });
             },
@@ -125,11 +145,14 @@ var generateRegister = function(accountType){
             width: 110,
             dataIndex: 'id'
         }, {
-            id: 'date',
+            xtype: 'datecolumn',
+            format: 'd-m-Y',
             header: "Date",
             width: 90,
             dataIndex: 'date',
-            renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+            renderer: function(value){
+                return value ? value.dateFormat('d-m-Y') : '';
+            },
             editor: new Ext.form.DateField({
                 format: 'd-m-Y',
                 allowBlank: false
@@ -147,12 +170,23 @@ var generateRegister = function(accountType){
         }, {
             header: 'Transfer',
             width: 200,
-            dataIndex: 'target_account_id',
+            dataIndex: 'to_from_account_id',
+            renderer: function(value){
+                var index = accounts_datastore.find('account_id', value);
+                if (index != -1) {
+                    var record = accounts_datastore.getAt(index);
+                    return record.get('account_name');
+                }
+                else {
+                    return '';
+                }
+            },
             editor: new Ext.form.ComboBox({
                 store: accounts_datastore,
                 displayField: 'account_name',
                 valueField: 'account_id',
                 mode: 'local',
+                triggerAction: 'all',
                 forceSelection: true,
                 allowBlank: false
             })
@@ -243,7 +277,34 @@ var generateRegister = function(accountType){
             }, {
                 text: 'Delete',
                 handler: function(){
-                    alert('Delete');
+                    if (gridpanel.getSelectionModel().hasSelection()) {
+                        var record = gridpanel.getSelectionModel().getSelected();
+                        var selectedTransactionId = record.get('id');
+                        var accountId = combobox.getValue();
+                        Ext.Ajax.request({
+                            url: getAbsoluteUrl('transaction', 'delete'),
+                            failure: function(){
+                                datastore.load({
+                                    params: {
+                                        account_id: accountId
+                                    }
+                                });
+                            },
+                            success: function(){
+                                datastore.load({
+                                    params: {
+                                        account_id: accountId
+                                    }
+                                });
+                            },
+                            params: {
+                                id: selectedTransactionId
+                            }
+                        });
+                    }
+                    else {
+                        alert('Select a transaction first');
+                    }
                 }
             }]
         }]

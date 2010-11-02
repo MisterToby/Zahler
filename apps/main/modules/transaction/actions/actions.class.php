@@ -10,26 +10,26 @@
  */
 class transactionActions extends sfActions
 {
+	public function executeDelete(sfWebRequest $request) {
+		try {
+			$transactionId = $request->getParameter('id');
+			$criteria = new Criteria();
+			$criteria->add(TransactionPeer::ATR_ID, $transactionId);
+			TransactionPeer::doDelete($criteria);
+		} catch(Exception $e) {
+			return $this->renderText($e);
+		}
+		return $this->renderText('ok');
+	}
 	public function executeCreate(sfWebRequest $request) {
 		try {
 			$transaction = new Transaction();
 			$transaction->setAtrDate($request->getParameter('date'));
 			$transaction->setAtrReference($request->getParameter('reference'));
 			$transaction->setAtrDescription($request->getParameter('description'));
-
-			$entry1 = new Entry();
-			$entry1->setAceAccId($request->getParameter('account1_id'));
-			$entry1->setAceDebit($request->getParameter('debit'));
-			$entry1->setAceCredit($request->getParameter('credit'));
-
-			$entry2 = new Entry();
-			$entry2->setAceAccId($request->getParameter('account2_id'));
-			$entry2->setAceDebit($request->getParameter('debit'));
-			$entry2->setAceCredit($request->getParameter('credit'));
-
-			$transaction->addEntry($entry1);
-			$transaction->addEntry($entry2);
-
+			$transaction->setAtrValue($request->getParameter('value'));
+			$transaction->setAtrAccIdDebit($request->getParameter('to_account_id'));
+			$transaction->setAtrAccIdCredit($request->getParameter('from_account_id'));
 			$transaction->save();
 		} catch(Exception $e) {
 			return $this->renderText($e);
@@ -37,11 +37,20 @@ class transactionActions extends sfActions
 		return $this->renderText('ok');
 	}
 	public function executeGetTransactionList(sfWebRequest $request) {
+		$accountId = $request->getParameter('account_id');
+
 		$criteria = new Criteria();
-		if($request->hasParameter('account_id')) {
-			$criteria->addJoin(TransactionPeer::ATR_ID, EntryPeer::ACE_ATR_ID);
-			$criteria->add(EntryPeer::ACE_ACC_ID, $request->getParameter('account_id'));
-		}
+
+		$criterion1 = $criteria->getNewCriterion(TransactionPeer::ATR_ACC_ID_DEBIT, $accountId, Criteria::EQUAL);
+		$criterion2 = $criteria->getNewCriterion(TransactionPeer::ATR_ACC_ID_CREDIT, $accountId, Criteria::EQUAL);
+		$criterion1->addOr($criterion2);
+		$criteria->add($criterion1);
+
+		//		$criteria->add(TransactionPeer::ATR_ACC_ID_DEBIT, $accountId);
+		//		$criteria->addOr(TransactionPeer::ATR_ACC_ID_DEBIT, $accountId);
+		//		$criteria->add(TransactionPeer::ATR_ACC_ID_CREDIT, $accountId);
+		//		$criteria->addOr(TransactionPeer::ATR_ACC_ID_CREDIT, $accountId);
+
 		$transactions = TransactionPeer::doSelect($criteria);
 
 		$result = array();
@@ -50,12 +59,22 @@ class transactionActions extends sfActions
 		foreach($transactions as $transaction) {
 			$fields = array();
 
-			//			$transaction = new Transaction();
+			//						$transaction = new Transaction();
 
 			$fields['id'] = $transaction->getAtrId();
-			$fields['date'] = $transaction->getAtrDate();
+			$fields['date'] = $transaction->getAtrDate('d-m-Y');
 			$fields['reference'] = $transaction->getAtrReference();
 			$fields['description'] = $transaction->getAtrDescription();
+			if($transaction->getAtrAccIdDebit()==$accountId) {
+				$fields['debit'] = $transaction->getAtrValue();
+				$fields['credit'] = 0;
+				$fields['to_from_account_id'] = $transaction->getAtrAccIdCredit();
+			}
+			else {
+				$fields['credit'] = $transaction->getAtrValue();
+				$fields['debit'] = 0;
+				$fields['to_from_account_id'] = $transaction->getAtrAccIdDebit();
+			}
 
 			$data[] = $fields;
 		}

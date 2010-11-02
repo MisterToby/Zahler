@@ -1,14 +1,14 @@
-AccountType:
-  AccountType_1:
-    act_name: ASSETS
-  AccountType_2:
-    act_name: EQUITY
-  AccountType_3:
-    act_name: EXPENSES
-  AccountType_4:
-    act_name: INCOME
-  AccountType_5:
-    act_name: LIABILITIES
+#AccountType:
+#  AccountType_1:
+#    act_name: ASSETS
+#  AccountType_2:
+#    act_name: EQUITY
+#  AccountType_3:
+#    act_name: EXPENSES
+#  AccountType_4:
+#    act_name: INCOME
+#  AccountType_5:
+#    act_name: LIABILITIES
 User:
   User_pedroabp:
     sus_user_name: pedroabp

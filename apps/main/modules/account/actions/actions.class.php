@@ -14,9 +14,7 @@ class accountActions extends sfActions
 		try {
 			$account = new Account();
 			$account->setAccName($request->getParameter('account_name'));
-			$account->setAccActId($request->getParameter('account_type'));
-			$account->setAccDebit(0);
-			$account->setAccCredit(0);
+			$account->setAccType($request->getParameter('account_type'));
 			$account->save();
 		} catch(Exception $e) {
 			return $this->renderText($e);
@@ -26,7 +24,7 @@ class accountActions extends sfActions
 	public function executeGetAccountList(sfWebRequest $request) {
 		$criteria = new Criteria();
 		if($request->hasParameter('account_type')) {
-			$criteria->add(AccountPeer::ACC_ACT_ID, $request->getParameter('account_type'));
+			$criteria->add(AccountPeer::ACC_TYPE, $request->getParameter('account_type'));
 		}
 		$accounts = AccountPeer::doSelect($criteria);
 
