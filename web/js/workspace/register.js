@@ -55,6 +55,42 @@ var generateRegister = function(accountType){
     
     accounts_datastore.load();
     
+    var all_accounts_datastore = new Ext.data.Store({
+        proxy: new Ext.data.HttpProxy({
+            url: getAbsoluteUrl('account', 'getAccountList'),
+            method: 'POST'
+        }),
+        reader: new Ext.data.JsonReader({
+            root: 'data',
+        }, [{
+            name: 'account_id',
+            type: 'integer'
+        }, {
+            name: 'account_name',
+            type: 'string'
+        }])
+    });
+    
+    all_accounts_datastore.load();
+    
+    var categorized_accounts_datastore = new Ext.data.Store({
+        proxy: new Ext.data.HttpProxy({
+            url: getAbsoluteUrl('account', 'getCategorizedAccountList'),
+            method: 'POST'
+        }),
+        reader: new Ext.data.JsonReader({
+            root: 'data',
+        }, [{
+            name: 'account_id',
+            type: 'integer'
+        }, {
+            name: 'account_name',
+            type: 'string'
+        }])
+    });
+    
+    categorized_accounts_datastore.load();
+    
     var combobox = new Ext.form.ComboBox({
         fieldLabel: 'Account',
         store: accounts_datastore,
@@ -80,6 +116,13 @@ var generateRegister = function(accountType){
     var roweditor = new Ext.ux.grid.RowEditor({
         saveText: 'Save',
         cancelText: 'Cancel',
+        errorSummary: false,
+        onKey: function(f, e){
+            if (e.getKey() === e.ENTER && this.isValid()) {
+                this.stopEditing(true);
+                e.stopPropagation();
+            }
+        },
         listeners: {
             'afteredit': function(){
                 var record = gridpanel.getSelectionModel().getSelected();
@@ -175,9 +218,9 @@ var generateRegister = function(accountType){
             width: 200,
             dataIndex: 'to_from_account_id',
             renderer: function(value){
-                var index = accounts_datastore.find('account_id', value);
+                var index = all_accounts_datastore.find('account_id', value);
                 if (index != -1) {
-                    var record = accounts_datastore.getAt(index);
+                    var record = all_accounts_datastore.getAt(index);
                     return record.get('account_name');
                 }
                 else {
@@ -185,7 +228,7 @@ var generateRegister = function(accountType){
                 }
             },
             editor: new Ext.form.ComboBox({
-                store: accounts_datastore,
+                store: categorized_accounts_datastore,
                 displayField: 'account_name',
                 valueField: 'account_id',
                 mode: 'local',
@@ -248,6 +291,8 @@ var generateRegister = function(accountType){
                                     success: function(response){
                                         if (response.responseText == 'ok') {
                                             accounts_datastore.load();
+                                            all_accounts_datastore.load();
+                                            categorized_accounts_datastore.load();
                                             alert('Account created');
                                         }
                                     }
