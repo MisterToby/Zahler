@@ -7,7 +7,7 @@ var generateRegister = function(accountType){
         reader: new Ext.data.JsonReader({
             root: 'data',
         }, [{
-            name: 'id',
+            name: 'transaction_id',
             type: 'string'
         }, {
             name: 'date',
@@ -143,7 +143,7 @@ var generateRegister = function(accountType){
         columns: [{
             header: 'Id',
             width: 110,
-            dataIndex: 'id'
+            dataIndex: 'transaction_id'
         }, {
             xtype: 'datecolumn',
             format: 'd-m-Y',
@@ -259,7 +259,7 @@ var generateRegister = function(accountType){
                 text: 'Add',
                 handler: function(){
                     var row = new gridpanel.store.recordType({
-                        'id': '',
+                        'transaction_id': '',
                         'date': '',
                         'reference': '',
                         'description': '',
@@ -279,7 +279,7 @@ var generateRegister = function(accountType){
                 handler: function(){
                     if (gridpanel.getSelectionModel().hasSelection()) {
                         var record = gridpanel.getSelectionModel().getSelected();
-                        var selectedTransactionId = record.get('id');
+                        var selectedTransactionId = record.get('transaction_id');
                         var accountId = combobox.getValue();
                         Ext.Ajax.request({
                             url: getAbsoluteUrl('transaction', 'delete'),

@@ -46,37 +46,36 @@ class transactionActions extends sfActions
 		$criterion1->addOr($criterion2);
 		$criteria->add($criterion1);
 
-		//		$criteria->add(TransactionPeer::ATR_ACC_ID_DEBIT, $accountId);
-		//		$criteria->addOr(TransactionPeer::ATR_ACC_ID_DEBIT, $accountId);
-		//		$criteria->add(TransactionPeer::ATR_ACC_ID_CREDIT, $accountId);
-		//		$criteria->addOr(TransactionPeer::ATR_ACC_ID_CREDIT, $accountId);
-
 		$transactions = TransactionPeer::doSelect($criteria);
 
 		$result = array();
 		$data = array();
 
 		foreach($transactions as $transaction) {
-			$fields = array();
+			//			$transaction = new Transaction();
 
-			//						$transaction = new Transaction();
-
-			$fields['id'] = $transaction->getAtrId();
-			$fields['date'] = $transaction->getAtrDate('d-m-Y');
-			$fields['reference'] = $transaction->getAtrReference();
-			$fields['description'] = $transaction->getAtrDescription();
 			if($transaction->getAtrAccIdDebit()==$accountId) {
+				$fields = array();
+				$fields['transaction_id'] = $transaction->getAtrId();
+				$fields['date'] = $transaction->getAtrDate('d-m-Y');
+				$fields['reference'] = $transaction->getAtrReference();
+				$fields['description'] = $transaction->getAtrDescription();
 				$fields['debit'] = $transaction->getAtrValue();
 				$fields['credit'] = 0;
 				$fields['to_from_account_id'] = $transaction->getAtrAccIdCredit();
+				$data[] = $fields;
 			}
-			else {
-				$fields['credit'] = $transaction->getAtrValue();
+			if($transaction->getAtrAccIdCredit()==$accountId) {
+				$fields = array();
+				$fields['transaction_id'] = $transaction->getAtrId();
+				$fields['date'] = $transaction->getAtrDate('d-m-Y');
+				$fields['reference'] = $transaction->getAtrReference();
+				$fields['description'] = $transaction->getAtrDescription();
 				$fields['debit'] = 0;
+				$fields['credit'] = $transaction->getAtrValue();
 				$fields['to_from_account_id'] = $transaction->getAtrAccIdDebit();
+				$data[] = $fields;
 			}
-
-			$data[] = $fields;
 		}
 
 		$result['data'] = $data;
