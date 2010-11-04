@@ -1,7 +1,7 @@
 var generateRegister = function(accountType){
     var datastore = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
-            url: getAbsoluteUrl('transaction', 'getTransactionList'),
+            url: getAbsoluteUrl('transaction', 'getListOfEntries'),
             method: 'POST'
         }),
         reader: new Ext.data.JsonReader({
@@ -27,6 +27,9 @@ var generateRegister = function(accountType){
             type: 'string'
         }, {
             name: 'credit',
+            type: 'string'
+        }, {
+            name: 'balance',
             type: 'string'
         }])
     });
@@ -141,7 +144,7 @@ var generateRegister = function(accountType){
             singleSelect: true
         }),
         columns: [{
-            header: 'Id',
+            header: 'Transaction Id',
             width: 110,
             dataIndex: 'transaction_id'
         }, {
@@ -204,6 +207,10 @@ var generateRegister = function(accountType){
             editor: new Ext.form.NumberField({
                 allowBlank: false
             })
+        }, {
+            header: 'Balance',
+            width: 110,
+            dataIndex: 'balance'
         }],
         width: '100%',
         height: 240,
@@ -279,7 +286,7 @@ var generateRegister = function(accountType){
                 handler: function(){
                     if (gridpanel.getSelectionModel().hasSelection()) {
                         var record = gridpanel.getSelectionModel().getSelected();
-                        var selectedTransactionId = record.get('transaction_id');
+                        var selectedTransactionId = record.get('id');
                         var accountId = combobox.getValue();
                         Ext.Ajax.request({
                             url: getAbsoluteUrl('transaction', 'delete'),

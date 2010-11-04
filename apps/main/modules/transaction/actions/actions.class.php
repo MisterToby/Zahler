@@ -36,7 +36,7 @@ class transactionActions extends sfActions
 		}
 		return $this->renderText('ok');
 	}
-	public function executeGetTransactionList(sfWebRequest $request) {
+	public function executeGetListOfEntries(sfWebRequest $request) {
 		$accountId = $request->getParameter('account_id');
 
 		$criteria = new Criteria();
@@ -45,16 +45,27 @@ class transactionActions extends sfActions
 		$criterion2 = $criteria->getNewCriterion(TransactionPeer::ATR_ACC_ID_CREDIT, $accountId, Criteria::EQUAL);
 		$criterion1->addOr($criterion2);
 		$criteria->add($criterion1);
+		$criteria->addAscendingOrderByColumn(TransactionPeer::ATR_DATE);
 
 		$transactions = TransactionPeer::doSelect($criteria);
 
+		$criteria = new Criteria();
+		$criteria->add(AccountPeer::ACC_ID, $accountId);
+		$account = AccountPeer::doSelectOne($criteria);
+		$accountType = $account->getAccType();
+
 		$result = array();
 		$data = array();
+
+		$debit = (double) 0;
+		$credit = (double) 0;
 
 		foreach($transactions as $transaction) {
 			//			$transaction = new Transaction();
 
 			if($transaction->getAtrAccIdDebit()==$accountId) {
+				$debit = $debit + (double) $transaction->getAtrValue();
+
 				$fields = array();
 				$fields['transaction_id'] = $transaction->getAtrId();
 				$fields['date'] = $transaction->getAtrDate('d-m-Y');
@@ -63,9 +74,12 @@ class transactionActions extends sfActions
 				$fields['debit'] = $transaction->getAtrValue();
 				$fields['credit'] = 0;
 				$fields['to_from_account_id'] = $transaction->getAtrAccIdCredit();
+				$fields['balance'] = AccountPeer::calculateBalance($debit, $credit, $accountType);
 				$data[] = $fields;
 			}
 			if($transaction->getAtrAccIdCredit()==$accountId) {
+				$credit = $credit + (double) $transaction->getAtrValue();
+
 				$fields = array();
 				$fields['transaction_id'] = $transaction->getAtrId();
 				$fields['date'] = $transaction->getAtrDate('d-m-Y');
@@ -74,6 +88,7 @@ class transactionActions extends sfActions
 				$fields['debit'] = 0;
 				$fields['credit'] = $transaction->getAtrValue();
 				$fields['to_from_account_id'] = $transaction->getAtrAccIdDebit();
+				$fields['balance'] = AccountPeer::calculateBalance($debit, $credit, $accountType);
 				$data[] = $fields;
 			}
 		}
