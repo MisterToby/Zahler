@@ -157,6 +157,7 @@ var generateRegister = function(accountType){
                         });
                     },
                     params: {
+                        'transaction_id': record.get('transaction_id'),
                         date: date.format('d-m-Y'),
                         reference: record.get('reference'),
                         description: record.get('description'),

@@ -23,7 +23,13 @@ class transactionActions extends sfActions
 	}
 	public function executeCreate(sfWebRequest $request) {
 		try {
-			$transaction = new Transaction();
+			$transaction = null;
+			if($request->getParameter('transaction_id')!='') {
+				$transaction = TransactionPeer::retrieveByPK($request->getParameter('transaction_id'));
+			}
+			else {
+				$transaction = new Transaction();
+			}
 			$transaction->setAtrDate($request->getParameter('date'));
 			$transaction->setAtrReference($request->getParameter('reference'));
 			$transaction->setAtrDescription($request->getParameter('description'));
