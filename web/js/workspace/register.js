@@ -282,7 +282,7 @@ var generateRegister = function(accountType){
                     width: 80,
                     handler: function(){
                         Ext.Msg.prompt('Create account', "Input the account's name", function(idButton, text){
-                            if (idButton = 'ok' && text != '') {
+                            if (idButton == 'ok' && text != '') {
                                 Ext.Ajax.request({
                                     url: getAbsoluteUrl('account', 'create'),
                                     params: {
@@ -300,6 +300,42 @@ var generateRegister = function(accountType){
                                 });
                             }
                         });
+                    }
+                }]
+            }, {
+                layout: 'form',
+                bodyStyle: 'padding-left: 10px;',
+                items: [{
+                    xtype: 'button',
+                    text: 'Delete',
+                    width: 80,
+                    handler: function(){
+                        var accountId = combobox.getValue();
+                        if (accountId != '') {
+                            Ext.Msg.confirm('Delete account', "Are you sure you want to delete ", function(idButton){
+                                if (idButton == 'yes') {
+                                    Ext.Ajax.request({
+                                        url: getAbsoluteUrl('account', 'delete'),
+                                        params: {
+                                            'id': accountId
+                                        },
+                                        success: function(response){
+                                            if (response.responseText == 'ok') {
+                                                gridpanel.disable();
+                                                combobox.setValue('');
+                                                accounts_datastore.load();
+                                                all_accounts_datastore.load();
+                                                categorized_accounts_datastore.load();
+                                                alert('Account deleted');
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            alert('Select an account first');
+                        }
                     }
                 }]
             }]
@@ -332,7 +368,7 @@ var generateRegister = function(accountType){
                 handler: function(){
                     if (gridpanel.getSelectionModel().hasSelection()) {
                         var record = gridpanel.getSelectionModel().getSelected();
-                        var selectedTransactionId = record.get('id');
+                        var selectedTransactionId = record.get('transaction_id');
                         var accountId = combobox.getValue();
                         Ext.Ajax.request({
                             url: getAbsoluteUrl('transaction', 'delete'),

@@ -10,6 +10,17 @@
  */
 class accountActions extends sfActions
 {
+	public function executeDelete(sfWebRequest $request) {
+		try {
+			$accountId = $request->getParameter('id');
+			$criteria = new Criteria();
+			$criteria->add(AccountPeer::ACC_ID, $accountId);
+			AccountPeer::doDelete($criteria);
+		} catch(Exception $e) {
+			return $this->renderText($e);
+		}
+		return $this->renderText('ok');
+	}
 	public function executeGetCategorizedAccountList(sfWebRequest $request) {
 		$criteria = new Criteria();
 		if($request->hasParameter('account_type')) {
