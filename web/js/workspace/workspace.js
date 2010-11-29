@@ -1,107 +1,139 @@
 var workspace = function(){
-    var assets_grouptab = new Ext.ux.GroupTab({
-        id: 'assets',
+    var assets_tab = {
+        title: 'Assets',
+        id: 'assets_general',
+        iconCls: 'x-icon-configuration',
+        tabTip: 'Assets management',
+        style: 'padding: 10px;',
+        items: [{
+            frame: true,
+            autoWidth: true,
+            layout: 'form',
+            padding: '10px 10px 10px 10px',
+            items: [generateRegister(ASSETS_ACCOUNT)]
+        }]
+    };
+    
+    var equity_tab = {
+        title: 'Equity',
+        id: 'equity_general',
+        iconCls: 'x-icon-configuration',
+        tabTip: 'Equity management',
+        style: 'padding: 10px;',
+        items: [{
+            frame: true,
+            autoWidth: true,
+            layout: 'form',
+            padding: '10px 10px 10px 10px',
+            items: [generateRegister(EQUITY_ACCOUNT)]
+        }]
+    };
+    
+    var expenses_tab = {
+        title: 'Expenses',
+        id: 'expenses_general',
+        iconCls: 'x-icon-configuration',
+        tabTip: 'Expenses management',
+        style: 'padding: 10px;',
+        items: [{
+            frame: true,
+            autoWidth: true,
+            layout: 'form',
+            padding: '10px 10px 10px 10px',
+            items: [generateRegister(EXPENSES_ACCOUNT)]
+        }]
+    };
+    
+    var income_tab = {
+        title: 'Income',
+        id: 'income_general',
+        iconCls: 'x-icon-configuration',
+        tabTip: 'Income management',
+        style: 'padding: 10px;',
+        items: [{
+            frame: true,
+            autoWidth: true,
+            layout: 'form',
+            padding: '10px 10px 10px 10px',
+            items: [generateRegister(INCOME_ACCOUNT)]
+        }]
+    };
+    
+    var liabilities_tab = {
+        title: 'Liabilities',
+        id: 'liabilities_general',
+        iconCls: 'x-icon-configuration',
+        tabTip: 'Liabilities management',
+        style: 'padding: 10px;',
+        items: [{
+            frame: true,
+            autoWidth: true,
+            layout: 'form',
+            padding: '10px 10px 10px 10px',
+            items: [generateRegister(LIABILITIES_ACCOUNT)]
+        }]
+    };
+    
+    var accounting_grouptab = new Ext.ux.GroupTab({
+        id: 'accounting',
         expanded: true,
         border: false,
         items: [{
-            title: 'Assets',
-            id: 'assets_general',
-            iconCls: 'x-icon-configuration',
-            tabTip: 'Assets management',
+            title: 'Accounting',
             style: 'padding: 10px;',
             items: [{
                 frame: true,
                 autoWidth: true,
                 layout: 'form',
                 padding: '10px 10px 10px 10px',
-                items: [generateRegister(ASSETS_ACCOUNT)]
+                html: 'Accounting module'
             }]
-        }],
-        listeners: {
-            'activate': function(){
-                this.setActiveTab(0);
-            }
-        }
+        }, assets_tab, equity_tab, expenses_tab, income_tab, liabilities_tab]
     });
     
-    var equity_grouptab = new Ext.ux.GroupTab({
-        id: 'equity',
-        expanded: true,
-        border: false,
+    var annuities_tab = {
+        title: 'Annuities',
+        id: 'annuities_general',
+        iconCls: 'x-icon-configuration',
+        tabTip: 'Annuities management',
+        style: 'padding: 10px;',
         items: [{
-            title: 'Equity',
-            id: 'equity_general',
-            iconCls: 'x-icon-configuration',
-            tabTip: 'Equity management',
-            style: 'padding: 10px;',
-            items: [{
-                frame: true,
-                autoWidth: true,
-                layout: 'form',
-                padding: '10px 10px 10px 10px',
-                items: [generateRegister(EQUITY_ACCOUNT)]
-            }]
+            frame: true,
+            autoWidth: true,
+            layout: 'form',
+            padding: '10px 10px 10px 10px'
         }]
-    });
+    };
     
-    var expenses_grouptab = new Ext.ux.GroupTab({
-        id: 'expenses',
-        expanded: true,
-        border: false,
+    var contacts_tab = {
+        title: 'Contacts',
+        id: 'contacts_general',
+        iconCls: 'x-icon-configuration',
+        tabTip: 'Contacts management',
+        style: 'padding: 10px;',
         items: [{
-            title: 'Expenses',
-            id: 'expenses_general',
-            iconCls: 'x-icon-configuration',
-            tabTip: 'Expenses management',
-            style: 'padding: 10px;',
-            items: [{
-                frame: true,
-                autoWidth: true,
-                layout: 'form',
-                padding: '10px 10px 10px 10px',
-                items: [generateRegister(EXPENSES_ACCOUNT)]
-            }]
+            frame: true,
+            autoWidth: true,
+            layout: 'form',
+            padding: '10px 10px 10px 10px'
         }]
-    });
+    };
     
-    var income_grouptab = new Ext.ux.GroupTab({
-        id: 'income',
+    var business_grouptab = new Ext.ux.GroupTab({
+        id: 'business',
         expanded: true,
         border: false,
         items: [{
-            title: 'Income',
-            id: 'income_general',
-            iconCls: 'x-icon-configuration',
-            tabTip: 'Income management',
+            title: 'Business',
             style: 'padding: 10px;',
             items: [{
                 frame: true,
                 autoWidth: true,
                 layout: 'form',
                 padding: '10px 10px 10px 10px',
-                items: [generateRegister(INCOME_ACCOUNT)]
+                html: 'Business module'
             }]
-        }]
-    });
-    
-    var liabilities_grouptab = new Ext.ux.GroupTab({
-        id: 'liabilities',
-        expanded: true,
-        border: false,
-        items: [{
-            title: 'Liabilities',
-            id: 'liabilities_general',
-            iconCls: 'x-icon-configuration',
-            tabTip: 'Liabilities management',
-            style: 'padding: 10px;',
-            items: [{
-                frame: true,
-                autoWidth: true,
-                layout: 'form',
-                padding: '10px 10px 10px 10px',
-                items: [generateRegister(LIABILITIES_ACCOUNT)]
-            }]
-        }]
+        }, annuities_tab, contacts_tab]
     });
     
     var viewport = new Ext.Viewport({
@@ -124,7 +156,7 @@ var workspace = function(){
             id: 'panel_servicios',
             tabWidth: 170,
             activeGroup: 0,
-            items: [assets_grouptab, equity_grouptab, expenses_grouptab, income_grouptab, liabilities_grouptab]
+            items: [accounting_grouptab, business_grouptab]
         }, {
             frame: true,
             baseCls: 'x-bubble',
