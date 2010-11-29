@@ -20,4 +20,11 @@ propel:
     atr_value: { type: REAL, required: true }
     atr_acc_id_debit: { type: INTEGER, required: true, foreignTable: account, foreignReference: acc_id }
     atr_acc_id_credit: { type: INTEGER, required: true, foreignTable: account, foreignReference: acc_id }
-    
+  contact:
+    _attributes: { phpName: Contact }
+    con_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
+    con_first_name: { type: VARCHAR, size: 50, required: true }
+    con_last_name: { type: VARCHAR, size: 50 }
+    con_email: { type: varchar(320) }
+    con_address: { type: VARCHAR, size: 100 }
+    con_phone_number: { type: VARCHAR, size: 20 }

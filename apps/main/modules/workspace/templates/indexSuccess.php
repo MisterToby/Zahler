@@ -7,6 +7,7 @@
 <?php echo javascript_include_tag( 'extjs/ux/RowEditor.js') ?>
 <?php echo javascript_include_tag( 'workspace/workspace.js') ?>
 <?php echo javascript_include_tag( 'workspace/register.js') ?>
+<?php echo javascript_include_tag( 'workspace/contacts.js') ?>
 <script type="text/javascript">
 Ext.onReady(workspace);
 </script>
