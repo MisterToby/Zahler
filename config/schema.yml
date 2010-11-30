@@ -28,3 +28,11 @@ propel:
     con_email: { type: varchar(320) }
     con_address: { type: VARCHAR, size: 100 }
     con_phone_number: { type: VARCHAR, size: 20 }
+  annuity:
+    _attributes: { phpName: Annuity }
+    ann_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
+    ann_con_id: { type: INTEGER, required: true, foreignTable: contact, foreignReference: con_id }
+    ann_atr_id: { type: INTEGER, required: true, foreignTable: account_transaction, foreignReference: atr_id }
+    ann_interest_rate: { type: REAL, required: true }
+    ann_loan_term: { type: INTEGER, required: true }
+    ann_loan_amount: { type: REAL, required: true }
