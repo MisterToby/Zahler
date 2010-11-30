@@ -10,6 +10,26 @@
  */
 class contactActions extends sfActions
 {
+	public function executeGetListWithFullName(sfWebRequest $request) {
+		$criteria = new Criteria();
+		$criteria->addAscendingOrderByColumn(ContactPeer::CON_LAST_NAME);
+		$contacts = ContactPeer::doSelect($criteria);
+
+		$result = array();
+		$data = array();
+
+		foreach($contacts as $contact) {
+			$fields = array();
+
+			$fields['contact_id'] = $contact->getConId();
+			$fields['contact_name'] = $contact->getConLastName().' '.$contact->getConFirstName();
+
+			$data[] = $fields;
+		}
+
+		$result['data'] = $data;
+		return $this->renderText(json_encode($result));
+	}
 	public function executeCreate(sfWebRequest $request) {
 		try {
 			$contact = null;
