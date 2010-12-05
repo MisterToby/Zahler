@@ -13,6 +13,10 @@ var generateAnnuitiesGrid = function(){
             name: 'contact_id',
             type: 'string'
         }, {
+            name: 'date',
+            type: 'date',
+            dateFormat: 'd-m-Y'
+        }, {
             name: 'transaction_id',
             type: 'string'
         }, {
@@ -24,10 +28,14 @@ var generateAnnuitiesGrid = function(){
         }, {
             name: 'loan_amount',
             type: 'float'
+        }, {
+            name: 'source_account_id',
+            type: 'string'
+        }, {
+            name: 'loans_account_id',
+            type: 'string'
         }])
     });
-    
-    datastore.load();
     
     var roweditor = new Ext.ux.grid.RowEditor({
         saveText: 'Save',
@@ -53,10 +61,12 @@ var generateAnnuitiesGrid = function(){
                     params: {
                         'annuity_id': record.get('annuity_id'),
                         'contact_id': record.get('contact_id'),
-                        'transaction_id': record.get('transaction_id'),
+                        'date': record.get('date'),
                         'interest_rate': record.get('interest_rate'),
                         'loan_term': record.get('loan_term'),
-                        'loan_amount': record.get('loan_amount')
+                        'loan_amount': record.get('loan_amount'),
+                        'source_account_id': record.get('source_account_id'),
+                        'loans_account_id': record.get('loans_account_id')
                     }
                 });
             },
@@ -103,6 +113,9 @@ var generateAnnuitiesGrid = function(){
     assets_accounts_datastore.load({
         params: {
             'account_type': ASSETS_ACCOUNT
+        },
+        callback: function(){
+            datastore.load();
         }
     });
     
@@ -122,6 +135,19 @@ var generateAnnuitiesGrid = function(){
             header: 'Transaction Id',
             width: 110,
             dataIndex: 'transaction_id'
+        }, {
+            xtype: 'datecolumn',
+            format: 'd-m-Y',
+            header: "Date",
+            width: 90,
+            dataIndex: 'date',
+            renderer: function(value){
+                return value ? value.dateFormat('d-m-Y') : '';
+            },
+            editor: new Ext.form.DateField({
+                format: 'd-m-Y',
+                allowBlank: false
+            })
         }, {
             header: 'Contact',
             width: 220,
@@ -190,31 +216,30 @@ var generateAnnuitiesGrid = function(){
                 forceSelection: true,
                 allowBlank: false
             })
-        } //        , {
-        //            header: 'Contact',
-        //            width: 220,
-        //            dataIndex: 'contact_id',
-        //            renderer: function(value){
-        //                var index = contacts_datastore.find('contact_id', value);
-        //                if (index != -1) {
-        //                    var record = contacts_datastore.getAt(index);
-        //                    return record.get('contact_name');
-        //                }
-        //                else {
-        //                    return '';
-        //                }
-        //            },
-        //            editor: new Ext.form.ComboBox({
-        //                store: contacts_datastore,
-        //                displayField: 'contact_name',
-        //                valueField: 'contact_id',
-        //                mode: 'local',
-        //                triggerAction: 'all',
-        //                forceSelection: true,
-        //                allowBlank: false
-        //            })
-        //        }
-        ],
+        }, {
+            header: 'Loans account',
+            width: 220,
+            dataIndex: 'loans_account_id',
+            renderer: function(value){
+                var index = assets_accounts_datastore.find('account_id', value);
+                if (index != -1) {
+                    var record = assets_accounts_datastore.getAt(index);
+                    return record.get('account_name');
+                }
+                else {
+                    return '';
+                }
+            },
+            editor: new Ext.form.ComboBox({
+                store: assets_accounts_datastore,
+                displayField: 'account_name',
+                valueField: 'account_id',
+                mode: 'local',
+                triggerAction: 'all',
+                forceSelection: true,
+                allowBlank: false
+            })
+        }],
         width: '100%',
         height: 240,
         wrap: true,
@@ -237,10 +262,13 @@ var generateAnnuitiesGrid = function(){
                     var row = new gridpanel.store.recordType({
                         'annuity_id': '',
                         'contact_id': '',
+                        'date': '',
                         'transaction_id': '',
                         'interest_rate': '',
                         'loan_term': '',
-                        'loan_amount': ''
+                        'loan_amount': '',
+                        'source_account_id': '',
+                        'loans_account_id': ''
                     });
                     gridpanel.getSelectionModel().clearSelections();
                     roweditor.stopEditing();
@@ -253,7 +281,7 @@ var generateAnnuitiesGrid = function(){
                 handler: function(){
                     if (gridpanel.getSelectionModel().hasSelection()) {
                         var record = gridpanel.getSelectionModel().getSelected();
-                        var selectedContactId = record.get('contact_id');
+                        var selectedAnnuityId = record.get('annuity_id');
                         Ext.Ajax.request({
                             url: getAbsoluteUrl('annuity', 'delete'),
                             failure: function(){
@@ -263,7 +291,7 @@ var generateAnnuitiesGrid = function(){
                                 datastore.load();
                             },
                             params: {
-                                id: selectedContactId
+                                id: selectedAnnuityId
                             }
                         });
                     }
@@ -272,6 +300,10 @@ var generateAnnuitiesGrid = function(){
                     }
                 }
             }]
-        }]
+        }],
+        listeners: {
+            activate: function(){
+            }
+        }
     };
 }

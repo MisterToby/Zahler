@@ -158,7 +158,15 @@ var workspace = function(){
             id: 'panel_servicios',
             tabWidth: 170,
             activeGroup: 0,
-            items: [accounting_grouptab, business_grouptab]
+            items: [accounting_grouptab, business_grouptab],
+            listeners: {
+                tabchange: function(activeTab){
+                    panel = activeTab.activeGroup.activeTab.items.first().items.first();
+                    if (panel) {
+                        panel.fireEvent('activate');
+                    }
+                }
+            }
         }, {
             frame: true,
             baseCls: 'x-bubble',

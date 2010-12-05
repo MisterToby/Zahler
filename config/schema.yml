@@ -35,4 +35,3 @@ propel:
     ann_atr_id: { type: INTEGER, required: true, foreignTable: account_transaction, foreignReference: atr_id }
     ann_interest_rate: { type: REAL, required: true }
     ann_loan_term: { type: INTEGER, required: true }
-    ann_loan_amount: { type: REAL, required: true }
