@@ -177,10 +177,14 @@ var generateLoansGrid = function(){
         }, {
             header: 'Loan amount',
             width: 180,
+            align: 'right',
             dataIndex: 'amount',
             editor: new Ext.form.NumberField({
                 allowBlank: false
-            })
+            }),
+            renderer: function(value){
+                return Ext.util.Format.usMoney(value);
+            }
         }, {
             header: 'Source account',
             width: 220,

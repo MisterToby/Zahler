@@ -77,10 +77,10 @@ class transactionActions extends sfActions
 				$fields['date'] = $transaction->getAtrDate('d-m-Y');
 				$fields['reference'] = $transaction->getAtrReference();
 				$fields['description'] = $transaction->getAtrDescription();
-				$fields['debit'] = $transaction->getAtrValue();
+				$fields['debit'] = round($transaction->getAtrValue(),2);
 				$fields['credit'] = 0;
 				$fields['to_from_account_id'] = $transaction->getAtrAccIdCredit();
-				$fields['balance'] = AccountPeer::calculateBalance($debit, $credit, $accountType);
+				$fields['balance'] = round(AccountPeer::calculateBalance($debit, $credit, $accountType),2);
 				$data[] = $fields;
 			}
 			if($transaction->getAtrAccIdCredit()==$accountId) {
@@ -92,9 +92,9 @@ class transactionActions extends sfActions
 				$fields['reference'] = $transaction->getAtrReference();
 				$fields['description'] = $transaction->getAtrDescription();
 				$fields['debit'] = 0;
-				$fields['credit'] = $transaction->getAtrValue();
+				$fields['credit'] = round($transaction->getAtrValue(),2);
 				$fields['to_from_account_id'] = $transaction->getAtrAccIdDebit();
-				$fields['balance'] = AccountPeer::calculateBalance($debit, $credit, $accountType);
+				$fields['balance'] = round(AccountPeer::calculateBalance($debit, $credit, $accountType),2);
 				$data[] = $fields;
 			}
 		}

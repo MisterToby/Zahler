@@ -240,21 +240,33 @@ var generateRegister = function(accountType){
         }, {
             header: 'Debit',
             width: 110,
+            align: 'right',
             dataIndex: 'debit',
             editor: new Ext.form.NumberField({
                 allowBlank: false
-            })
+            }),
+            renderer: function(value){
+                return Ext.util.Format.usMoney(value);
+            }
         }, {
             header: 'Credit',
             width: 110,
+            align: 'right',
             dataIndex: 'credit',
             editor: new Ext.form.NumberField({
                 allowBlank: false
-            })
+            }),
+            renderer: function(value){
+                return Ext.util.Format.usMoney(value);
+            }
         }, {
             header: 'Balance',
             width: 110,
-            dataIndex: 'balance'
+            align: 'right',
+            dataIndex: 'balance',
+            renderer: function(value){
+                return Ext.util.Format.usMoney(value);
+            }
         }],
         width: '100%',
         height: 240,
