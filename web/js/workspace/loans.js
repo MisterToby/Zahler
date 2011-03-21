@@ -1,13 +1,13 @@
-var generateAnnuitiesGrid = function(){
+var generateLoansGrid = function(){
     var datastore = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
-            url: getAbsoluteUrl('annuity', 'getList'),
+            url: getAbsoluteUrl('loan', 'getList'),
             method: 'POST'
         }),
         reader: new Ext.data.JsonReader({
             root: 'data',
         }, [{
-            name: 'annuity_id',
+            name: 'loan_id',
             type: 'string'
         }, {
             name: 'contact_id',
@@ -23,10 +23,7 @@ var generateAnnuitiesGrid = function(){
             name: 'interest_rate',
             type: 'float'
         }, {
-            name: 'loan_term',
-            type: 'int'
-        }, {
-            name: 'loan_amount',
+            name: 'amount',
             type: 'float'
         }, {
             name: 'source_account_id',
@@ -51,7 +48,7 @@ var generateAnnuitiesGrid = function(){
             'afteredit': function(){
                 var record = gridpanel.getSelectionModel().getSelected();
                 Ext.Ajax.request({
-                    url: getAbsoluteUrl('annuity', 'create'),
+                    url: getAbsoluteUrl('loan', 'create'),
                     failure: function(){
                         datastore.load();
                     },
@@ -59,12 +56,11 @@ var generateAnnuitiesGrid = function(){
                         datastore.load();
                     },
                     params: {
-                        'annuity_id': record.get('annuity_id'),
+                        'loan_id': record.get('loan_id'),
                         'contact_id': record.get('contact_id'),
                         'date': record.get('date'),
                         'interest_rate': record.get('interest_rate'),
-                        'loan_term': record.get('loan_term'),
-                        'loan_amount': record.get('loan_amount'),
+                        'amount': record.get('amount'),
                         'source_account_id': record.get('source_account_id'),
                         'loans_account_id': record.get('loans_account_id')
                     }
@@ -128,9 +124,9 @@ var generateAnnuitiesGrid = function(){
             singleSelect: true
         }),
         columns: [{
-            header: 'Annuity Id',
+            header: 'Loan Id',
             width: 110,
-            dataIndex: 'annuity_id'
+            dataIndex: 'loan_id'
         }, {
             header: 'Transaction Id',
             width: 110,
@@ -179,17 +175,9 @@ var generateAnnuitiesGrid = function(){
                 allowBlank: false
             })
         }, {
-            header: 'Loan term',
-            width: 95,
-            dataIndex: 'loan_term',
-            editor: new Ext.form.NumberField({
-                allowBlank: false,
-                allowDecimals: false
-            })
-        }, {
             header: 'Loan amount',
             width: 180,
-            dataIndex: 'loan_amount',
+            dataIndex: 'amount',
             editor: new Ext.form.NumberField({
                 allowBlank: false
             })
@@ -260,13 +248,12 @@ var generateAnnuitiesGrid = function(){
                 text: 'Add',
                 handler: function(){
                     var row = new gridpanel.store.recordType({
-                        'annuity_id': '',
+                        'loan_id': '',
                         'contact_id': '',
                         'date': '',
                         'transaction_id': '',
                         'interest_rate': '',
-                        'loan_term': '',
-                        'loan_amount': '',
+                        'amount': '',
                         'source_account_id': '',
                         'loans_account_id': ''
                     });
@@ -281,9 +268,9 @@ var generateAnnuitiesGrid = function(){
                 handler: function(){
                     if (gridpanel.getSelectionModel().hasSelection()) {
                         var record = gridpanel.getSelectionModel().getSelected();
-                        var selectedAnnuityId = record.get('annuity_id');
+                        var selectedLoanId = record.get('loan_id');
                         Ext.Ajax.request({
-                            url: getAbsoluteUrl('annuity', 'delete'),
+                            url: getAbsoluteUrl('loan', 'delete'),
                             failure: function(){
                                 datastore.load();
                             },
@@ -291,12 +278,12 @@ var generateAnnuitiesGrid = function(){
                                 datastore.load();
                             },
                             params: {
-                                id: selectedAnnuityId
+                                id: selectedLoanId
                             }
                         });
                     }
                     else {
-                        alert('Select an annuity first');
+                        alert('Select an loan first');
                     }
                 }
             }]

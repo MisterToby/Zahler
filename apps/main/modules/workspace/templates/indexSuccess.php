@@ -8,7 +8,7 @@
 <?php echo javascript_include_tag( 'workspace/workspace.js') ?>
 <?php echo javascript_include_tag( 'workspace/register.js') ?>
 <?php echo javascript_include_tag( 'workspace/contacts.js') ?>
-<?php echo javascript_include_tag( 'workspace/annuities.js') ?>
+<?php echo javascript_include_tag( 'workspace/loans.js') ?>
 <script type="text/javascript">
 Ext.onReady(workspace);
 </script>

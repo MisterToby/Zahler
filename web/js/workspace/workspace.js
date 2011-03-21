@@ -91,18 +91,18 @@ var workspace = function(){
         }, assets_tab, equity_tab, expenses_tab, income_tab, liabilities_tab]
     });
     
-    var annuities_tab = {
-        title: 'Annuities',
-        id: 'annuities_general',
+    var loans_tab = {
+        title: 'Loans',
+        id: 'loans_general',
         iconCls: 'x-icon-configuration',
-        tabTip: 'Annuities management',
+        tabTip: 'Loans management',
         style: 'padding: 10px;',
         items: [{
             frame: true,
             autoWidth: true,
             layout: 'form',
             padding: '10px 10px 10px 10px',
-            items: [generateAnnuitiesGrid()]
+            items: [generateLoansGrid()]
         }]
     };
     
@@ -135,7 +135,7 @@ var workspace = function(){
                 padding: '10px 10px 10px 10px',
                 html: 'Business module'
             }]
-        }, annuities_tab, contacts_tab]
+        }, loans_tab, contacts_tab]
     });
     
     var viewport = new Ext.Viewport({

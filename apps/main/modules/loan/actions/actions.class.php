@@ -8,15 +8,15 @@
  * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class annuityActions extends sfActions
+class loanActions extends sfActions
 {
 	public function executeDelete(sfWebRequest $request) {
 		try {
-			$annuityId = $request->getParameter('id');
-			$annuity = AnnuityPeer::retrieveByPK($annuityId);
-			$transaction = $annuity->getTransaction();
+			$loanId = $request->getParameter('id');
+			$loan = LoanPeer::retrieveByPK($loanId);
+			$transaction = $loan->getTransaction();
 			$transaction->delete();
-			$annuity->delete();
+			$loan->delete();
 		} catch(Exception $e) {
 			return $this->renderText($e);
 		}
@@ -24,14 +24,14 @@ class annuityActions extends sfActions
 	}
 	public function executeCreate(sfWebRequest $request) {
 		try {
-			$annuity = null;
+			$loan = null;
 			$transaction = null;
-			if($request->getParameter('annuity_id')!='') {
-				$annuity = AnnuityPeer::retrieveByPK($request->getParameter('annuity_id'));
-				$transaction = $annuity->getTransaction();
+			if($request->getParameter('loan_id')!='') {
+				$loan = LoanPeer::retrieveByPK($request->getParameter('loan_id'));
+				$transaction = $loan->getTransaction();
 			}
 			else {
-				$annuity = new Annuity();
+				$loan = new Loan();
 				$transaction = new Transaction();
 				$transaction->setAtrReference('');
 				$transaction->setAtrDescription('Loan');
@@ -40,37 +40,37 @@ class annuityActions extends sfActions
 			$transaction->setAtrDate($request->getParameter('date'));
 			$transaction->setAtrAccIdDebit($request->getParameter('loans_account_id'));
 			$transaction->setAtrAccIdCredit($request->getParameter('source_account_id'));
-			$transaction->setAtrValue($request->getParameter('loan_amount'));
+			$transaction->setAtrValue($request->getParameter('amount'));
 
-			$annuity->setAnnConId($request->getParameter('contact_id'));
-			$annuity->setTransaction($transaction);
-			$annuity->setAnnInterestRate($request->getParameter('interest_rate'));
-			$annuity->setAnnLoanTerm($request->getParameter('loan_term'));
-			$annuity->save();
+			$loan->setLoaConId($request->getParameter('contact_id'));
+			$loan->setTransaction($transaction);
+			$loan->setLoaInterestRate($request->getParameter('interest_rate'));
+			$loan->save();
 		} catch(Exception $e) {
 			return $this->renderText($e);
 		}
 		return $this->renderText('ok');
 	}
 	public function executeGetList(sfWebRequest $request) {
-		$annuities = AnnuityPeer::doSelect(new Criteria());
+		$loans = LoanPeer::doSelect(new Criteria());
 
 		$result = array();
 		$data = array();
 
-		foreach($annuities as $annuity) {
+		foreach($loans as $loan) {
 			$fields = array();
 
-			$fields['annuity_id'] = $annuity->getAnnId();
-			$fields['contact_id'] = $annuity->getAnnConId();
-			$fields['transaction_id'] = $annuity->getAnnAtrId();
-			$fields['interest_rate'] = $annuity->getAnnInterestRate();
-			$fields['loan_term'] = $annuity->getAnnLoanTerm();
+			//			$loan = new Loan();
 
-			$transaction = $annuity->getTransaction();
+			$fields['loan_id'] = $loan->getLoaId();
+			$fields['contact_id'] = $loan->getLoaConId();
+			$fields['transaction_id'] = $loan->getLoaAtrId();
+			$fields['interest_rate'] = $loan->getLoaInterestRate();
+
+			$transaction = $loan->getTransaction();
 
 			$fields['date'] = $transaction->getAtrDate('d-m-Y');
-			$fields['loan_amount'] = $transaction->getAtrValue();
+			$fields['amount'] = $transaction->getAtrValue();
 			$fields['source_account_id'] = $transaction->getAtrAccIdCredit();
 			$fields['loans_account_id'] = $transaction->getAtrAccIdDebit();
 
