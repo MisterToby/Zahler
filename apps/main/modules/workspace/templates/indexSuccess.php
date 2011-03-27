@@ -18,7 +18,7 @@ body {
 }
 </style>
 
-
+<div id="floating_window"	class="x-hidden"></div>
 <div id="titulo">
 <div style="float: left; text-align: center;"><font face="arial"
 	size="6" color="#4E79B2">Welcome to Zahler</font></div>
@@ -32,3 +32,4 @@ body {
 </form>
 </div>
 </div>
+<div></div>

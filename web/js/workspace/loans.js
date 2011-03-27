@@ -239,6 +239,195 @@ var generateLoansGrid = function(){
         clicksToEdit: 1
     });
     
+    var payments_made_datastore = new Ext.data.Store({
+        proxy: new Ext.data.HttpProxy({
+            url: getAbsoluteUrl('loan', 'getPaymentsList'),
+            method: 'POST'
+        }),
+        reader: new Ext.data.JsonReader({
+            root: 'data',
+        }, [{
+            name: 'payment_id',
+            type: 'integer'
+        }, {
+            name: 'date',
+            type: 'date',
+            dateFormat: 'd-m-Y'
+        }, {
+            name: 'amount',
+            type: 'string'
+        }, {
+            name: 'payments_account_id',
+            type: 'string'
+        }])
+    });
+    
+    var payments_made_roweditor = new Ext.ux.grid.RowEditor({
+        saveText: 'Save',
+        cancelText: 'Cancel',
+        errorSummary: false,
+        onKey: function(f, e){
+            if (e.getKey() === e.ENTER && this.isValid()) {
+                this.stopEditing(true);
+                e.stopPropagation();
+            }
+        },
+        listeners: {
+            'afteredit': function(){
+                if (gridpanel.getSelectionModel().hasSelection()) {
+                    var loanRecord = gridpanel.getSelectionModel().getSelected();
+                    var record = payments_made_grid.getSelectionModel().getSelected();
+                    Ext.Ajax.request({
+                        url: getAbsoluteUrl('loan', 'registerPayment'),
+                        failure: function(){
+                            payments_made_datastore.load();
+                        },
+                        success: function(){
+                            payments_made_datastore.load();
+                        },
+                        params: {
+                            'payment_id': record.get('payment_id'),
+                            'loan_id': loanRecord.get('loan_id'),
+                            'date': record.get('date'),
+                            'amount': record.get('amount'),
+                            'payments_account_id': record.get('payments_account_id')
+                        }
+                    });
+                }
+            },
+            'canceledit': function(){
+                payments_made_datastore.load();
+            }
+        }
+    });
+    
+    var payments_made_grid = new Ext.grid.GridPanel({
+        store: payments_made_datastore,
+        frame: true,
+        plugins: [payments_made_roweditor],
+        border: false,
+        selModel: new Ext.grid.RowSelectionModel({
+            singleSelect: true
+        }),
+        columns: [{
+            header: 'Payment Id',
+            width: 110,
+            dataIndex: 'payment_id'
+        }, {
+            xtype: 'datecolumn',
+            format: 'd-m-Y',
+            header: "Date",
+            width: 90,
+            dataIndex: 'date',
+            renderer: function(value){
+                return value ? value.dateFormat('d-m-Y') : '';
+            },
+            editor: new Ext.form.DateField({
+                format: 'd-m-Y',
+                allowBlank: false
+            })
+        }, {
+            header: 'Payment amount',
+            width: 180,
+            align: 'right',
+            dataIndex: 'amount',
+            editor: new Ext.form.NumberField({
+                allowBlank: false
+            }),
+            renderer: function(value){
+                return Ext.util.Format.usMoney(value);
+            }
+        }, {
+            header: 'Payments account',
+            width: 220,
+            dataIndex: 'payments_account_id',
+            renderer: function(value){
+                var index = assets_accounts_datastore.find('account_id', value);
+                if (index != -1) {
+                    var record = assets_accounts_datastore.getAt(index);
+                    return record.get('account_name');
+                }
+                else {
+                    return '';
+                }
+            },
+            editor: new Ext.form.ComboBox({
+                store: assets_accounts_datastore,
+                displayField: 'account_name',
+                valueField: 'account_id',
+                mode: 'local',
+                triggerAction: 'all',
+                forceSelection: true,
+                allowBlank: false
+            })
+        }],
+        width: '100%',
+        height: 240,
+        wrap: true,
+        stripeRows: true,
+        clicksToEdit: 1
+    });
+    
+    var payments_made_floating_window = new Ext.Window({
+        applyTo: 'floating_window',
+        layout: 'fit',
+        width: 800,
+        height: 300,
+        closeAction: 'hide',
+        plain: true,
+        title: 'Payments made',
+        items: [payments_made_grid],
+        buttons: [{
+            text: 'Register',
+            handler: function(){
+                var row = new payments_made_grid.store.recordType({
+                    'payment_id': '',
+                    'date': '',
+                    'amount': '',
+                    'payments_account_id': ''
+                });
+                payments_made_grid.getSelectionModel().clearSelections();
+                payments_made_roweditor.stopEditing();
+                payments_made_grid.store.insert(0, row);
+                payments_made_grid.getSelectionModel().selectRow(0);
+                payments_made_roweditor.startEditing(0);
+            }
+        }, {
+            text: 'Delete',
+            handler: function(){
+                if (payments_made_grid.getSelectionModel().hasSelection()) {
+                    var record = payments_made_grid.getSelectionModel().getSelected();
+                    var selectedPaymentId = record.get('payment_id');
+                    Ext.Ajax.request({
+                        url: getAbsoluteUrl('loan', 'deletePayment'),
+                        failure: function(){
+                            payments_made_datastore.load();
+                        },
+                        success: function(){
+                            payments_made_datastore.load();
+                        },
+                        params: {
+                            id: selectedPaymentId
+                        }
+                    });
+                }
+                else {
+                    alert('Select a payment first');
+                }
+            }
+        }, {
+            text: 'Ok',
+            handler: function(){
+                payments_made_floating_window.hide();
+            }
+        }],
+        listeners: {
+            hide: function(){
+                Ext.getBody().unmask();
+            }
+        }
+    });
+    
     return {
         height: 400,
         autoWidth: true,
@@ -287,7 +476,21 @@ var generateLoansGrid = function(){
                         });
                     }
                     else {
-                        alert('Select an loan first');
+                        alert('Select a loan first');
+                    }
+                }
+            }, {
+                text: 'View payments made',
+                handler: function(){
+                    if (gridpanel.getSelectionModel().hasSelection()) {
+                        var record = gridpanel.getSelectionModel().getSelected();
+                        Ext.getBody().mask();
+                        payments_made_floating_window.show();
+                        payments_made_datastore.load({
+                            params: {
+                                'loan_id': record.get('loan_id')
+                            }
+                        });
                     }
                 }
             }]

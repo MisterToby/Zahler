@@ -34,3 +34,8 @@ propel:
     loa_con_id: { type: INTEGER, required: true, foreignTable: contact, foreignReference: con_id }
     loa_atr_id: { type: INTEGER, required: true, foreignTable: account_transaction, foreignReference: atr_id }
     loa_interest_rate: { type: REAL, required: true }
+  loan_payment:
+    _attributes: { phpName: LoanPayment }
+    lpa_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
+    lpa_loa_id: { type: INTEGER, required: true, foreignTable: loan, foreignReference: loa_id }
+    lpa_atr_id: { type: INTEGER, required: true, foreignTable: account_transaction, foreignReference: atr_id }

@@ -10,6 +10,77 @@
  */
 class loanActions extends sfActions
 {
+	public function executeDeletePayment(sfWebRequest $request) {
+		$payment = LoanPaymentPeer::retrieveByPK($request->getParameter('id'));
+		$transaction = $payment->getTransaction();
+
+		$payment->delete();
+		$transaction->delete();
+
+		return sfView::NONE;
+	}
+	public function executeRegisterPayment(sfWebRequest $request) {
+		$payment = null;
+		$transaction = null;
+		//		if($request->getParameter('payment_id')!='') {
+		//			$payment = LoanPaymentPeer::retrieveByPK($request->getParameter('payment_id'));
+		//		}
+		//		else {
+		$payment = new LoanPayment();
+		$transaction = new Transaction();
+		$transaction->setAtrReference('');
+		$transaction->setAtrDescription('Loan');
+		//		}
+
+		$loan = LoanPeer::retrieveByPK($request->getParameter('loan_id'));
+
+		$payment->setLoan($loan);
+
+		$transaction->setAtrDate($request->getParameter('date'));
+		$transaction->setAtrValue($request->getParameter('amount'));
+		$transaction->setAtrAccIdCredit($loan->getTransaction()->getAtrAccIdDebit());
+		$transaction->setAtrAccIdDebit($request->getParameter('payments_account_id'));
+
+		$transaction->save();
+
+		$payment->setTransaction($transaction);
+
+		$payment->save();
+
+		return sfView::NONE;
+	}
+	public function executeGetPaymentsList(sfWebRequest $request) {
+		$criteria = new Criteria();
+		if($request->hasParameter('loan_id')){
+			$criteria->add(LoanPaymentPeer::LPA_LOA_ID, $request->getParameter('loan_id'));
+		}
+		$payments = LoanPaymentPeer::doSelect($criteria);
+
+		$result = array();
+		$data = array();
+
+		foreach($payments as $payment) {
+			$fields = array();
+
+			//			$payment = new LoanPayment();
+
+			$fields['payment_id'] = $payment->getLpaId();
+			$fields['loan_id'] = $payment->getLpaLoaId();
+			$fields['transaction_id'] = $payment->getLpaAtrId();
+
+			$transaction = $payment->getTransaction();
+			$loan = $payment->getLoan();
+
+			$fields['date'] = $transaction->getAtrDate('d-m-Y');
+			$fields['amount'] = $transaction->getAtrValue();
+			$fields['payments_account_id'] = $transaction->getAtrAccIdDebit();
+
+			$data[] = $fields;
+		}
+
+		$result['data'] = $data;
+		return $this->renderText(json_encode($result));
+	}
 	public function executeDelete(sfWebRequest $request) {
 		try {
 			$loanId = $request->getParameter('id');

@@ -4,9 +4,12 @@ nodeaccount [label="{<table>account|<cols>acc_id (INTEGER) [PK]\lacc_name (VARCH
 nodeaccount_transaction [label="{<table>account_transaction|<cols>atr_id (INTEGER) [PK]\latr_date (DATE)\latr_reference (VARCHAR)\latr_description (VARCHAR)\latr_value (REAL)\latr_acc_id_debit (INTEGER) [FK]\latr_acc_id_credit (INTEGER) [FK]\l}", shape=record];
 nodecontact [label="{<table>contact|<cols>con_id (INTEGER) [PK]\lcon_first_name (VARCHAR)\lcon_last_name (VARCHAR)\lcon_email (VARCHAR)\lcon_address (VARCHAR)\lcon_phone_number (VARCHAR)\l}", shape=record];
 nodeloan [label="{<table>loan|<cols>loa_id (INTEGER) [PK]\lloa_con_id (INTEGER) [FK]\lloa_atr_id (INTEGER) [FK]\lloa_interest_rate (REAL)\l}", shape=record];
+nodeloan_payment [label="{<table>loan_payment|<cols>lpa_id (INTEGER) [PK]\llpa_loa_id (INTEGER) [FK]\llpa_atr_id (INTEGER) [FK]\l}", shape=record];
 
 nodeaccount_transaction:cols -> nodeaccount:table [label="atr_acc_id_debit=acc_id "];
 nodeaccount_transaction:cols -> nodeaccount:table [label="atr_acc_id_credit=acc_id "];
 nodeloan:cols -> nodecontact:table [label="loa_con_id=con_id "];
 nodeloan:cols -> nodeaccount_transaction:table [label="loa_atr_id=atr_id "];
+nodeloan_payment:cols -> nodeloan:table [label="lpa_loa_id=loa_id "];
+nodeloan_payment:cols -> nodeaccount_transaction:table [label="lpa_atr_id=atr_id "];
 }
