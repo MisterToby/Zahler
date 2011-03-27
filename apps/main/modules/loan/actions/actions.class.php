@@ -22,15 +22,16 @@ class loanActions extends sfActions
 	public function executeRegisterPayment(sfWebRequest $request) {
 		$payment = null;
 		$transaction = null;
-		//		if($request->getParameter('payment_id')!='') {
-		//			$payment = LoanPaymentPeer::retrieveByPK($request->getParameter('payment_id'));
-		//		}
-		//		else {
-		$payment = new LoanPayment();
-		$transaction = new Transaction();
-		$transaction->setAtrReference('');
-		$transaction->setAtrDescription('Loan');
-		//		}
+		if($request->getParameter('payment_id')!='') {
+			$payment = LoanPaymentPeer::retrieveByPK($request->getParameter('payment_id'));
+			$transaction = $payment->getTransaction();
+		}
+		else {
+			$payment = new LoanPayment();
+			$transaction = new Transaction();
+			$transaction->setAtrReference('');
+			$transaction->setAtrDescription('Loan payment');
+		}
 
 		$loan = LoanPeer::retrieveByPK($request->getParameter('loan_id'));
 
