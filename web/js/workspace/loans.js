@@ -371,14 +371,14 @@ var generateLoansGrid = function(){
     var payments_made_floating_window = new Ext.Window({
         applyTo: 'floating_window',
         layout: 'fit',
-        width: 800,
+        width: 650,
         height: 300,
         closeAction: 'hide',
         plain: true,
         title: 'Payments made',
         items: [payments_made_grid],
         buttons: [{
-            text: 'Register',
+            text: 'Add',
             handler: function(){
                 var row = new payments_made_grid.store.recordType({
                     'payment_id': '',
@@ -419,6 +419,37 @@ var generateLoansGrid = function(){
             text: 'Ok',
             handler: function(){
                 payments_made_floating_window.hide();
+            }
+        }],
+        listeners: {
+            hide: function(){
+                Ext.getBody().unmask();
+            }
+        }
+    });
+    
+    var details_floating_window = new Ext.Window({
+        applyTo: 'details_floating_window',
+        layout: 'form',
+        width: 300,
+        height: 150,
+        closeAction: 'hide',
+        plain: true,
+        title: 'Details',
+        items: [{
+            xtype: 'textfield',
+            fieldLabel: 'Current balance'
+        }, {
+            xtype: 'textfield',
+            fieldLabel: 'Interests'
+        }, {
+            xtype: 'textfield',
+            fieldLabel: 'Full payment'
+        }],
+        buttons: [{
+            text: 'Ok',
+            handler: function(){
+                details_floating_window.hide();
             }
         }],
         listeners: {
@@ -492,6 +523,12 @@ var generateLoansGrid = function(){
                             }
                         });
                     }
+                }
+            }, {
+                text: 'Details',
+                handler: function(){
+                    Ext.getBody().mask();
+                    details_floating_window.show();
                 }
             }]
         }],
