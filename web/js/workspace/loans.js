@@ -296,7 +296,12 @@ var generateLoansGrid = function(){
                 }
             },
             'canceledit': function(){
-                payments_made_datastore.load();
+                var record = gridpanel.getSelectionModel().getSelected();
+                payments_made_datastore.load({
+                    params: {
+                        'loan_id': record.get('loan_id')
+                    }
+                });
             }
         }
     });
