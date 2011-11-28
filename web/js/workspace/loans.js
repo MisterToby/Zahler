@@ -366,17 +366,39 @@ var generateLoansGrid = function() {
 		height : 240,
 		wrap : true,
 		stripeRows : true,
-		clicksToEdit : 1
+		clicksToEdit : 1,
+		tbar : {
+			items : [{
+				xtype : 'label',
+				text : 'Current balance:'
+			}, ' ', {
+				xtype : 'textfield',
+				readOnly : true
+			}, ' ', {
+				xtype : 'label',
+				text : 'Interests:'
+			}, ' ', {
+				xtype : 'textfield',
+				readOnly : true
+			}, ' ', {
+				xtype : 'label',
+				text : 'Full payment:'
+			}, ' ', {
+				xtype : 'textfield',
+				fieldLabel : 'Full payment',
+				readOnly : true
+			}]
+		}
 	});
 
-	var payments_made_floating_window = new Ext.Window({
+	var details_floating_window = new Ext.Window({
 		applyTo : 'floating_window',
 		layout : 'fit',
 		width : 650,
 		height : 300,
 		closeAction : 'hide',
 		plain : true,
-		title : 'Payments made',
+		title : 'Loan details',
 		items : [payments_made_grid],
 		buttons : [{
 			text : 'Add',
@@ -416,37 +438,6 @@ var generateLoansGrid = function() {
 				}
 			}
 		}, {
-			text : 'Ok',
-			handler : function() {
-				payments_made_floating_window.hide();
-			}
-		}],
-		listeners : {
-			hide : function() {
-				Ext.getBody().unmask();
-			}
-		}
-	});
-
-	var details_floating_window = new Ext.Window({
-		applyTo : 'details_floating_window',
-		layout : 'form',
-		width : 300,
-		height : 150,
-		closeAction : 'hide',
-		plain : true,
-		title : 'Details',
-		items : [{
-			xtype : 'textfield',
-			fieldLabel : 'Current balance'
-		}, {
-			xtype : 'textfield',
-			fieldLabel : 'Interests'
-		}, {
-			xtype : 'textfield',
-			fieldLabel : 'Full payment'
-		}],
-		buttons : [{
 			text : 'Ok',
 			handler : function() {
 				details_floating_window.hide();
@@ -510,24 +501,18 @@ var generateLoansGrid = function() {
 					}
 				}
 			}, {
-				text : 'View payments made',
+				text : 'Details',
 				handler : function() {
 					if(gridpanel.getSelectionModel().hasSelection()) {
 						var record = gridpanel.getSelectionModel().getSelected();
 						Ext.getBody().mask();
-						payments_made_floating_window.show();
+						details_floating_window.show();
 						payments_made_datastore.load({
 							params : {
 								'loan_id' : record.get('loan_id')
 							}
 						});
 					}
-				}
-			}, {
-				text : 'Details',
-				handler : function() {
-					Ext.getBody().mask();
-					details_floating_window.show();
 				}
 			}]
 		}],
