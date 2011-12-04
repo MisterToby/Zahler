@@ -426,8 +426,13 @@ var generateLoansGrid = function() {
 						failure : function() {
 							payments_made_datastore.load();
 						},
-						success : function() {
+						success : function(result) {
 							payments_made_datastore.load();
+							if(result.responseText == 'Ok') {
+
+							} else {
+								alert(result.responseText);
+							}
 						},
 						params : {
 							id : selectedPaymentId
@@ -448,6 +453,22 @@ var generateLoansGrid = function() {
 				Ext.getBody().unmask();
 			}
 		}
+	});
+
+	var details_datastore = new Ext.data.Store({
+		proxy : new Ext.data.HttpProxy({
+			url : getAbsoluteUrl('loan', 'getLoanDetails'),
+			method : 'POST'
+		}),
+		reader : new Ext.data.JsonReader({
+			root : 'data',
+		}, [{
+			name : 'current_balance'
+		}, {
+			name : 'interests'
+		}, {
+			name : 'full_payment'
+		}])
 	});
 
 	return {
@@ -489,7 +510,7 @@ var generateLoansGrid = function() {
 							failure : function() {
 								datastore.load();
 							},
-							success : function() {
+							success : function(result) {
 								datastore.load();
 							},
 							params : {
@@ -507,6 +528,11 @@ var generateLoansGrid = function() {
 						var record = gridpanel.getSelectionModel().getSelected();
 						Ext.getBody().mask();
 						details_floating_window.show();
+						details_datastore.load({
+							params : {
+								'loan_id' : record.get('loan_id')
+							}
+						});
 						payments_made_datastore.load({
 							params : {
 								'loan_id' : record.get('loan_id')
