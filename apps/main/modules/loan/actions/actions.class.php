@@ -10,13 +10,38 @@
  */
 class loanActions extends sfActions {
 	public function executeGetLoanDetails(sfWebRequest $request) {
-		// $loanId = $request -> getParameter('loan_id');
-		// $loan = LoanPeer::retrieveByPK($loanId);
-		// // $loan = new Loan();
-		// $transaction = $loan -> getTransaction();
-		// // $transaction = new Transaction();
-		// $value = $transaction -> getAtrValue();
-		//
+		$loanId = $request -> getParameter('loan_id');
+		$loan = LoanPeer::retrieveByPK($loanId);
+		// $loan = new Loan();
+		$loanTransaction = $loan -> getTransaction();
+		// $transaction = new Transaction();
+		$value = $loanTransaction -> getAtrValue();
+
+		$criteria = new Criteria();
+		$criteria -> add(LoanPaymentPeer::LPA_LOA_ID, $loanId);
+		$payments = LoanPaymentPeer::doSelect($criteria);
+
+		$totalPayments = 0;
+		foreach ($payments as $payment) {
+			// $payment = new LoanPayment();
+			$paymentTransaction = $payment -> getTransaction();
+			// $paymentTransaction = new Transaction();
+			$totalPayments += $paymentTransaction -> getAtrValue();
+		}
+
+		$currentBalance = $value - $totalPayments;
+
+		$interests = $currentBalance * (pow(($loan -> getLoaInterestRate() / 100) + 1, 1 / 12) - 1);
+		$interests = number_format($interests, 2, '.', '');
+
+		$result = array();
+		$data = array();
+		$fields = array();
+		$fields['current_balance'] = $currentBalance;
+		$fields['interests'] = $interests;
+		$data[] = $fields;
+		$result['data'] = $data;
+		return $this -> renderText(json_encode($result));
 	}
 
 	public function executeDeletePayment(sfWebRequest $request) {

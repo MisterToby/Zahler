@@ -372,14 +372,22 @@ var generateLoansGrid = function() {
 				xtype : 'label',
 				text : 'Current balance:'
 			}, ' ', {
+				id : 'current_balance',
 				xtype : 'textfield',
-				readOnly : true
+				readOnly : true,
+				style : {
+					'text-align' : 'right'
+				}
 			}, ' ', {
 				xtype : 'label',
 				text : 'Interests:'
 			}, ' ', {
+				id : 'interests',
 				xtype : 'textfield',
-				readOnly : true
+				readOnly : true,
+				style : {
+					'text-align' : 'right'
+				}
 			}, ' ', {
 				xtype : 'label',
 				text : 'Full payment:'
@@ -528,14 +536,21 @@ var generateLoansGrid = function() {
 						var record = gridpanel.getSelectionModel().getSelected();
 						Ext.getBody().mask();
 						details_floating_window.show();
-						details_datastore.load({
+						payments_made_datastore.load({
 							params : {
 								'loan_id' : record.get('loan_id')
 							}
 						});
-						payments_made_datastore.load({
+						details_datastore.load({
 							params : {
 								'loan_id' : record.get('loan_id')
+							},
+							callback : function() {
+								var detailsRecord = details_datastore.getAt(0);
+								var currentBalanceTextfield = Ext.getCmp('current_balance');
+								currentBalanceTextfield.setValue('$ ' + detailsRecord.get('current_balance'));
+								var interestsTextfield = Ext.getCmp('interests');
+								interestsTextfield.setValue('$ ' + detailsRecord.get('interests'));
 							}
 						});
 					}
