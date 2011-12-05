@@ -14,11 +14,13 @@ class loanActions extends sfActions {
 		$loan = LoanPeer::retrieveByPK($loanId);
 		// $loan = new Loan();
 		$loanTransaction = $loan -> getTransaction();
-		// $transaction = new Transaction();
+		// $loanTransaction = new Transaction();
 		$value = $loanTransaction -> getAtrValue();
 
 		$criteria = new Criteria();
 		$criteria -> add(LoanPaymentPeer::LPA_LOA_ID, $loanId);
+		$criteria -> addJoin(LoanPaymentPeer::LPA_ATR_ID, TransactionPeer::ATR_ID);
+		$criteria -> addDescendingOrderByColumn(TransactionPeer::ATR_DATE);
 		$payments = LoanPaymentPeer::doSelect($criteria);
 
 		$totalPayments = 0;
@@ -31,14 +33,31 @@ class loanActions extends sfActions {
 
 		$currentBalance = $value - $totalPayments;
 
-		$interests = $currentBalance * (pow(($loan -> getLoaInterestRate() / 100) + 1, 1 / 12) - 1);
+		$dateTimeCurrent = new DateTime('now');
+		$interval = null;
+		if (count($payments) > 0) {
+			$lastPayment = $payments[0];
+			// $lastPayment = new LoanPayment();
+			$lastPaymentTransaction = $lastPayment -> getTransaction();
+			// $lastPaymentTransaction = new Transaction();
+			$dateTimeLastPayment = new DateTime($lastPaymentTransaction -> getAtrDate('Y-m-d'));
+			$interval = $dateTimeCurrent -> diff($dateTimeLastPayment, true);
+		} else {
+			$loanDateTime = new DateTime($loanTransaction -> getAtrDate('Y-m-d'));
+			$interval = $dateTimeCurrent -> diff($loanDateTime, true);
+		}
+		$months = $interval -> m;
+		$interests = $currentBalance * (pow(($loan -> getLoaInterestRate() / 100) + 1, $months / 12) - 1);
 		$interests = number_format($interests, 2, '.', '');
+
+		$fullPayment = $currentBalance + $interests;
 
 		$result = array();
 		$data = array();
 		$fields = array();
 		$fields['current_balance'] = $currentBalance;
 		$fields['interests'] = $interests;
+		$fields['full_payment'] = $fullPayment;
 		$data[] = $fields;
 		$result['data'] = $data;
 		return $this -> renderText(json_encode($result));

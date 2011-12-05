@@ -277,10 +277,10 @@ var generateLoansGrid = function() {
 					Ext.Ajax.request({
 						url : getAbsoluteUrl('loan', 'registerPayment'),
 						failure : function() {
-							payments_made_datastore.load();
+							updateDetailsData();
 						},
 						success : function() {
-							payments_made_datastore.load();
+							updateDetailsData();
 						},
 						params : {
 							'payment_id' : record.get('payment_id'),
@@ -294,11 +294,7 @@ var generateLoansGrid = function() {
 			},
 			'canceledit' : function() {
 				var record = gridpanel.getSelectionModel().getSelected();
-				payments_made_datastore.load({
-					params : {
-						'loan_id' : record.get('loan_id')
-					}
-				});
+				payments_made_datastore.setBaseParam('loan_id', record.get('loan_id'));
 			}
 		}
 	});
@@ -392,9 +388,13 @@ var generateLoansGrid = function() {
 				xtype : 'label',
 				text : 'Full payment:'
 			}, ' ', {
+				id : 'full_payment',
 				xtype : 'textfield',
 				fieldLabel : 'Full payment',
-				readOnly : true
+				readOnly : true,
+				style : {
+					'text-align' : 'right'
+				}
 			}]
 		}
 	});
@@ -432,10 +432,10 @@ var generateLoansGrid = function() {
 					Ext.Ajax.request({
 						url : getAbsoluteUrl('loan', 'deletePayment'),
 						failure : function() {
-							payments_made_datastore.load();
+							updateDetailsData();
 						},
 						success : function(result) {
-							payments_made_datastore.load();
+							updateDetailsData();
 							if(result.responseText == 'Ok') {
 
 							} else {
@@ -479,6 +479,20 @@ var generateLoansGrid = function() {
 		}])
 	});
 
+	var updateDetailsData = function() {
+		payments_made_datastore.load();
+		details_datastore.load({
+			callback : function() {
+				var detailsRecord = details_datastore.getAt(0);
+				var currentBalanceTextfield = Ext.getCmp('current_balance');
+				currentBalanceTextfield.setValue('$ ' + detailsRecord.get('current_balance'));
+				var interestsTextfield = Ext.getCmp('interests');
+				interestsTextfield.setValue('$ ' + detailsRecord.get('interests'));
+				var fullPaymentTextfield = Ext.getCmp('full_payment');
+				fullPaymentTextfield.setValue('$ ' + detailsRecord.get('full_payment'));
+			}
+		});
+	}
 	return {
 		height : 400,
 		autoWidth : true,
@@ -536,23 +550,10 @@ var generateLoansGrid = function() {
 						var record = gridpanel.getSelectionModel().getSelected();
 						Ext.getBody().mask();
 						details_floating_window.show();
-						payments_made_datastore.load({
-							params : {
-								'loan_id' : record.get('loan_id')
-							}
-						});
-						details_datastore.load({
-							params : {
-								'loan_id' : record.get('loan_id')
-							},
-							callback : function() {
-								var detailsRecord = details_datastore.getAt(0);
-								var currentBalanceTextfield = Ext.getCmp('current_balance');
-								currentBalanceTextfield.setValue('$ ' + detailsRecord.get('current_balance'));
-								var interestsTextfield = Ext.getCmp('interests');
-								interestsTextfield.setValue('$ ' + detailsRecord.get('interests'));
-							}
-						});
+						payments_made_datastore.setBaseParam('loan_id', record.get('loan_id'));
+						details_datastore.setBaseParam('loan_id', record.get('loan_id'));
+
+						updateDetailsData();
 					}
 				}
 			}]
