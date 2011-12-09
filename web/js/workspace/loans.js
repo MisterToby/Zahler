@@ -124,17 +124,17 @@ var generateLoansGrid = function() {
 			singleSelect : true
 		}),
 		columns : [{
-			header : 'Loan Id',
+			header : 'Id. de préstamo',
 			width : 110,
 			dataIndex : 'loan_id'
 		}, {
-			header : 'Transaction Id',
+			header : 'Id. de transacción',
 			width : 110,
 			dataIndex : 'transaction_id'
 		}, {
 			xtype : 'datecolumn',
 			format : 'd-m-Y',
-			header : "Date",
+			header : "Fecha",
 			width : 90,
 			dataIndex : 'date',
 			renderer : function(value) {
@@ -145,7 +145,7 @@ var generateLoansGrid = function() {
 				allowBlank : false
 			})
 		}, {
-			header : 'Contact',
+			header : 'Prestatario',
 			width : 220,
 			dataIndex : 'contact_id',
 			renderer : function(value) {
@@ -167,14 +167,15 @@ var generateLoansGrid = function() {
 				allowBlank : false
 			})
 		}, {
-			header : 'Interest rate (%)',
+			header : 'Tasa E.A (%)',
 			width : 95,
+			align : 'right',
 			dataIndex : 'interest_rate',
 			editor : new Ext.form.NumberField({
 				allowBlank : false
 			})
 		}, {
-			header : 'Loan amount',
+			header : 'Valor',
 			width : 180,
 			align : 'right',
 			dataIndex : 'amount',
@@ -185,7 +186,7 @@ var generateLoansGrid = function() {
 				return Ext.util.Format.usMoney(value);
 			}
 		}, {
-			header : 'Source account',
+			header : 'Cuenta de origen',
 			width : 220,
 			dataIndex : 'source_account_id',
 			renderer : function(value) {
@@ -207,7 +208,7 @@ var generateLoansGrid = function() {
 				allowBlank : false
 			})
 		}, {
-			header : 'Loans account',
+			header : 'Cuenta de destino',
 			width : 220,
 			dataIndex : 'loans_account_id',
 			renderer : function(value) {
@@ -409,7 +410,7 @@ var generateLoansGrid = function() {
 		title : 'Loan details',
 		items : [payments_made_grid],
 		buttons : [{
-			text : 'Add',
+			text : 'Adicionar',
 			handler : function() {
 				var row = new payments_made_grid.store.recordType({
 					'payment_id' : '',
@@ -424,7 +425,7 @@ var generateLoansGrid = function() {
 				payments_made_roweditor.startEditing(0);
 			}
 		}, {
-			text : 'Delete',
+			text : 'Eliminar',
 			handler : function() {
 				if(payments_made_grid.getSelectionModel().hasSelection()) {
 					var record = payments_made_grid.getSelectionModel().getSelected();
@@ -503,7 +504,7 @@ var generateLoansGrid = function() {
 			items : [gridpanel],
 			buttonAlign : 'left',
 			buttons : [{
-				text : 'Add',
+				text : 'Adicionar',
 				handler : function() {
 					var row = new gridpanel.store.recordType({
 						'loan_id' : '',
@@ -522,7 +523,7 @@ var generateLoansGrid = function() {
 					roweditor.startEditing(0);
 				}
 			}, {
-				text : 'Delete',
+				text : 'Eliminar',
 				handler : function() {
 					if(gridpanel.getSelectionModel().hasSelection()) {
 						var record = gridpanel.getSelectionModel().getSelected();
@@ -544,7 +545,7 @@ var generateLoansGrid = function() {
 					}
 				}
 			}, {
-				text : 'Details',
+				text : 'Procesar pagos',
 				handler : function() {
 					if(gridpanel.getSelectionModel().hasSelection()) {
 						var record = gridpanel.getSelectionModel().getSelected();

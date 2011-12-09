@@ -1,9 +1,8 @@
 var workspace = function(){
     var assets_tab = {
-        title: 'Assets',
+        title: 'Activos',
         id: 'assets_general',
         iconCls: 'x-icon-configuration',
-        tabTip: 'Assets management',
         style: 'padding: 10px;',
         items: [{
             frame: true,
@@ -15,10 +14,9 @@ var workspace = function(){
     };
     
     var equity_tab = {
-        title: 'Equity',
+        title: 'Patrimonio',
         id: 'equity_general',
         iconCls: 'x-icon-configuration',
-        tabTip: 'Equity management',
         style: 'padding: 10px;',
         items: [{
             frame: true,
@@ -30,10 +28,9 @@ var workspace = function(){
     };
     
     var expenses_tab = {
-        title: 'Expenses',
+        title: 'Gastos',
         id: 'expenses_general',
         iconCls: 'x-icon-configuration',
-        tabTip: 'Expenses management',
         style: 'padding: 10px;',
         items: [{
             frame: true,
@@ -45,10 +42,9 @@ var workspace = function(){
     };
     
     var income_tab = {
-        title: 'Income',
+        title: 'Ingresos',
         id: 'income_general',
         iconCls: 'x-icon-configuration',
-        tabTip: 'Income management',
         style: 'padding: 10px;',
         items: [{
             frame: true,
@@ -60,10 +56,9 @@ var workspace = function(){
     };
     
     var liabilities_tab = {
-        title: 'Liabilities',
+        title: 'Pasivos',
         id: 'liabilities_general',
         iconCls: 'x-icon-configuration',
-        tabTip: 'Liabilities management',
         style: 'padding: 10px;',
         items: [{
             frame: true,
@@ -79,23 +74,22 @@ var workspace = function(){
         expanded: true,
         border: false,
         items: [{
-            title: 'Accounting',
+            title: 'Contabilidad',
             style: 'padding: 10px;',
             items: [{
                 frame: true,
                 autoWidth: true,
                 layout: 'form',
                 padding: '10px 10px 10px 10px',
-                html: 'Accounting module'
+                html: 'Módulo de contabilidad'
             }]
         }, assets_tab, equity_tab, expenses_tab, income_tab, liabilities_tab]
     });
     
     var loans_tab = {
-        title: 'Loans',
+        title: 'Préstamos',
         id: 'loans_general',
         iconCls: 'x-icon-configuration',
-        tabTip: 'Loans management',
         style: 'padding: 10px;',
         items: [{
             frame: true,
@@ -107,10 +101,9 @@ var workspace = function(){
     };
     
     var contacts_tab = {
-        title: 'Contacts',
+        title: 'Contactos',
         id: 'contacts_general',
         iconCls: 'x-icon-configuration',
-        tabTip: 'Contacts management',
         style: 'padding: 10px;',
         items: [{
             frame: true,
@@ -126,14 +119,14 @@ var workspace = function(){
         expanded: true,
         border: false,
         items: [{
-            title: 'Business',
+            title: 'Negocios',
             style: 'padding: 10px;',
             items: [{
                 frame: true,
                 autoWidth: true,
                 layout: 'form',
                 padding: '10px 10px 10px 10px',
-                html: 'Business module'
+                html: 'Módulo de negocios'
             }]
         }, loans_tab, contacts_tab]
     });
@@ -179,7 +172,7 @@ var workspace = function(){
     });
     
     var logout_button = new Ext.Button({
-        text: 'Logout',
+        text: 'Cerrar sesión',
         renderTo: 'logout_button',
         handler: function(){
             Ext.Ajax.request({
