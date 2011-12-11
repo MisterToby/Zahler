@@ -32,7 +32,7 @@ var login_panel = new Ext.form.FormPanel({
             'border-color': 'transparent',
             'color': 'gray'
         },
-        emptyText: 'User name',
+        emptyText: 'Nombre de usuario',
         anchor: '100%',
         id: 'user_name',
         name: 'user_name',

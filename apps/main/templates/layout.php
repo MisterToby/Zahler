@@ -10,7 +10,7 @@
   </head>
   <body>
   <script>
-  <?php require_once '../config/generalVariables.php'; ?>
+  <?php require_once '../config/variables_generales.php'; ?>
   var webUrlFolder = '<?php echo $webUrlFolder ?>';
   var urlPrefix = '<?php echo url_for('default/index'); ?>';
   </script>
