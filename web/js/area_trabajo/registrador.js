@@ -1,7 +1,7 @@
 var generateRegister = function(accountType) {
 	var datastore = new Ext.data.Store({
 		proxy : new Ext.data.HttpProxy({
-			url : getAbsoluteUrl('transaction', 'getListOfEntries'),
+			url : getAbsoluteUrl('transaccion', 'consultarListaRegistros'),
 			method : 'POST'
 		}),
 		reader : new Ext.data.JsonReader({
@@ -36,19 +36,19 @@ var generateRegister = function(accountType) {
 
 	var accounts_datastore = new Ext.data.Store({
 		proxy : new Ext.data.HttpProxy({
-			url : getAbsoluteUrl('account', 'getAccountList'),
+			url : getAbsoluteUrl('cuenta', 'consultarListaCuentas'),
 			method : 'POST'
 		}),
 		baseParams : {
-			account_type : accountType
+			'tipo_cuenta' : accountType
 		},
 		reader : new Ext.data.JsonReader({
 			root : 'data',
 		}, [{
-			name : 'account_id',
+			name : 'id',
 			type : 'integer'
 		}, {
-			name : 'account_name',
+			name : 'nombre',
 			type : 'string'
 		}])
 	});
@@ -57,16 +57,16 @@ var generateRegister = function(accountType) {
 
 	var all_accounts_datastore = new Ext.data.Store({
 		proxy : new Ext.data.HttpProxy({
-			url : getAbsoluteUrl('account', 'getAccountList'),
+			url : getAbsoluteUrl('cuenta', 'consultarListaCuentas'),
 			method : 'POST'
 		}),
 		reader : new Ext.data.JsonReader({
 			root : 'data',
 		}, [{
-			name : 'account_id',
+			name : 'id',
 			type : 'integer'
 		}, {
-			name : 'account_name',
+			name : 'nombre',
 			type : 'string'
 		}])
 	});
@@ -75,7 +75,7 @@ var generateRegister = function(accountType) {
 
 	var categorized_accounts_datastore = new Ext.data.Store({
 		proxy : new Ext.data.HttpProxy({
-			url : getAbsoluteUrl('account', 'getCategorizedAccountList'),
+			url : getAbsoluteUrl('cuenta', 'consultarListaCategorizadaCuentas'),
 			method : 'POST'
 		}),
 		reader : new Ext.data.JsonReader({
@@ -94,8 +94,8 @@ var generateRegister = function(accountType) {
 	var combobox = new Ext.form.ComboBox({
 		fieldLabel : 'Cuenta',
 		store : accounts_datastore,
-		displayField : 'account_name',
-		valueField : 'account_id',
+		displayField : 'nombre',
+		valueField : 'id',
 		triggerAction : 'all',
 		mode : 'local',
 		forceSelection : true,
@@ -140,7 +140,7 @@ var generateRegister = function(accountType) {
 				}
 				var date = new Date(record.get('date'));
 				Ext.Ajax.request({
-					url : getAbsoluteUrl('transaction', 'create'),
+					url : getAbsoluteUrl('transaccion', 'crear'),
 					failure : function() {
 						datastore.load({
 							params : {
@@ -218,10 +218,10 @@ var generateRegister = function(accountType) {
 			width : 200,
 			dataIndex : 'to_from_account_id',
 			renderer : function(value) {
-				var index = all_accounts_datastore.find('account_id', value);
+				var index = all_accounts_datastore.find('id', value);
 				if(index != -1) {
 					var record = all_accounts_datastore.getAt(index);
-					return record.get('account_name');
+					return record.get('nombre');
 				} else {
 					return '';
 				}
@@ -294,10 +294,10 @@ var generateRegister = function(accountType) {
 						Ext.Msg.prompt('Crear cuenta', "Digite el nombre de la cuenta", function(idButton, text) {
 							if(idButton == 'ok' && text != '') {
 								Ext.Ajax.request({
-									url : getAbsoluteUrl('account', 'create'),
+									url : getAbsoluteUrl('cuenta', 'crear'),
 									params : {
-										'account_name' : text,
-										'account_type' : accountType
+										'nombre' : text,
+										'tipo' : accountType
 									},
 									success : function(response) {
 										if(response.responseText == 'ok') {
@@ -325,7 +325,7 @@ var generateRegister = function(accountType) {
 							Ext.Msg.confirm('Eliminar cuenta', "¿Estás de eliminar esta cuenta?", function(idButton) {
 								if(idButton == 'yes') {
 									Ext.Ajax.request({
-										url : getAbsoluteUrl('account', 'delete'),
+										url : getAbsoluteUrl('cuenta', 'eliminar'),
 										params : {
 											'id' : accountId
 										},
@@ -380,7 +380,7 @@ var generateRegister = function(accountType) {
 						var selectedTransactionId = record.get('transaction_id');
 						var accountId = combobox.getValue();
 						Ext.Ajax.request({
-							url : getAbsoluteUrl('transaction', 'delete'),
+							url : getAbsoluteUrl('transaccion', 'eliminar'),
 							failure : function() {
 								datastore.load({
 									params : {

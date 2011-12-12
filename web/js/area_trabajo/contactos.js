@@ -1,7 +1,7 @@
 var generateContactsGrid = function() {
 	var datastore = new Ext.data.Store({
 		proxy : new Ext.data.HttpProxy({
-			url : getAbsoluteUrl('contact', 'getList'),
+			url : getAbsoluteUrl('contacto', 'consultarLista'),
 			method : 'POST'
 		}),
 		reader : new Ext.data.JsonReader({
@@ -43,7 +43,7 @@ var generateContactsGrid = function() {
 			'afteredit' : function() {
 				var record = gridpanel.getSelectionModel().getSelected();
 				Ext.Ajax.request({
-					url : getAbsoluteUrl('contact', 'create'),
+					url : getAbsoluteUrl('contacto', 'crear'),
 					failure : function() {
 						datastore.load();
 					},
@@ -144,7 +144,7 @@ var generateContactsGrid = function() {
 						var record = gridpanel.getSelectionModel().getSelected();
 						var selectedContactId = record.get('contact_id');
 						Ext.Ajax.request({
-							url : getAbsoluteUrl('transaction', 'delete'),
+							url : getAbsoluteUrl('contacto', 'eliminar'),
 							failure : function() {
 								datastore.load();
 							},
