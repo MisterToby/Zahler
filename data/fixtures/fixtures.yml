@@ -9,8 +9,8 @@
 #    act_name: INCOME
 #  AccountType_5:
 #    act_name: LIABILITIES
-User:
-  User_pedroabp:
-    sus_user_name: pedroabp
-    sus_password: c34c03b3d1c1383ab9c997abdd1712c6b17ec05f
+Usuario:
+  Usuario_pedroabp:
+    usu_login: pedroabp
+    usu_password: c34c03b3d1c1383ab9c997abdd1712c6b17ec05f
     

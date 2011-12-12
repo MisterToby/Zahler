@@ -136,7 +136,7 @@ function login_autenticar(){
             }
         },
         failure: function(response){
-            Ext.Msg.alert('Error', 'It was not possible to establish a connection to the server. Try again later');
+            Ext.Msg.alert('Error', 'No fue posible establecer una conexión con el servidor');
         }
     });
 }

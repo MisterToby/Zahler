@@ -2,40 +2,40 @@ propel:
   _attributes:
     package: lib.model
     defaultIdMethod: native
-  system_user:
-    _attributes: { phpName: User }
-    sus_user_name: { type: VARCHAR, size: 20, required: true, unique: true, primaryKey: true }
-    sus_password: { type: VARCHAR, size: 40, required: true, unique: true }
-  account:
-    _attributes: { phpName: Account }
-    acc_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
-    acc_name: { type: VARCHAR, size: 20, required: true, unique: true }
-    acc_type: { type: INTEGER, required: true }
-  account_transaction:
-    _attributes: { phpName: Transaction }
-    atr_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
-    atr_date: { type: DATE, required: true }
-    atr_reference: { type: VARCHAR, size: 20, required: true }
-    atr_description: { type: VARCHAR, size: 255, required: true }
-    atr_value: { type: REAL, required: true }
-    atr_acc_id_debit: { type: INTEGER, required: true, foreignTable: account, foreignReference: acc_id }
-    atr_acc_id_credit: { type: INTEGER, required: true, foreignTable: account, foreignReference: acc_id }
-  contact:
-    _attributes: { phpName: Contact }
+  usuario:
+    _attributes: { phpName: Usuario }
+    usu_login: { type: VARCHAR, size: 20, required: true, unique: true, primaryKey: true }
+    usu_password: { type: VARCHAR, size: 40, required: true, unique: true }
+  cuenta:
+    _attributes: { phpName: Cuenta }
+    cue_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
+    cue_nombre: { type: VARCHAR, size: 20, required: true, unique: true }
+    cue_tipo: { type: INTEGER, required: true }
+  transaccion:
+    _attributes: { phpName: Transaccion }
+    tra_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
+    tra_fecha: { type: DATE, required: true }
+    tra_referencia: { type: VARCHAR, size: 20, required: true }
+    tra_descripcion: { type: VARCHAR, size: 255, required: true }
+    tra_valor: { type: REAL, required: true }
+    tra_cue_id_debito: { type: INTEGER, required: true, foreignTable: cuenta, foreignReference: cue_id }
+    tra_cue_id_credito: { type: INTEGER, required: true, foreignTable: cuenta, foreignReference: cue_id }
+  contacto:
+    _attributes: { phpName: Contacto }
     con_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
-    con_first_name: { type: VARCHAR, size: 50, required: true }
-    con_last_name: { type: VARCHAR, size: 50 }
+    con_nombres: { type: VARCHAR, size: 50, required: true }
+    con_apellidos: { type: VARCHAR, size: 50 }
     con_email: { type: varchar(320) }
-    con_address: { type: VARCHAR, size: 100 }
-    con_phone_number: { type: VARCHAR, size: 20 }
-  loan:
-    _attributes: { phpName: Loan }
-    loa_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
-    loa_con_id: { type: INTEGER, required: true, foreignTable: contact, foreignReference: con_id }
-    loa_atr_id: { type: INTEGER, required: true, foreignTable: account_transaction, foreignReference: atr_id }
-    loa_interest_rate: { type: REAL, required: true }
-  loan_payment:
-    _attributes: { phpName: LoanPayment }
-    lpa_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
-    lpa_loa_id: { type: INTEGER, required: true, foreignTable: loan, foreignReference: loa_id }
-    lpa_atr_id: { type: INTEGER, required: true, foreignTable: account_transaction, foreignReference: atr_id }
+    con_direccion: { type: VARCHAR, size: 100 }
+    con_telefono: { type: VARCHAR, size: 20 }
+  prestamo:
+    _attributes: { phpName: Prestamo }
+    pre_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
+    pre_con_id: { type: INTEGER, required: true, foreignTable: contacto, foreignReference: con_id }
+    pre_tra_id: { type: INTEGER, required: true, foreignTable: transaccion, foreignReference: tra_id }
+    pre_tasa_interes: { type: REAL, required: true }
+  pago_prestamo:
+    _attributes: { phpName: PagoPrestamo }
+    pap_id: { type: INTEGER, required: true, unique: true, primaryKey: true, autoIncrement: true }
+    pap_pre_id: { type: INTEGER, required: true, foreignTable: prestamo, foreignReference: pre_id }
+    pap_tra_id: { type: INTEGER, required: true, foreignTable: transaccion, foreignReference: tra_id }

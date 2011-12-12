@@ -8,47 +8,48 @@
  * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class authenticationActions extends sfActions
-{
+class authenticationActions extends sfActions {
 	/**
 	 * Executes index action
 	 *
 	 * @param sfRequest $request A request object
 	 */
-	public function executeIndex(sfWebRequest $request)
-	{
-			
+	public function executeIndex(sfWebRequest $request) {
+
 	}
+
 	public function executeAuthenticate(sfWebRequest $request) {
-		$user = $this->getUser();
-		$user->setAuthenticated(true);
+		$user = $this -> getUser();
 
 		$response = array();
 
-		$username = $request->getParameter('user_name');
-		$password = sha1($request->getParameter('password'));
+		$username = $request -> getParameter('user_name');
+		$password = sha1($request -> getParameter('password'));
 		$criteria = new Criteria();
-		$criteria->add(UserPeer::SUS_USER_NAME, $username);
-		$criteria->add(UserPeer::SUS_PASSWORD, $password);
-		$count = UserPeer::doCount($criteria);
+		$criteria -> add(UsuarioPeer::USU_LOGIN, $username);
+		$criteria -> add(UsuarioPeer::USU_PASSWORD, $password);
+		$count = UsuarioPeer::doCount($criteria);
 
-		if($count>0) {
+		if ($count > 0) {
+			$user -> setAuthenticated(true);
 			$response['success'] = true;
-			$response['msg'] = 'Successful authentication';
-		}
-		else {
+			$response['msg'] = 'Autenticación exitosa';
+		} else {
+			$user -> setAuthenticated(false);
 			$response['success'] = false;
-			$response['msg'] = 'The username and password do not match';
+			$response['msg'] = 'Login y/o contraseña inválidos';
 		}
-		return $this->renderText(json_encode($response));
+		return $this -> renderText(json_encode($response));
 	}
+
 	public function executeLogOut() {
-		$user = $this->getUser();
-		$user->setAuthenticated(false);
+		$user = $this -> getUser();
+		$user -> setAuthenticated(false);
 
 		$response = array();
 		$response['success'] = true;
 		$response['msg'] = 'Successful logout';
-		return $this->renderText(json_encode($response));
+		return $this -> renderText(json_encode($response));
 	}
+
 }
