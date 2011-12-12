@@ -35,8 +35,8 @@ var generateLoansGrid = function() {
 	});
 
 	var roweditor = new Ext.ux.grid.RowEditor({
-		saveText : 'Save',
-		cancelText : 'Cancel',
+		saveText : 'Guardar',
+		cancelText : 'Cancelar',
 		errorSummary : false,
 		onKey : function(f, e) {
 			if(e.getKey() === e.ENTER && this.isValid()) {
@@ -309,13 +309,13 @@ var generateLoansGrid = function() {
 			singleSelect : true
 		}),
 		columns : [{
-			header : 'Payment Id',
+			header : 'Id. de pago',
 			width : 110,
 			dataIndex : 'payment_id'
 		}, {
 			xtype : 'datecolumn',
 			format : 'd-m-Y',
-			header : "Date",
+			header : "Fecha",
 			width : 90,
 			dataIndex : 'date',
 			renderer : function(value) {
@@ -326,7 +326,7 @@ var generateLoansGrid = function() {
 				allowBlank : false
 			})
 		}, {
-			header : 'Payment amount',
+			header : 'Valor del pago',
 			width : 180,
 			align : 'right',
 			dataIndex : 'amount',
@@ -337,7 +337,7 @@ var generateLoansGrid = function() {
 				return Ext.util.Format.usMoney(value);
 			}
 		}, {
-			header : 'Payments account',
+			header : 'Cuenta de destino',
 			width : 220,
 			dataIndex : 'payments_account_id',
 			renderer : function(value) {
@@ -367,7 +367,7 @@ var generateLoansGrid = function() {
 		tbar : {
 			items : [{
 				xtype : 'label',
-				text : 'Current balance:'
+				text : 'Saldo:'
 			}, ' ', {
 				id : 'current_balance',
 				xtype : 'textfield',
@@ -377,7 +377,7 @@ var generateLoansGrid = function() {
 				}
 			}, ' ', {
 				xtype : 'label',
-				text : 'Interests:'
+				text : 'Intereses:'
 			}, ' ', {
 				id : 'interests',
 				xtype : 'textfield',
@@ -387,7 +387,7 @@ var generateLoansGrid = function() {
 				}
 			}, ' ', {
 				xtype : 'label',
-				text : 'Full payment:'
+				text : 'Pago total:'
 			}, ' ', {
 				id : 'full_payment',
 				xtype : 'textfield',
@@ -407,7 +407,7 @@ var generateLoansGrid = function() {
 		height : 300,
 		closeAction : 'hide',
 		plain : true,
-		title : 'Loan details',
+		title : 'Procesar pagos',
 		items : [payments_made_grid],
 		buttons : [{
 			text : 'Adicionar',

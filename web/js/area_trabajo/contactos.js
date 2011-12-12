@@ -30,8 +30,8 @@ var generateContactsGrid = function() {
 	datastore.load();
 
 	var roweditor = new Ext.ux.grid.RowEditor({
-		saveText : 'Save',
-		cancelText : 'Cancel',
+		saveText : 'Guardar',
+		cancelText : 'Cancelar',
 		errorSummary : false,
 		onKey : function(f, e) {
 			if(e.getKey() === e.ENTER && this.isValid()) {
