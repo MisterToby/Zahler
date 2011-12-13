@@ -1,7 +1,7 @@
 var generateLoansGrid = function() {
 	var datastore = new Ext.data.Store({
 		proxy : new Ext.data.HttpProxy({
-			url : getAbsoluteUrl('loan', 'getList'),
+			url : getAbsoluteUrl('prestamo', 'consultarLista'),
 			method : 'POST'
 		}),
 		reader : new Ext.data.JsonReader({
@@ -48,7 +48,7 @@ var generateLoansGrid = function() {
 			'afteredit' : function() {
 				var record = gridpanel.getSelectionModel().getSelected();
 				Ext.Ajax.request({
-					url : getAbsoluteUrl('loan', 'create'),
+					url : getAbsoluteUrl('prestamo', 'crear'),
 					failure : function() {
 						datastore.load();
 					},
@@ -74,7 +74,7 @@ var generateLoansGrid = function() {
 
 	var contacts_datastore = new Ext.data.Store({
 		proxy : new Ext.data.HttpProxy({
-			url : getAbsoluteUrl('contact', 'getListWithFullName'),
+			url : getAbsoluteUrl('contacto', 'consultarListaNombreCompleto'),
 			method : 'POST'
 		}),
 		reader : new Ext.data.JsonReader({
@@ -92,16 +92,16 @@ var generateLoansGrid = function() {
 
 	var assets_accounts_datastore = new Ext.data.Store({
 		proxy : new Ext.data.HttpProxy({
-			url : getAbsoluteUrl('account', 'getAccountList'),
+			url : getAbsoluteUrl('cuenta', 'consultarListaCuentas'),
 			method : 'POST'
 		}),
 		reader : new Ext.data.JsonReader({
 			root : 'data',
 		}, [{
-			name : 'account_id',
+			name : 'id',
 			type : 'integer'
 		}, {
-			name : 'account_name',
+			name : 'nombre',
 			type : 'string'
 		}])
 	});
@@ -200,8 +200,8 @@ var generateLoansGrid = function() {
 			},
 			editor : new Ext.form.ComboBox({
 				store : assets_accounts_datastore,
-				displayField : 'account_name',
-				valueField : 'account_id',
+				displayField : 'nombre',
+				valueField : 'id',
 				mode : 'local',
 				triggerAction : 'all',
 				forceSelection : true,
@@ -222,8 +222,8 @@ var generateLoansGrid = function() {
 			},
 			editor : new Ext.form.ComboBox({
 				store : assets_accounts_datastore,
-				displayField : 'account_name',
-				valueField : 'account_id',
+				displayField : 'nombre',
+				valueField : 'id',
 				mode : 'local',
 				triggerAction : 'all',
 				forceSelection : true,
@@ -239,7 +239,7 @@ var generateLoansGrid = function() {
 
 	var payments_made_datastore = new Ext.data.Store({
 		proxy : new Ext.data.HttpProxy({
-			url : getAbsoluteUrl('loan', 'getPaymentsList'),
+			url : getAbsoluteUrl('prestamo', 'consultarListaPagos'),
 			method : 'POST'
 		}),
 		reader : new Ext.data.JsonReader({
@@ -276,7 +276,7 @@ var generateLoansGrid = function() {
 					var loanRecord = gridpanel.getSelectionModel().getSelected();
 					var record = payments_made_grid.getSelectionModel().getSelected();
 					Ext.Ajax.request({
-						url : getAbsoluteUrl('loan', 'registerPayment'),
+						url : getAbsoluteUrl('prestamo', 'registrarPago'),
 						failure : function() {
 							updateDetailsData();
 						},
@@ -431,7 +431,7 @@ var generateLoansGrid = function() {
 					var record = payments_made_grid.getSelectionModel().getSelected();
 					var selectedPaymentId = record.get('payment_id');
 					Ext.Ajax.request({
-						url : getAbsoluteUrl('loan', 'deletePayment'),
+						url : getAbsoluteUrl('prestamo', 'eliminarPago'),
 						failure : function() {
 							updateDetailsData();
 						},
@@ -466,7 +466,7 @@ var generateLoansGrid = function() {
 
 	var details_datastore = new Ext.data.Store({
 		proxy : new Ext.data.HttpProxy({
-			url : getAbsoluteUrl('loan', 'getLoanDetails'),
+			url : getAbsoluteUrl('prestamo', 'consultarDetallesPrestamo'),
 			method : 'POST'
 		}),
 		reader : new Ext.data.JsonReader({
@@ -529,7 +529,7 @@ var generateLoansGrid = function() {
 						var record = gridpanel.getSelectionModel().getSelected();
 						var selectedLoanId = record.get('loan_id');
 						Ext.Ajax.request({
-							url : getAbsoluteUrl('loan', 'delete'),
+							url : getAbsoluteUrl('prestamo', 'eliminar'),
 							failure : function() {
 								datastore.load();
 							},

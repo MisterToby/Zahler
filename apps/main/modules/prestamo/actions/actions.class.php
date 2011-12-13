@@ -8,10 +8,10 @@
  * @author     Your name here
  * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
-class loanActions extends sfActions {
+class prestamoActions extends sfActions {
 	public function executeGetLoanDetails(sfWebRequest $request) {
 		$loanId = $request -> getParameter('loan_id');
-		$loan = LoanPeer::retrieveByPK($loanId);
+		$loan = PrestamoPeer::retrieveByPK($loanId);
 		// $loan = new Loan();
 		$loanTransaction = $loan -> getTransaction();
 		// $loanTransaction = new Transaction();
@@ -98,7 +98,7 @@ class loanActions extends sfActions {
 			$transaction -> setAtrDescription('Loan payment');
 		}
 
-		$loan = LoanPeer::retrieveByPK($request -> getParameter('loan_id'));
+		$loan = PrestamoPeer::retrieveByPK($request -> getParameter('loan_id'));
 
 		$payment -> setLoan($loan);
 
@@ -149,11 +149,12 @@ class loanActions extends sfActions {
 		return $this -> renderText(json_encode($result));
 	}
 
-	public function executeDelete(sfWebRequest $request) {
+	public function executeEliminar(sfWebRequest $request) {
 		try {
 			$loanId = $request -> getParameter('id');
-			$loan = LoanPeer::retrieveByPK($loanId);
-			$transaction = $loan -> getTransaction();
+			$loan = PrestamoPeer::retrieveByPK($loanId);
+			// $loan = new Prestamo();
+			$transaction = $loan -> getTransaccion();
 			$transaction -> delete();
 			$loan -> delete();
 		} catch(Exception $e) {
@@ -162,28 +163,33 @@ class loanActions extends sfActions {
 		return $this -> renderText('ok');
 	}
 
-	public function executeCreate(sfWebRequest $request) {
+	public function executeCrear(sfWebRequest $request) {
 		try {
 			$loan = null;
 			$transaction = null;
 			if ($request -> getParameter('loan_id') != '') {
-				$loan = LoanPeer::retrieveByPK($request -> getParameter('loan_id'));
-				$transaction = $loan -> getTransaction();
+				$loan = PrestamoPeer::retrieveByPK($request -> getParameter('loan_id'));
+				// $loan = new Prestamo();
+				$transaction = $loan -> getTransaccion();
 			} else {
-				$loan = new Loan();
-				$transaction = new Transaction();
-				$transaction -> setAtrReference('');
-				$transaction -> setAtrDescription('Loan');
+				$loan = new Prestamo();
+				$transaction = new Transaccion();
+				$transaction -> setTraReferencia('');
+				$transaction -> setTraDescripcion('Préstamo');
 			}
 
-			$transaction -> setAtrDate($request -> getParameter('date'));
-			$transaction -> setAtrAccIdDebit($request -> getParameter('loans_account_id'));
-			$transaction -> setAtrAccIdCredit($request -> getParameter('source_account_id'));
-			$transaction -> setAtrValue($request -> getParameter('amount'));
+			// $transaction = new Transaccion();
 
-			$loan -> setLoaConId($request -> getParameter('contact_id'));
-			$loan -> setTransaction($transaction);
-			$loan -> setLoaInterestRate($request -> getParameter('interest_rate'));
+			$transaction -> setTraFecha($request -> getParameter('date'));
+			$transaction -> setTraCueIdDebito($request -> getParameter('loans_account_id'));
+			$transaction -> setTraCueIdCredito($request -> getParameter('source_account_id'));
+			$transaction -> setTraValor($request -> getParameter('amount'));
+
+			// $loan = new Prestamo();
+
+			$loan -> setPreConId($request -> getParameter('contact_id'));
+			$loan -> setTransaccion($transaction);
+			$loan -> setPreTasaInteres($request -> getParameter('interest_rate'));
 			$loan -> save();
 		} catch(Exception $e) {
 			return $this -> renderText($e);
@@ -191,8 +197,8 @@ class loanActions extends sfActions {
 		return $this -> renderText('ok');
 	}
 
-	public function executeGetList(sfWebRequest $request) {
-		$loans = LoanPeer::doSelect(new Criteria());
+	public function executeConsultarLista(sfWebRequest $request) {
+		$loans = PrestamoPeer::doSelect(new Criteria());
 
 		$result = array();
 		$data = array();
@@ -200,19 +206,20 @@ class loanActions extends sfActions {
 		foreach ($loans as $loan) {
 			$fields = array();
 
-			//			$loan = new Loan();
+			// $loan = new Prestamo();
 
-			$fields['loan_id'] = $loan -> getLoaId();
-			$fields['contact_id'] = $loan -> getLoaConId();
-			$fields['transaction_id'] = $loan -> getLoaAtrId();
-			$fields['interest_rate'] = $loan -> getLoaInterestRate();
+			$fields['loan_id'] = $loan -> getPreId();
+			$fields['contact_id'] = $loan -> getPreConId();
+			$fields['transaction_id'] = $loan -> getPreTraId();
+			$fields['interest_rate'] = $loan -> getPreTasaInteres();
 
-			$transaction = $loan -> getTransaction();
+			$transaction = $loan -> getTransaccion();
+			// $transaction = new Transaccion();
 
-			$fields['date'] = $transaction -> getAtrDate('d-m-Y');
-			$fields['amount'] = $transaction -> getAtrValue();
-			$fields['source_account_id'] = $transaction -> getAtrAccIdCredit();
-			$fields['loans_account_id'] = $transaction -> getAtrAccIdDebit();
+			$fields['date'] = $transaction -> getTraFecha('Y-m-d');
+			$fields['amount'] = $transaction -> getTraValor();
+			$fields['source_account_id'] = $transaction -> getTraCueIdCredito();
+			$fields['loans_account_id'] = $transaction -> getTraCueIdDebito();
 
 			$data[] = $fields;
 		}
