@@ -1,3 +1,3 @@
 <?php
 
-$webUrlFolder = '/Zahler/web/';
+$webUrlFolder = '/zahler/web/';
