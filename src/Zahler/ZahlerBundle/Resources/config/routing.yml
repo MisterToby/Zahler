@@ -1,0 +1,16 @@
+zahler_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: ZahlerBundle:Default:index }
+
+ZahlerBundle_accounttype:
+        resource: "@ZahlerBundle/Resources/config/routing/accounttype.yml"
+        prefix:   /accounttype
+
+ZahlerBundle_account:
+        resource: "@ZahlerBundle/Resources/config/routing/account.yml"
+        prefix:   /account
+
+ZahlerBundle_transaction:
+        resource: "@ZahlerBundle/Resources/config/routing/transaction.yml"
+        prefix:   /transaction
+

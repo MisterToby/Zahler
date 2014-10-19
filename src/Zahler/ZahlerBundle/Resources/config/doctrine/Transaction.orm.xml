@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Zahler\ZahlerBundle\Entity\Transaction" table="transaction">
+    <indexes>
+      <index name="IDX_723705D11E2F771A" columns="tra_acc_id_debit"/>
+      <index name="IDX_723705D1DDB03079" columns="tra_acc_id_credit"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="traDate" type="date" column="tra_date" nullable="false"/>
+    <field name="traDescription" type="string" column="tra_description" length="255" nullable="false"/>
+    <field name="traAmount" type="float" column="tra_amount" precision="10" scale="0" nullable="false"/>
+    <many-to-one field="traAccCredit" target-entity="Account">
+      <join-columns>
+        <join-column name="tra_acc_id_credit" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="traAccDebit" target-entity="Account">
+      <join-columns>
+        <join-column name="tra_acc_id_debit" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

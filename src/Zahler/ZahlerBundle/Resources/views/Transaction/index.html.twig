@@ -1,0 +1,46 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Transaction list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Tradate</th>
+                <th>Tradescription</th>
+                <th>Traamount</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('transaction_show', { 'id': entity.id }) }}">{{ entity.traDate|date("Y-m-d") }}</a></td>
+                <td>{{ entity.traDescription }}</td>
+                <td>{{ entity.traAmount }}</td>
+                <td>{{ entity.id }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('transaction_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('transaction_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('transaction_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% include 'ZahlerBundle:Transaction:new.html.twig' %}
+    {% endblock %}

@@ -1,0 +1,7 @@
+parameters:
+#    zahler.example.class: Zahler\ZahlerBundle\Example
+
+services:
+#    zahler.example:
+#        class: %zahler.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,3 +1,0 @@
-<?php
-
-$webUrlFolder = '/zahler/web/';

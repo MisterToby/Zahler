@@ -1,0 +1,30 @@
+transaction:
+    path:     /
+    defaults: { _controller: "ZahlerBundle:Transaction:index" }
+
+transaction_show:
+    path:     /{id}/show
+    defaults: { _controller: "ZahlerBundle:Transaction:show" }
+
+transaction_new:
+    path:     /new
+    defaults: { _controller: "ZahlerBundle:Transaction:new" }
+
+transaction_create:
+    path:     /create
+    defaults: { _controller: "ZahlerBundle:Transaction:create" }
+    requirements: { _method: post }
+
+transaction_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ZahlerBundle:Transaction:edit" }
+
+transaction_update:
+    path:     /{id}/update
+    defaults: { _controller: "ZahlerBundle:Transaction:update" }
+    requirements: { _method: post|put }
+
+transaction_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ZahlerBundle:Transaction:delete" }
+    requirements: { _method: post|delete }

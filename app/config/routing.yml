@@ -1,0 +1,4 @@
+zahler:
+    resource: "@ZahlerBundle/Resources/config/routing.yml"
+    prefix:   /
+

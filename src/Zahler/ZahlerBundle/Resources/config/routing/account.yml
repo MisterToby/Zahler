@@ -1,0 +1,30 @@
+account:
+    path:     /
+    defaults: { _controller: "ZahlerBundle:Account:index" }
+
+account_show:
+    path:     /{id}/show
+    defaults: { _controller: "ZahlerBundle:Account:show" }
+
+account_new:
+    path:     /new
+    defaults: { _controller: "ZahlerBundle:Account:new" }
+
+account_create:
+    path:     /create
+    defaults: { _controller: "ZahlerBundle:Account:create" }
+    requirements: { _method: post }
+
+account_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ZahlerBundle:Account:edit" }
+
+account_update:
+    path:     /{id}/update
+    defaults: { _controller: "ZahlerBundle:Account:update" }
+    requirements: { _method: post|put }
+
+account_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ZahlerBundle:Account:delete" }
+    requirements: { _method: post|delete }
