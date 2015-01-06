@@ -13,4 +13,8 @@ ZahlerBundle_account:
 ZahlerBundle_transaction:
         resource: "@ZahlerBundle/Resources/config/routing/transaction.yml"
         prefix:   /transaction
+        
+root:
+    path:     /
+    defaults: { _controller: "ZahlerBundle:Transaction:index_js" }
 

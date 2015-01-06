@@ -15,12 +15,15 @@ class TransactionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('traDate')
-            ->add('traDescription')
-            ->add('traAmount')
+            ->add('traDate', NULL, array('label' => 'Date: '))
+            ->add('traDescription', NULL, array('label' => 'Description: '))
             ->add('traAccCredit')
             ->add('traAccDebit')
+            ->add('traAmount')
         ;
+            // ->add('account', 'entity', array('label' => 'Account: ', 'class' => 'ZahlerBundle:Account'))
+            // ->add('debit_amount', 'text', array('label' => 'Debit amount: '))
+            // ->add('credit_amount', 'text', array('label' => 'Credit amount: '))
     }
     
     /**
@@ -29,7 +32,8 @@ class TransactionType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Zahler\ZahlerBundle\Entity\Transaction'
+            'data_class' => 'Zahler\ZahlerBundle\Entity\Transaction',
+            'csrf_protection'   => false
         ));
     }
 

@@ -7,8 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Transaction
  */
-class Transaction
-{
+class Transaction {
     /**
      * @var \DateTime
      */
@@ -39,6 +38,56 @@ class Transaction
      */
     private $traAccDebit;
 
+    private $debitAmount;
+    private $creditAmount;
+
+    public $balance;
+
+    private $account;
+
+    public function adjust($account) {
+        if ($this -> getDebitAmount() > $this -> getCreditAmount()) {
+            $difference = $this -> getDebitAmount() - $this -> getCreditAmount();
+            $this -> setTraAmount($difference);
+            $this -> setTraAccDebit($account);
+            $this -> setTraAccCredit($this -> getAccount());
+        } else {
+            $difference = $this -> getCreditAmount() - $this -> getDebitAmount();
+            $this -> setTraAmount($difference);
+            $this -> setTraAccDebit($this -> getAccount());
+            $this -> setTraAccCredit($account);
+        }
+    }
+
+    public function getAccount() {
+        return $this -> account;
+    }
+
+    public function setAccount($account) {
+        $this -> account = $account;
+
+        return $this;
+    }
+
+    public function getDebitAmount() {
+        return $this -> debitAmount;
+    }
+
+    public function getCreditAmount() {
+        return $this -> creditAmount;
+    }
+
+    public function setDebitAmount($debitAmount) {
+        $this -> debitAmount = $debitAmount;
+
+        return $this;
+    }
+
+    public function setCreditAmount($creditAmount) {
+        $this -> creditAmount = $creditAmount;
+
+        return $this;
+    }
 
     /**
      * Set traDate
@@ -46,9 +95,8 @@ class Transaction
      * @param \DateTime $traDate
      * @return Transaction
      */
-    public function setTraDate($traDate)
-    {
-        $this->traDate = $traDate;
+    public function setTraDate($traDate) {
+        $this -> traDate = $traDate;
 
         return $this;
     }
@@ -56,11 +104,10 @@ class Transaction
     /**
      * Get traDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
-    public function getTraDate()
-    {
-        return $this->traDate;
+    public function getTraDate() {
+        return $this -> traDate;
     }
 
     /**
@@ -69,9 +116,8 @@ class Transaction
      * @param string $traDescription
      * @return Transaction
      */
-    public function setTraDescription($traDescription)
-    {
-        $this->traDescription = $traDescription;
+    public function setTraDescription($traDescription) {
+        $this -> traDescription = $traDescription;
 
         return $this;
     }
@@ -79,11 +125,10 @@ class Transaction
     /**
      * Get traDescription
      *
-     * @return string 
+     * @return string
      */
-    public function getTraDescription()
-    {
-        return $this->traDescription;
+    public function getTraDescription() {
+        return $this -> traDescription;
     }
 
     /**
@@ -92,9 +137,8 @@ class Transaction
      * @param float $traAmount
      * @return Transaction
      */
-    public function setTraAmount($traAmount)
-    {
-        $this->traAmount = $traAmount;
+    public function setTraAmount($traAmount) {
+        $this -> traAmount = $traAmount;
 
         return $this;
     }
@@ -102,21 +146,19 @@ class Transaction
     /**
      * Get traAmount
      *
-     * @return float 
+     * @return float
      */
-    public function getTraAmount()
-    {
-        return $this->traAmount;
+    public function getTraAmount() {
+        return $this -> traAmount;
     }
 
     /**
      * Get traId
      *
-     * @return integer 
+     * @return integer
      */
-    public function getTraId()
-    {
-        return $this->traId;
+    public function getTraId() {
+        return $this -> traId;
     }
 
     /**
@@ -125,9 +167,8 @@ class Transaction
      * @param \Zahler\ZahlerBundle\Entity\Account $traAccCredit
      * @return Transaction
      */
-    public function setTraAccCredit(\Zahler\ZahlerBundle\Entity\Account $traAccCredit = null)
-    {
-        $this->traAccCredit = $traAccCredit;
+    public function setTraAccCredit(\Zahler\ZahlerBundle\Entity\Account $traAccCredit = null) {
+        $this -> traAccCredit = $traAccCredit;
 
         return $this;
     }
@@ -135,11 +176,10 @@ class Transaction
     /**
      * Get traAccCredit
      *
-     * @return \Zahler\ZahlerBundle\Entity\Account 
+     * @return \Zahler\ZahlerBundle\Entity\Account
      */
-    public function getTraAccCredit()
-    {
-        return $this->traAccCredit;
+    public function getTraAccCredit() {
+        return $this -> traAccCredit;
     }
 
     /**
@@ -148,9 +188,8 @@ class Transaction
      * @param \Zahler\ZahlerBundle\Entity\Account $traAccDebit
      * @return Transaction
      */
-    public function setTraAccDebit(\Zahler\ZahlerBundle\Entity\Account $traAccDebit = null)
-    {
-        $this->traAccDebit = $traAccDebit;
+    public function setTraAccDebit(\Zahler\ZahlerBundle\Entity\Account $traAccDebit = null) {
+        $this -> traAccDebit = $traAccDebit;
 
         return $this;
     }
@@ -158,25 +197,24 @@ class Transaction
     /**
      * Get traAccDebit
      *
-     * @return \Zahler\ZahlerBundle\Entity\Account 
+     * @return \Zahler\ZahlerBundle\Entity\Account
      */
-    public function getTraAccDebit()
-    {
-        return $this->traAccDebit;
+    public function getTraAccDebit() {
+        return $this -> traAccDebit;
     }
+
     /**
      * @var integer
      */
     private $id;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId()
-    {
-        return $this->id;
+    public function getId() {
+        return $this -> id;
     }
+
 }

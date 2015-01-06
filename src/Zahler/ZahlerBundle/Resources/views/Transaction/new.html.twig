@@ -1,15 +1,14 @@
 {% extends '::base.html.twig' %}
-
 {% block body -%}
     <h1>Transaction creation</h1>
 
     {{ form(form) }}
 
-        <ul class="record_actions">
+        <!-- <ul class="record_actions">
     <li>
-        <a href="{{ path('transaction') }}">
+        <a href="{{ path('transaction', {'accId':accId}) }}">
             Back to the list
         </a>
     </li>
-</ul>
+</ul> -->
 {% endblock %}

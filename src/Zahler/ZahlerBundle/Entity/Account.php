@@ -25,7 +25,7 @@ class Account
     private $accActType;
 
     public function __toString() {
-	return $this->accName;
+	return $this->accActType->__toString().':'.$this->accName;
     }
 
     /**

@@ -1,6 +1,18 @@
 transaction:
-    path:     /
+    path:     /{accId}
     defaults: { _controller: "ZahlerBundle:Transaction:index" }
+
+transaction_retrieve:
+    path:     /retrieve/{accId}
+    defaults: { _controller: "ZahlerBundle:Transaction:retrieve" }
+    
+transaction_js:
+    path:     /js/{accId}
+    defaults: { _controller: "ZahlerBundle:Transaction:index_js" }
+    
+transaction_root:
+    path:     /
+    defaults: { _controller: "ZahlerBundle:Transaction:index_js" }
 
 transaction_show:
     path:     /{id}/show
@@ -11,20 +23,20 @@ transaction_new:
     defaults: { _controller: "ZahlerBundle:Transaction:new" }
 
 transaction_create:
-    path:     /create
+    path:     /create/
     defaults: { _controller: "ZahlerBundle:Transaction:create" }
     requirements: { _method: post }
 
 transaction_edit:
-    path:     /{id}/edit
+    path:     /{id}/{accId}/edit
     defaults: { _controller: "ZahlerBundle:Transaction:edit" }
 
 transaction_update:
-    path:     /{id}/update
+    path:     /{id}/{accId}/update
     defaults: { _controller: "ZahlerBundle:Transaction:update" }
     requirements: { _method: post|put }
 
 transaction_delete:
-    path:     /{id}/delete
+    path:     /{id}/{accId}/delete
     defaults: { _controller: "ZahlerBundle:Transaction:delete" }
     requirements: { _method: post|delete }

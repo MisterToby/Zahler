@@ -7,10 +7,10 @@
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('transaction') }}">
+        <a href="{{ path('transaction', {'accId':accId}) }}">
             Back to the list
         </a>
     </li>
-    <li>{{ form(delete_form) }}</li>
+    <!-- <li>{{ form(delete_form) }}</li> -->
 </ul>
 {% endblock %}
