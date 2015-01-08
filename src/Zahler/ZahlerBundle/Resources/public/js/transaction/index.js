@@ -47,7 +47,7 @@ Ext.onReady(function() {
                         return true;
                     }
                 };
-                store.loadData([['', '']], true);
+                store.loadData([['', new Date(), '', '', 0, 0]], true);
             }
         }
     });
@@ -129,6 +129,20 @@ Ext.onReady(function() {
                             store.load();
                         }
                     });
+                } else {
+                    params._method = 'PUT';
+                    Ext.Ajax.request({
+                        url : prefijoUrl + 'transaction/update/' + e.record.get('id'),
+                        params : params,
+                        success : function(response) {
+                            var text = response.responseText;
+                            store.load();
+                        },
+                        failure : function(response) {
+                            var text = response.responseText;
+                            store.load();
+                        }
+                    });
                 }
             }
         }
@@ -184,6 +198,8 @@ Ext.onReady(function() {
             header : 'Debit',
             dataIndex : 'debitAmount',
             flex : 1,
+            align : 'right',
+            renderer : Ext.util.Format.usMoney,
             editor : {
                 allowBlank : false
             }
@@ -191,17 +207,21 @@ Ext.onReady(function() {
             header : 'Credit',
             dataIndex : 'creditAmount',
             flex : 1,
+            align : 'right',
+            renderer : Ext.util.Format.usMoney,
             editor : {
                 allowBlank : false
             }
         }, {
             header : 'Balance',
             dataIndex : 'balance',
-            flex : 1
+            flex : 1,
+            renderer : Ext.util.Format.usMoney,
+            align : 'right'
         }],
         width : 600,
         height : 400,
-        title : 'Employee Salaries',
+        // title : 'Transactions',
         frame : true,
         plugins : [rowEditing]
     });

@@ -32,11 +32,11 @@ transaction_edit:
     defaults: { _controller: "ZahlerBundle:Transaction:edit" }
 
 transaction_update:
-    path:     /{id}/{accId}/update
+    path:     /update/{id}
     defaults: { _controller: "ZahlerBundle:Transaction:update" }
     requirements: { _method: post|put }
 
 transaction_delete:
-    path:     /{id}/{accId}/delete
+    path:     /{id}/delete
     defaults: { _controller: "ZahlerBundle:Transaction:delete" }
     requirements: { _method: post|delete }

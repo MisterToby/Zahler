@@ -210,8 +210,8 @@ class TransactionController extends Controller {
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Transaction $entity, $accId) {
-        $form = $this -> createForm(new TransactionType(), $entity, array('action' => $this -> generateUrl('transaction_update', array('id' => $entity -> getId(), 'accId' => $accId)), 'method' => 'PUT', ));
+    private function createEditForm(Transaction $entity) {
+        $form = $this -> createForm(new TransactionType(), $entity, array('action' => $this -> generateUrl('transaction_update', array('id' => $entity -> getId())), 'method' => 'PUT', ));
 
         $form -> add('submit', 'submit', array('label' => 'Update'));
 
@@ -222,7 +222,7 @@ class TransactionController extends Controller {
      * Edits an existing Transaction entity.
      *
      */
-    public function updateAction(Request $request, $id, $accId) {
+    public function updateAction(Request $request, $id) {
         $em = $this -> getDoctrine() -> getManager();
 
         $entity = $em -> getRepository('ZahlerBundle:Transaction') -> find($id);
@@ -231,17 +231,16 @@ class TransactionController extends Controller {
             throw $this -> createNotFoundException('Unable to find Transaction entity.');
         }
 
-        $deleteForm = $this -> createDeleteForm($id, $accId);
-        $editForm = $this -> createEditForm($entity, $accId);
+        $editForm = $this -> createEditForm($entity);
         $editForm -> handleRequest($request);
 
         if ($editForm -> isValid()) {
-            $entity -> adjust($em -> getReference('ZahlerBundle:Account', $accId));
-
             $em -> flush();
 
-            return $this -> redirect($this -> generateUrl('transaction_edit', array('id' => $id, 'accId' => $accId)));
+            return new Response('Ok');
         }
+
+        $deleteForm = $this -> createDeleteForm($id);
 
         return $this -> render('ZahlerBundle:Transaction:edit.html.twig', array('entity' => $entity, 'edit_form' => $editForm -> createView(), 'delete_form' => $deleteForm -> createView(), ));
     }
@@ -250,8 +249,8 @@ class TransactionController extends Controller {
      * Deletes a Transaction entity.
      *
      */
-    public function deleteAction(Request $request, $id, $accId) {
-        $form = $this -> createDeleteForm($id, $accId);
+    public function deleteAction(Request $request, $id) {
+        $form = $this -> createDeleteForm($id);
         $form -> handleRequest($request);
 
         if ($form -> isValid()) {
@@ -266,7 +265,7 @@ class TransactionController extends Controller {
             $em -> flush();
         }
 
-        return $this -> redirect($this -> generateUrl('transaction', array('accId' => $accId)));
+        return $this -> redirect($this -> generateUrl('transaction'));
     }
 
     /**
@@ -276,8 +275,8 @@ class TransactionController extends Controller {
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id, $accId) {
-        return $this -> createFormBuilder() -> setAction($this -> generateUrl('transaction_delete', array('id' => $id, 'accId' => $accId))) -> setMethod('DELETE') -> add('submit', 'submit', array('label' => 'Delete')) -> getForm();
+    private function createDeleteForm($id) {
+        return $this -> createFormBuilder() -> setAction($this -> generateUrl('transaction_delete', array('id' => $id))) -> setMethod('DELETE') -> add('submit', 'submit', array('label' => 'Delete')) -> getForm();
     }
 
 }
