@@ -95,8 +95,8 @@ Ext.onReady(function() {
         errorSummary : false,
         listeners : {
             edit : function(editor, e) {
-                var debitAmount = e.record.get('debitAmount');
-                var creditAmount = e.record.get('creditAmount');
+                var debitAmount = parseFloat(e.record.get('debitAmount'));
+                var creditAmount = parseFloat(e.record.get('creditAmount'));
                 var amount = 0;
                 if (debitAmount > creditAmount) {
                     amount = debitAmount - creditAmount;
@@ -201,6 +201,8 @@ Ext.onReady(function() {
             align : 'right',
             renderer : Ext.util.Format.usMoney,
             editor : {
+                xtype : 'numberfield',
+                decimalSeparator : ',',
                 allowBlank : false
             }
         }, {
@@ -210,6 +212,8 @@ Ext.onReady(function() {
             align : 'right',
             renderer : Ext.util.Format.usMoney,
             editor : {
+                xtype : 'numberfield',
+                decimalSeparator : ',',
                 allowBlank : false
             }
         }, {
@@ -218,6 +222,37 @@ Ext.onReady(function() {
             flex : 1,
             renderer : Ext.util.Format.usMoney,
             align : 'right'
+        }, {
+            xtype : 'actioncolumn',
+            width : 30,
+            sortable : false,
+            items : [{
+                icon : resourcesPath + 'images/delete.png',
+                tooltip : 'Delete transaction',
+                handler : function(grid, rowIndex, colIndex) {
+                    var callback = function(button) {
+                        if (button == 'yes') {
+                            var record = store.getAt(rowIndex);
+                            var params = {
+                                '_method' : 'DELETE'
+                            };
+                            Ext.Ajax.request({
+                                url : prefijoUrl + 'transaction/delete/' + record.get('id'),
+                                params : params,
+                                success : function(response) {
+                                    var text = response.responseText;
+                                    store.load();
+                                },
+                                failure : function(response) {
+                                    var text = response.responseText;
+                                    store.load();
+                                }
+                            });
+                        }
+                    };
+                    Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this transaction?', callback);
+                }
+            }]
         }],
         width : 600,
         height : 400,

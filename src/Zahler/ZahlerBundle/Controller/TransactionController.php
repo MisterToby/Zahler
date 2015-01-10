@@ -38,7 +38,8 @@ class TransactionController extends Controller {
         $qb -> join('tra.traAccDebit', 'accDebit');
         $qb -> join('tra.traAccCredit', 'accCredit');
         $qb -> where("tra.traAccCredit = $accId OR tra.traAccDebit = $accId");
-        $qb -> orderBy('tra.id');
+        $qb -> orderBy('tra.traDate');
+        $qb -> addOrderBy('tra.id');
 
         $query = $qb -> getQuery();
         $entities = $query -> getArrayResult();
@@ -250,22 +251,22 @@ class TransactionController extends Controller {
      *
      */
     public function deleteAction(Request $request, $id) {
-        $form = $this -> createDeleteForm($id);
-        $form -> handleRequest($request);
+        // $form = $this -> createDeleteForm($id);
+        // $form -> handleRequest($request);
 
-        if ($form -> isValid()) {
-            $em = $this -> getDoctrine() -> getManager();
-            $entity = $em -> getRepository('ZahlerBundle:Transaction') -> find($id);
+        // if ($form -> isValid()) {
+        $em = $this -> getDoctrine() -> getManager();
+        $entity = $em -> getRepository('ZahlerBundle:Transaction') -> find($id);
 
-            if (!$entity) {
-                throw $this -> createNotFoundException('Unable to find Transaction entity.');
-            }
-
-            $em -> remove($entity);
-            $em -> flush();
+        if (!$entity) {
+            throw $this -> createNotFoundException('Unable to find Transaction entity.');
         }
 
-        return $this -> redirect($this -> generateUrl('transaction'));
+        $em -> remove($entity);
+        $em -> flush();
+        // }
+
+        return new Response('Ok');
     }
 
     /**
@@ -276,7 +277,9 @@ class TransactionController extends Controller {
      * @return \Symfony\Component\Form\Form The form
      */
     private function createDeleteForm($id) {
-        return $this -> createFormBuilder() -> setAction($this -> generateUrl('transaction_delete', array('id' => $id))) -> setMethod('DELETE') -> add('submit', 'submit', array('label' => 'Delete')) -> getForm();
+        $form = $this -> createFormBuilder() -> setAction($this -> generateUrl('transaction_delete', array('id' => $id))) -> setMethod('DELETE') -> add('submit', 'submit', array('label' => 'Delete')) -> getForm();
+
+        return $form;
     }
 
 }

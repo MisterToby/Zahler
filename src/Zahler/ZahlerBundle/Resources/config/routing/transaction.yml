@@ -37,6 +37,6 @@ transaction_update:
     requirements: { _method: post|put }
 
 transaction_delete:
-    path:     /{id}/delete
+    path:     /delete/{id}
     defaults: { _controller: "ZahlerBundle:Transaction:delete" }
     requirements: { _method: post|delete }
