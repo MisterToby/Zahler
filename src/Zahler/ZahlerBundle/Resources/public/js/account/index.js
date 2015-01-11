@@ -69,7 +69,12 @@ Ext.onReady(function() {
         width : 600,
         height : 400,
         // title : 'Transactions',
-        frame : true
+        frame : true,
+        listeners : {
+            itemdblclick : function(view, record) {
+                window.open(prefijoUrl + 'transaction/js/' + record.get('id'));
+            }
+        }
     });
 
     Ext.create('Ext.container.Viewport', {
