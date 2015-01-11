@@ -5,6 +5,10 @@ account:
 account_retrieve:
     path:     /retrieve
     defaults: { _controller: "ZahlerBundle:Account:retrieve" }
+    
+account_js:
+    path:     /js
+    defaults: { _controller: "ZahlerBundle:Account:index_js" }
 
 account_show:
     path:     /{id}/show

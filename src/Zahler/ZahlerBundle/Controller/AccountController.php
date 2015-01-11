@@ -14,6 +14,12 @@ use Zahler\ZahlerBundle\Form\AccountType;
  *
  */
 class AccountController extends Controller {
+    public function index_jsAction() {
+        $array = array();
+        $array['prefijo_url'] = $this -> get('router') -> generate('root');
+        return $this -> render('ZahlerBundle:Account:index_js.html.twig', $array);
+    }
+
     public function retrieveAction() {
         $em = $this -> getDoctrine() -> getManager();
 
