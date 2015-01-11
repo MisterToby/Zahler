@@ -12,7 +12,6 @@ security:
         in_memory:
             memory:
                 users:
-                    
 
     firewalls:
         dev:
