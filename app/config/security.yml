@@ -12,7 +12,7 @@ security:
         in_memory:
             memory:
                 users:
-                    
+                  pedroabp: { password: $2a$04$TGQfHD5azj7.JItDfTRvw.lNUOK3fT05E.eMCVyFCxs7X47WMjNBW, roles: [ 'ROLE_ADMIN' ] }
 
     firewalls:
         dev:
