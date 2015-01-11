@@ -28,7 +28,7 @@ ZahlerBundle_payment:
 
 root:
     path:     /
-    defaults: { _controller: "ZahlerBundle:Transaction:index_js" }
+    defaults: { _controller: "ZahlerBundle:Account:index_js" }
 
 login:
     path:     /login
