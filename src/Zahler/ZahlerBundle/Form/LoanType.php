@@ -15,9 +15,12 @@ class LoanType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('loaTra')
-            ->add('loaCus')
+            ->add('date', 'date', array('input' => 'datetime'))
+            ->add('sourceAccount', 'entity', array('class' => 'ZahlerBundle:Account'))
+            ->add('loaPer')
+            ->add('amount', 'money', array('currency' => 'COP'))
         ;
+            // ->add('loaTra')
     }
     
     /**

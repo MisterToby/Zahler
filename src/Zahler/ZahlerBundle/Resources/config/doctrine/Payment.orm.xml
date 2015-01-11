@@ -19,7 +19,7 @@
         <join-column name="pay_tra_id" referenced-column-name="id"/>
       </join-columns>
     </many-to-one>
-    <many-to-one field="payLoa" target-entity="Customer">
+    <many-to-one field="payLoa" target-entity="Loan">
       <join-columns>
         <join-column name="pay_loa_id" referenced-column-name="id"/>
       </join-columns>

@@ -5,37 +5,37 @@ namespace Zahler\ZahlerBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Zahler\ZahlerBundle\Entity\Customer;
-use Zahler\ZahlerBundle\Form\CustomerType;
+use Zahler\ZahlerBundle\Entity\Person;
+use Zahler\ZahlerBundle\Form\PersonType;
 
 /**
- * Customer controller.
+ * Person controller.
  *
  */
-class CustomerController extends Controller
+class PersonController extends Controller
 {
 
     /**
-     * Lists all Customer entities.
+     * Lists all Person entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('ZahlerBundle:Customer')->findAll();
+        $entities = $em->getRepository('ZahlerBundle:Person')->findAll();
 
-        return $this->render('ZahlerBundle:Customer:index.html.twig', array(
+        return $this->render('ZahlerBundle:Person:index.html.twig', array(
             'entities' => $entities,
         ));
     }
     /**
-     * Creates a new Customer entity.
+     * Creates a new Person entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new Customer();
+        $entity = new Person();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -44,26 +44,26 @@ class CustomerController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('customer_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('person_show', array('id' => $entity->getId())));
         }
 
-        return $this->render('ZahlerBundle:Customer:new.html.twig', array(
+        return $this->render('ZahlerBundle:Person:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Creates a form to create a Customer entity.
+     * Creates a form to create a Person entity.
      *
-     * @param Customer $entity The entity
+     * @param Person $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Customer $entity)
+    private function createCreateForm(Person $entity)
     {
-        $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('customer_create'),
+        $form = $this->createForm(new PersonType(), $entity, array(
+            'action' => $this->generateUrl('person_create'),
             'method' => 'POST',
         ));
 
@@ -73,60 +73,60 @@ class CustomerController extends Controller
     }
 
     /**
-     * Displays a form to create a new Customer entity.
+     * Displays a form to create a new Person entity.
      *
      */
     public function newAction()
     {
-        $entity = new Customer();
+        $entity = new Person();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('ZahlerBundle:Customer:new.html.twig', array(
+        return $this->render('ZahlerBundle:Person:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a Customer entity.
+     * Finds and displays a Person entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('ZahlerBundle:Customer')->find($id);
+        $entity = $em->getRepository('ZahlerBundle:Person')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
+            throw $this->createNotFoundException('Unable to find Person entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('ZahlerBundle:Customer:show.html.twig', array(
+        return $this->render('ZahlerBundle:Person:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing Customer entity.
+     * Displays a form to edit an existing Person entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('ZahlerBundle:Customer')->find($id);
+        $entity = $em->getRepository('ZahlerBundle:Person')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
+            throw $this->createNotFoundException('Unable to find Person entity.');
         }
 
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('ZahlerBundle:Customer:edit.html.twig', array(
+        return $this->render('ZahlerBundle:Person:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -134,16 +134,16 @@ class CustomerController extends Controller
     }
 
     /**
-    * Creates a form to edit a Customer entity.
+    * Creates a form to edit a Person entity.
     *
-    * @param Customer $entity The entity
+    * @param Person $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Customer $entity)
+    private function createEditForm(Person $entity)
     {
-        $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('customer_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new PersonType(), $entity, array(
+            'action' => $this->generateUrl('person_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -152,17 +152,17 @@ class CustomerController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Customer entity.
+     * Edits an existing Person entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('ZahlerBundle:Customer')->find($id);
+        $entity = $em->getRepository('ZahlerBundle:Person')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
+            throw $this->createNotFoundException('Unable to find Person entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -172,17 +172,17 @@ class CustomerController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('customer_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('person_edit', array('id' => $id)));
         }
 
-        return $this->render('ZahlerBundle:Customer:edit.html.twig', array(
+        return $this->render('ZahlerBundle:Person:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
     /**
-     * Deletes a Customer entity.
+     * Deletes a Person entity.
      *
      */
     public function deleteAction(Request $request, $id)
@@ -192,21 +192,21 @@ class CustomerController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('ZahlerBundle:Customer')->find($id);
+            $entity = $em->getRepository('ZahlerBundle:Person')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Customer entity.');
+                throw $this->createNotFoundException('Unable to find Person entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('customer'));
+        return $this->redirect($this->generateUrl('person'));
     }
 
     /**
-     * Creates a form to delete a Customer entity by id.
+     * Creates a form to delete a Person entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -215,7 +215,7 @@ class CustomerController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('customer_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('person_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

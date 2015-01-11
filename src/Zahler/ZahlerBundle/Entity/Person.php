@@ -5,13 +5,13 @@ namespace Zahler\ZahlerBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Customer
+ * Person
  */
-class Customer {
+class Person {
     /**
      * @var string
      */
-    private $cusName;
+    private $perName;
 
     /**
      * @var integer
@@ -19,28 +19,28 @@ class Customer {
     private $id;
 
     public function __toString() {
-        return $this -> cusName;
+        return $this -> perName;
     }
 
     /**
-     * Set cusName
+     * Set perName
      *
-     * @param string $cusName
-     * @return Customer
+     * @param string $perName
+     * @return Person
      */
-    public function setCusName($cusName) {
-        $this -> cusName = $cusName;
+    public function setPerName($perName) {
+        $this -> perName = $perName;
 
         return $this;
     }
 
     /**
-     * Get cusName
+     * Get perName
      *
      * @return string
      */
-    public function getCusName() {
-        return $this -> cusName;
+    public function getPerName() {
+        return $this -> perName;
     }
 
     /**

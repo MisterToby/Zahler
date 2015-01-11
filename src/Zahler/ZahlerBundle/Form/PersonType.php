@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class CustomerType extends AbstractType
+class PersonType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -15,7 +15,7 @@ class CustomerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('cusName')
+            ->add('perName')
         ;
     }
     
@@ -25,7 +25,7 @@ class CustomerType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Zahler\ZahlerBundle\Entity\Customer'
+            'data_class' => 'Zahler\ZahlerBundle\Entity\Person'
         ));
     }
 
@@ -34,6 +34,6 @@ class CustomerType extends AbstractType
      */
     public function getName()
     {
-        return 'zahler_zahlerbundle_customer';
+        return 'zahler_zahlerbundle_person';
     }
 }

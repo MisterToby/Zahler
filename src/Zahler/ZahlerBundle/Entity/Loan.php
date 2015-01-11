@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Loan
  */
-class Loan
-{
+class Loan {
+    const LOAN_ACCOUNT = 515;
     /**
      * @var integer
      */
@@ -20,19 +20,57 @@ class Loan
     private $loaTra;
 
     /**
-     * @var \Zahler\ZahlerBundle\Entity\Customer
+     * @var \Zahler\ZahlerBundle\Entity\Person
      */
-    private $loaCus;
+    private $loaPer;
 
+    private $date;
+
+    private $sourceAccount;
+
+    private $amount;
+
+    public function getDate() {
+        return $this -> date;
+    }
+
+    public function setDate($date) {
+        $this -> date = $date;
+
+        return $this;
+    }
+
+    public function getSourceAccount() {
+        return $this -> sourceAccount;
+    }
+
+    public function setSourceAccount($sourceAccount) {
+        $this -> sourceAccount = $sourceAccount;
+
+        return $this;
+    }
+
+    public function getAmount() {
+        return $this -> amount;
+    }
+
+    public function setAmount($amount) {
+        $this -> amount = $amount;
+
+        return $this;
+    }
+
+    public function __toString() {
+        return $this -> getId() . ' - ' . $this -> getLoaPer() -> getPerName();
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId()
-    {
-        return $this->id;
+    public function getId() {
+        return $this -> id;
     }
 
     /**
@@ -41,9 +79,8 @@ class Loan
      * @param \Zahler\ZahlerBundle\Entity\Transaction $loaTra
      * @return Loan
      */
-    public function setLoaTra(\Zahler\ZahlerBundle\Entity\Transaction $loaTra = null)
-    {
-        $this->loaTra = $loaTra;
+    public function setLoaTra(\Zahler\ZahlerBundle\Entity\Transaction $loaTra = null) {
+        $this -> loaTra = $loaTra;
 
         return $this;
     }
@@ -51,33 +88,31 @@ class Loan
     /**
      * Get loaTra
      *
-     * @return \Zahler\ZahlerBundle\Entity\Transaction 
+     * @return \Zahler\ZahlerBundle\Entity\Transaction
      */
-    public function getLoaTra()
-    {
-        return $this->loaTra;
+    public function getLoaTra() {
+        return $this -> loaTra;
     }
 
     /**
-     * Set loaCus
+     * Set loaPer
      *
-     * @param \Zahler\ZahlerBundle\Entity\Customer $loaCus
+     * @param \Zahler\ZahlerBundle\Entity\Person $loaPer
      * @return Loan
      */
-    public function setLoaCus(\Zahler\ZahlerBundle\Entity\Customer $loaCus = null)
-    {
-        $this->loaCus = $loaCus;
+    public function setLoaPer(\Zahler\ZahlerBundle\Entity\Person $loaPer = null) {
+        $this -> loaPer = $loaPer;
 
         return $this;
     }
 
     /**
-     * Get loaCus
+     * Get loaPer
      *
-     * @return \Zahler\ZahlerBundle\Entity\Customer 
+     * @return \Zahler\ZahlerBundle\Entity\Person
      */
-    public function getLoaCus()
-    {
-        return $this->loaCus;
+    public function getLoaPer() {
+        return $this -> loaPer;
     }
+
 }

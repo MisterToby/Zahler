@@ -15,10 +15,14 @@ class PaymentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('payTraInterest')
-            ->add('payTra')
+            ->add('date', 'date', array('input' => 'datetime'))
             ->add('payLoa')
+            ->add('destinationAccount', 'entity', array('class' => 'ZahlerBundle:Account'))
+            ->add('amount', 'money', array('currency' => 'COP'))
+            ->add('interest', 'money', array('currency' => 'COP'))
         ;
+            // ->add('payTraInterest')
+            // ->add('payTra')
     }
     
     /**

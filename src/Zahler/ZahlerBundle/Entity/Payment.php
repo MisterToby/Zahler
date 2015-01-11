@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Payment
  */
-class Payment
-{
+class Payment {
+    const INTEREST_ACCOUNT = 527;
     /**
      * @var integer
      */
@@ -25,19 +25,65 @@ class Payment
     private $payTra;
 
     /**
-     * @var \Zahler\ZahlerBundle\Entity\Customer
+     * @var \Zahler\ZahlerBundle\Entity\Loan
      */
     private $payLoa;
 
+    private $amount;
+
+    private $interest;
+
+    private $date;
+
+    private $destinationAccount;
+
+    public function getAmount() {
+        return $this -> amount;
+    }
+
+    public function setAmount($amount) {
+        $this -> amount = $amount;
+
+        return $this;
+    }
+
+    public function getInterest() {
+        return $this -> interest;
+    }
+
+    public function setInterest($interest) {
+        $this -> interest = $interest;
+
+        return $this;
+    }
+
+    public function getDate() {
+        return $this -> date;
+    }
+
+    public function setDate($date) {
+        $this -> date = $date;
+
+        return $this;
+    }
+
+    public function getDestinationAccount() {
+        return $this -> destinationAccount;
+    }
+
+    public function setDestinationAccount($destinationAccount) {
+        $this -> destinationAccount = $destinationAccount;
+
+        return $destinationAccount;
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId()
-    {
-        return $this->id;
+    public function getId() {
+        return $this -> id;
     }
 
     /**
@@ -46,9 +92,8 @@ class Payment
      * @param \Zahler\ZahlerBundle\Entity\Transaction $payTraInterest
      * @return Payment
      */
-    public function setPayTraInterest(\Zahler\ZahlerBundle\Entity\Transaction $payTraInterest = null)
-    {
-        $this->payTraInterest = $payTraInterest;
+    public function setPayTraInterest(\Zahler\ZahlerBundle\Entity\Transaction $payTraInterest = null) {
+        $this -> payTraInterest = $payTraInterest;
 
         return $this;
     }
@@ -56,11 +101,10 @@ class Payment
     /**
      * Get payTraInterest
      *
-     * @return \Zahler\ZahlerBundle\Entity\Transaction 
+     * @return \Zahler\ZahlerBundle\Entity\Transaction
      */
-    public function getPayTraInterest()
-    {
-        return $this->payTraInterest;
+    public function getPayTraInterest() {
+        return $this -> payTraInterest;
     }
 
     /**
@@ -69,9 +113,8 @@ class Payment
      * @param \Zahler\ZahlerBundle\Entity\Transaction $payTra
      * @return Payment
      */
-    public function setPayTra(\Zahler\ZahlerBundle\Entity\Transaction $payTra = null)
-    {
-        $this->payTra = $payTra;
+    public function setPayTra(\Zahler\ZahlerBundle\Entity\Transaction $payTra = null) {
+        $this -> payTra = $payTra;
 
         return $this;
     }
@@ -79,22 +122,20 @@ class Payment
     /**
      * Get payTra
      *
-     * @return \Zahler\ZahlerBundle\Entity\Transaction 
+     * @return \Zahler\ZahlerBundle\Entity\Transaction
      */
-    public function getPayTra()
-    {
-        return $this->payTra;
+    public function getPayTra() {
+        return $this -> payTra;
     }
 
     /**
      * Set payLoa
      *
-     * @param \Zahler\ZahlerBundle\Entity\Customer $payLoa
+     * @param \Zahler\ZahlerBundle\Entity\Loan $payLoa
      * @return Payment
      */
-    public function setPayLoa(\Zahler\ZahlerBundle\Entity\Customer $payLoa = null)
-    {
-        $this->payLoa = $payLoa;
+    public function setPayLoa(\Zahler\ZahlerBundle\Entity\Loan $payLoa = null) {
+        $this -> payLoa = $payLoa;
 
         return $this;
     }
@@ -102,10 +143,10 @@ class Payment
     /**
      * Get payLoa
      *
-     * @return \Zahler\ZahlerBundle\Entity\Customer 
+     * @return \Zahler\ZahlerBundle\Entity\Loan
      */
-    public function getPayLoa()
-    {
-        return $this->payLoa;
+    public function getPayLoa() {
+        return $this -> payLoa;
     }
+
 }

@@ -1,0 +1,30 @@
+person:
+    path:     /
+    defaults: { _controller: "ZahlerBundle:Person:index" }
+
+person_show:
+    path:     /{id}/show
+    defaults: { _controller: "ZahlerBundle:Person:show" }
+
+person_new:
+    path:     /new
+    defaults: { _controller: "ZahlerBundle:Person:new" }
+
+person_create:
+    path:     /create
+    defaults: { _controller: "ZahlerBundle:Person:create" }
+    requirements: { _method: post }
+
+person_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ZahlerBundle:Person:edit" }
+
+person_update:
+    path:     /{id}/update
+    defaults: { _controller: "ZahlerBundle:Person:update" }
+    requirements: { _method: post|put }
+
+person_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ZahlerBundle:Person:delete" }
+    requirements: { _method: post|delete }
