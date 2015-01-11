@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Zahler\ZahlerBundle\Entity\Payment" table="payment">
+    <indexes>
+      <index name="IDX_6D28840D4697C815" columns="pay_loa_id"/>
+      <index name="IDX_6D28840D31621BD0" columns="pay_tra_id"/>
+      <index name="IDX_6D28840DA427BA87" columns="pay_tra_id_interest"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <many-to-one field="payTraInterest" target-entity="Transaction">
+      <join-columns>
+        <join-column name="pay_tra_id_interest" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="payTra" target-entity="Transaction">
+      <join-columns>
+        <join-column name="pay_tra_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="payLoa" target-entity="Customer">
+      <join-columns>
+        <join-column name="pay_loa_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

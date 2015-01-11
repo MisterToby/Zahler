@@ -1,0 +1,30 @@
+customer:
+    path:     /
+    defaults: { _controller: "ZahlerBundle:Customer:index" }
+
+customer_show:
+    path:     /{id}/show
+    defaults: { _controller: "ZahlerBundle:Customer:show" }
+
+customer_new:
+    path:     /new
+    defaults: { _controller: "ZahlerBundle:Customer:new" }
+
+customer_create:
+    path:     /create
+    defaults: { _controller: "ZahlerBundle:Customer:create" }
+    requirements: { _method: post }
+
+customer_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ZahlerBundle:Customer:edit" }
+
+customer_update:
+    path:     /{id}/update
+    defaults: { _controller: "ZahlerBundle:Customer:update" }
+    requirements: { _method: post|put }
+
+customer_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ZahlerBundle:Customer:delete" }
+    requirements: { _method: post|delete }

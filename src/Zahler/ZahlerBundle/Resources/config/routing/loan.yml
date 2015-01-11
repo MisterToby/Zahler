@@ -1,0 +1,30 @@
+loan:
+    path:     /
+    defaults: { _controller: "ZahlerBundle:Loan:index" }
+
+loan_show:
+    path:     /{id}/show
+    defaults: { _controller: "ZahlerBundle:Loan:show" }
+
+loan_new:
+    path:     /new
+    defaults: { _controller: "ZahlerBundle:Loan:new" }
+
+loan_create:
+    path:     /create
+    defaults: { _controller: "ZahlerBundle:Loan:create" }
+    requirements: { _method: post }
+
+loan_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ZahlerBundle:Loan:edit" }
+
+loan_update:
+    path:     /{id}/update
+    defaults: { _controller: "ZahlerBundle:Loan:update" }
+    requirements: { _method: post|put }
+
+loan_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ZahlerBundle:Loan:delete" }
+    requirements: { _method: post|delete }

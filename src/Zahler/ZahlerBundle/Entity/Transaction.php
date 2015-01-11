@@ -38,25 +38,8 @@ class Transaction {
      */
     private $traAccDebit;
 
-    private $debitAmount;
-    private $creditAmount;
-
-    public $balance;
-
-    private $account;
-
-    public function adjust($account) {
-        if ($this -> getDebitAmount() > $this -> getCreditAmount()) {
-            $difference = $this -> getDebitAmount() - $this -> getCreditAmount();
-            $this -> setTraAmount($difference);
-            $this -> setTraAccDebit($account);
-            $this -> setTraAccCredit($this -> getAccount());
-        } else {
-            $difference = $this -> getCreditAmount() - $this -> getDebitAmount();
-            $this -> setTraAmount($difference);
-            $this -> setTraAccDebit($this -> getAccount());
-            $this -> setTraAccCredit($account);
-        }
+    public function __toString() {
+        return "{$this -> id}";
     }
 
     public function getAccount() {
