@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Zahler\ZahlerBundle\Entity\Account;
 use Zahler\ZahlerBundle\Form\AccountType;
 
+use Doctrine\ORM\Query\ResultSetMapping;
+
 /**
  * Account controller.
  *
@@ -23,17 +25,21 @@ class AccountController extends Controller {
     public function retrieveAction() {
         $em = $this -> getDoctrine() -> getManager();
 
-        $qb = $em -> createQueryBuilder();
-        $qb -> select('acc, act');
-        $qb -> from('ZahlerBundle:Account', 'acc');
-        $qb -> join('acc.accActType', 'act');
-        $qb -> orderBy('acc.accActType');
-        $qb -> addOrderBy('acc.accName');
+        $sql = "SELECT a0_.id AS id,
+        a0_.acc_name AS accName,
+        a1_.act_name AS actName,
+        workoutbalance(a0_.id) AS balance
+        FROM account a0_ INNER JOIN account_type a1_ ON a0_.acc_act_id_type = a1_.id
+        ORDER BY a0_.acc_act_id_type ASC,
+        a0_.acc_name ASC";
+        
+        $rsm = new ResultSetMapping();
+        $query = $em -> createNativeQuery($sql, $rsm);
 
-        $query = $qb -> getQuery();
-        $entities = $query -> getArrayResult();
+        $connection = $em -> getConnection();
+        $result = $connection -> query($query -> getSQL());
 
-        return new Response(json_encode($entities));
+        return new Response(json_encode($result->fetchAll()));
     }
 
     /**

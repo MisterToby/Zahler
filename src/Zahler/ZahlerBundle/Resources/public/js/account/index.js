@@ -10,9 +10,11 @@ Ext.onReady(function() {
         fields : [{
             name : 'id'
         }, {
-            name : 'accActType'
+            name : 'actname'
         }, {
-            name : 'accName'
+            name : 'accname'
+        }, {
+            name : 'balance'
         }]
     });
 
@@ -44,19 +46,23 @@ Ext.onReady(function() {
             flex : 1
         }, {
             header : 'Type',
-            dataIndex : 'accActType',
-            flex : 1,
-            renderer : function(value, metaData, record) {
-                return record.get('accActType').actName;
-            }
+            dataIndex : 'actname',
+            flex : 1
         }, {
             header : 'Name',
-            dataIndex : 'accName',
+            dataIndex : 'accname',
             flex : 2
+        }, {
+            header : 'Balance',
+            dataIndex : 'balance',
+            flex : 1,
+            align : 'right',
+            renderer : Ext.util.Format.usMoney
         }, {
             xtype : 'actioncolumn',
             width : 30,
             sortable : false,
+            align : 'right',
             items : [{
                 icon : resourcesPath + 'images/open.png',
                 tooltip : 'Open account',
@@ -65,6 +71,15 @@ Ext.onReady(function() {
                     window.open(prefijoUrl + 'transaction/js/' + record.get('id'));
                 }
             }]
+        }],
+        tbar : ['->', {
+            xtype : 'button',
+            iconCls : 'logout',
+            scale : 'large',
+            text : 'Log out',
+            handler : function() {
+                window.location = prefijoUrl + 'logout';
+            }
         }],
         width : 600,
         height : 400,
