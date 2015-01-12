@@ -57,13 +57,13 @@ Ext.onReady(function() {
         fields : [{
             name : 'id'
         }, {
-            name : 'accName'
+            name : 'accname'
         }, {
-            name : 'accActType'
+            name : 'actname'
         }, {
             name : 'fullName',
             convert : function(value, record) {
-                return record.data.accActType.actName + ':' + record.data.accName;
+                return record.data.actname + ':' + record.data.accname;
             }
         }]
     });
