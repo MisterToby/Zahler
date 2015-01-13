@@ -21,5 +21,7 @@
         <join-column name="tra_acc_id_debit" referenced-column-name="id"/>
       </join-columns>
     </many-to-one>
+    <one-to-many field="loans" target-entity="Loan" mapped-by="loaTra" />
+    <one-to-many field="payments" target-entity="Payment" mapped-by="payTra" />
   </entity>
 </doctrine-mapping>

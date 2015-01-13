@@ -14,7 +14,49 @@ use Zahler\ZahlerBundle\Form\PersonType;
  */
 class PersonController extends Controller
 {
+    public function reportAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $qb = $em -> createQueryBuilder();
+        $qb -> select('tra');
+        $qb -> from('ZahlerBundle:Transaction', 'tra');
+        $qb -> leftJoin('tra.loans', 'loa');
+        $qb -> leftJoin('loa.loaPer', 'per');
+        $qb -> leftJoin('tra.payments', 'pay');
+        $qb -> leftJoin('pay.payLoa', 'pay_loa');
+        $qb -> leftJoin('pay_loa.loaPer', 'pay_loa_per');
+        $qb -> where("per.id = $id OR pay_loa_per.id = $id");
+        $qb -> orderBy('tra.traDate', 'ASC');
+        $qb -> addOrderBy('tra.id', 'ASC');
 
+        $query = $qb -> getQuery();
+        $entities = $query -> getResult();
+        
+        $totalLoans = 0;
+        $totalPayments = 0;
+        foreach ($entities as $entity) {
+            if(count($entity->loans)>0) {
+                $totalLoans += $entity->getTraAmount();
+            }
+            if(count($entity->payments)>0) {
+                $totalPayments += $entity->getTraAmount();
+            }
+        }
+        
+        $balance = $totalLoans - $totalPayments;
+        $interest = 0;
+        $totalDue = $balance + $interest;
+        
+        return $this->render('ZahlerBundle:Person:report.html.twig', array(
+            'entities'      => $entities,
+            'totalLoans' => $totalLoans,
+            'totalPayments' => $totalPayments,
+            'balance' => $balance,
+            'interest' => $interest,
+            'totalDue' => $totalDue
+        ));
+    }
     /**
      * Lists all Person entities.
      *

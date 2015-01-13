@@ -24,7 +24,15 @@ class LoanController extends Controller {
     public function indexAction() {
         $em = $this -> getDoctrine() -> getManager();
 
-        $entities = $em -> getRepository('ZahlerBundle:Loan') -> findAll();
+        $qb = $em -> createQueryBuilder();
+        $qb -> select('loa, tra, per');
+        $qb -> from('ZahlerBundle:Loan', 'loa');
+        $qb -> join('loa.loaTra', 'tra');
+        $qb -> join('loa.loaPer', 'per');
+        $qb -> orderBy('loa.id');
+
+        $query = $qb -> getQuery();
+        $entities = $query -> getResult();
 
         return $this -> render('ZahlerBundle:Loan:index.html.twig', array('entities' => $entities, Loan::LOAN_ACCOUNT));
     }

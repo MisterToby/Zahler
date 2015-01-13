@@ -32,6 +32,9 @@ class Transaction {
      * @var \Zahler\ZahlerBundle\Entity\Account
      */
     private $traAccCredit;
+    
+    public $loans;
+    public $payments;
 
     /**
      * @var \Zahler\ZahlerBundle\Entity\Account

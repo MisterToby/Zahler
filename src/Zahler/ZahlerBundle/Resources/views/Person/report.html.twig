@@ -1,0 +1,78 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/zahler/css/main.css') }}" />
+    <h1>Person report</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Transaction id</th>
+                <th>Date</th>
+                <th>Loan amount</th>
+                <th>Payment amount</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>{{ entity.id }}</td>
+                <td>{{ entity.traDate | date('Y-m-d') }}</td>
+                <td>
+                {% if entity.loans | length > 0 %}
+                    $ {{ entity.traAmount | number_format(2, ',', '.') }}
+                {% endif %}
+                </td>
+                <td>
+                {% if entity.payments | length > 0 %}
+                    $ {{ entity.traAmount | number_format(2, ',', '.') }}
+                {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td>----</td>
+            <td>----</td>
+            <td>----</td>
+            <td>----</td>
+        </tr>
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td>$ {{ totalLoans | number_format(2, ',', '.') }}</td>
+            <td>$ {{ totalPayments | number_format(2, ',', '.') }}</td>
+        </tr>
+        <tr>
+            <td>----</td>
+            <td>----</td>
+            <td>----</td>
+            <td>----</td>
+        </tr>
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td><b>Balance:</b></td>
+            <td>$ {{ balance | number_format(2, ',', '.') }}</td>
+        </tr>
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td><b>Interest:</b></td>
+            <td>$ {{ interest | number_format(2, ',', '.') }}</td>
+        </tr>
+        <tr>
+            <td> </td>
+            <td> </td>
+            <td><b>Total due:</b></td>
+            <td>$ {{ totalDue | number_format(2, ',', '.') }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <ul class="record_actions">
+    <li>
+        <a href="{{ path('person') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

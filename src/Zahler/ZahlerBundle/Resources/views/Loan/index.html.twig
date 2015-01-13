@@ -7,6 +7,9 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Person</th>
+                <th>Date</th>
+                <th>Amount</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -14,6 +17,9 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('loan_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.loaPer.perName }}</td>
+                <td>{{ entity.loaTra.traDate | date('Y-m-d') }}</td>
+                <td>$ {{ entity.loaTra.traAmount | number_format(2, ',', '.') }}</td>
                 <td>
                 <ul>
                     <li>

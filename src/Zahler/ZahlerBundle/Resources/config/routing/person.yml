@@ -28,3 +28,8 @@ person_delete:
     path:     /{id}/delete
     defaults: { _controller: "ZahlerBundle:Person:delete" }
     requirements: { _method: post|delete }
+
+person_report:
+    path:     /{id}/report
+    defaults: { _controller: "ZahlerBundle:Person:report" }
+
