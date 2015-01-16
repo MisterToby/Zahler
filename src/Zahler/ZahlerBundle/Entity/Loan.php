@@ -115,4 +115,60 @@ class Loan {
         return $this -> loaPer;
     }
 
+    /**
+     * @var string
+     */
+    private $loaDescription;
+
+    /**
+     * @var float
+     */
+    private $loaInterestRate;
+
+
+    /**
+     * Set loaDescription
+     *
+     * @param string $loaDescription
+     * @return Loan
+     */
+    public function setLoaDescription($loaDescription)
+    {
+        $this->loaDescription = $loaDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get loaDescription
+     *
+     * @return string 
+     */
+    public function getLoaDescription()
+    {
+        return $this->loaDescription;
+    }
+
+    /**
+     * Set loaInterestRate
+     *
+     * @param float $loaInterestRate
+     * @return Loan
+     */
+    public function setLoaInterestRate($loaInterestRate)
+    {
+        $this->loaInterestRate = $loaInterestRate;
+
+        return $this;
+    }
+
+    /**
+     * Get loaInterestRate
+     *
+     * @return float 
+     */
+    public function getLoaInterestRate()
+    {
+        return $this->loaInterestRate;
+    }
 }

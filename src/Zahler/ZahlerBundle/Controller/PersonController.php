@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Zahler\ZahlerBundle\Entity\Person;
 use Zahler\ZahlerBundle\Form\PersonType;
 
+use \DateTime;
+
 /**
  * Person controller.
  *
@@ -35,25 +37,40 @@ class PersonController extends Controller
         
         $totalLoans = 0;
         $totalPayments = 0;
+        $currentDatetime = new DateTime('now');
+        $totalInterest = 0;
         foreach ($entities as $entity) {
+            $interval = date_diff($entity->getTraDate(), $currentDatetime);
+            $numberOfDays = intval($interval->format('%a'));
+            $interest = 0;
             if(count($entity->loans)>0) {
+                $annualInterestRate = $entity->loans[0]->getLoaInterestRate()/100;
+                $compoundInterestRate = pow($annualInterestRate+1, $numberOfDays/365)-1;
+                $interest = $compoundInterestRate * $entity->getTraAmount();
+                
                 $totalLoans += $entity->getTraAmount();
             }
             if(count($entity->payments)>0) {
+                $annualInterestRate = $entity->payments[0]->getPayLoa()->getLoaInterestRate()/100;
+                $compoundInterestRate = pow($annualInterestRate+1, $numberOfDays/365)-1;
+                $interest = $compoundInterestRate * $entity->getTraAmount() * -1;
+                
                 $totalPayments += $entity->getTraAmount();
             }
+            
+            $totalInterest += $interest;
+            $entity->setInterest($interest);
         }
         
         $balance = $totalLoans - $totalPayments;
-        $interest = 0;
-        $totalDue = $balance + $interest;
+        $totalDue = $balance + $totalInterest;
         
         return $this->render('ZahlerBundle:Person:report.html.twig', array(
             'entities'      => $entities,
             'totalLoans' => $totalLoans,
             'totalPayments' => $totalPayments,
+            'totalInterest' => $totalInterest,
             'balance' => $balance,
-            'interest' => $interest,
             'totalDue' => $totalDue
         ));
     }

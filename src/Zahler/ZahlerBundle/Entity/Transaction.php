@@ -35,6 +35,20 @@ class Transaction {
     
     public $loans;
     public $payments;
+    
+    private $interest;
+    
+    public function setInterest($interest)
+    {
+        $this->interest = $interest;
+        
+        return $this;
+    }
+    
+    public function getInterest()
+    {
+        return $this->interest;
+    }
 
     /**
      * @var \Zahler\ZahlerBundle\Entity\Account

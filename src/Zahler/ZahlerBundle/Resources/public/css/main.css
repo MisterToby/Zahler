@@ -2,7 +2,17 @@
     background-image: url(../../zahler/images/logout.png) !important;
 }
 
-.records_list, th, td {
+.records_list {
     border: solid;
+    text-align: right;
+}
+
+.records_list > thead > tr > th ~ th {
+    border-left: solid;
+    text-align: right;
+}
+
+.records_list > tbody > tr > td ~ td {
+    border-left: solid;
     text-align: right;
 }

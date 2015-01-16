@@ -19,6 +19,8 @@ class LoanType extends AbstractType
             ->add('sourceAccount', 'entity', array('class' => 'ZahlerBundle:Account'))
             ->add('loaPer')
             ->add('amount', 'money', array('currency' => 'COP'))
+            ->add('loaInterestRate')
+            ->add('loaDescription')
         ;
             // ->add('loaTra')
     }

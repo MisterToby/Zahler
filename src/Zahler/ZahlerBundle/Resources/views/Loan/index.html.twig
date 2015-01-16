@@ -10,6 +10,8 @@
                 <th>Person</th>
                 <th>Date</th>
                 <th>Amount</th>
+                <th>Interest rate</th>
+                <th>Description</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -20,6 +22,8 @@
                 <td>{{ entity.loaPer.perName }}</td>
                 <td>{{ entity.loaTra.traDate | date('Y-m-d') }}</td>
                 <td>$ {{ entity.loaTra.traAmount | number_format(2, ',', '.') }}</td>
+                <td>{{ entity.loaInterestRate }} %</td>
+                <td>{{ entity.loaDescription }}</td>
                 <td>
                 <ul>
                     <li>

@@ -8,6 +8,8 @@
     <id name="id" type="integer" column="id">
       <generator strategy="SEQUENCE"/>
     </id>
+    <field name="loaDescription" type="string" column="loa_description" length="255" nullable="true"/>
+    <field name="loaInterestRate" type="float" column="loa_interest_rate" precision="10" scale="0" nullable="false"/>
     <many-to-one field="loaTra" target-entity="Transaction">
       <join-columns>
         <join-column name="loa_tra_id" referenced-column-name="id"/>
