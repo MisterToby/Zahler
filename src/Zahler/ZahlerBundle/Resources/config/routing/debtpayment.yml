@@ -1,0 +1,30 @@
+debtpayment:
+    path:     /
+    defaults: { _controller: "ZahlerBundle:DebtPayment:index" }
+
+debtpayment_show:
+    path:     /{id}/show
+    defaults: { _controller: "ZahlerBundle:DebtPayment:show" }
+
+debtpayment_new:
+    path:     /new
+    defaults: { _controller: "ZahlerBundle:DebtPayment:new" }
+
+debtpayment_create:
+    path:     /create
+    defaults: { _controller: "ZahlerBundle:DebtPayment:create" }
+    requirements: { _method: post }
+
+debtpayment_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ZahlerBundle:DebtPayment:edit" }
+
+debtpayment_update:
+    path:     /{id}/update
+    defaults: { _controller: "ZahlerBundle:DebtPayment:update" }
+    requirements: { _method: post|put }
+
+debtpayment_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ZahlerBundle:DebtPayment:delete" }
+    requirements: { _method: post|delete }

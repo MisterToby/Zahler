@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Zahler\ZahlerBundle\Entity\DebtPayment" table="debt_payment">
+    <indexes>
+      <index name="IDX_751D57EF9E279682" columns="dep_deb_id"/>
+      <index name="IDX_751D57EF5D847065" columns="dep_tra_id"/>
+      <index name="IDX_751D57EF3413DFB4" columns="dep_tra_id_interest"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <many-to-one field="depTraInterest" target-entity="Transaction">
+      <join-columns>
+        <join-column name="dep_tra_id_interest" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="depTra" target-entity="Transaction">
+      <join-columns>
+        <join-column name="dep_tra_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="depDeb" target-entity="Debt">
+      <join-columns>
+        <join-column name="dep_deb_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

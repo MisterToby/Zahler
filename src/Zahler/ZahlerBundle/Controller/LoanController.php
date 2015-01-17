@@ -50,7 +50,7 @@ class LoanController extends Controller {
 
         if ($form -> isValid()) {
             $transaction = new Transaction();
-            $transaction -> setTraAccCredit($em -> getReference('ZahlerBundle:Account', $entity -> getSourceAccount() -> getId()));
+            $transaction -> setTraAccCredit($entity -> getSourceAccount());
             $transaction -> setTraAccDebit($em -> getReference('ZahlerBundle:Account', 515));
             $transaction -> setTraAmount($entity -> getAmount());
             $transaction -> setTraDate($entity -> getDate());
@@ -171,7 +171,7 @@ class LoanController extends Controller {
 
         if ($editForm -> isValid()) {
             $transaction = $entity -> getLoaTra();
-            $transaction -> setTraAccCredit($em -> getReference('ZahlerBundle:Account', $entity -> getSourceAccount() -> getId()));
+            $transaction -> setTraAccCredit($entity -> getSourceAccount());
             $transaction -> setTraAmount($entity -> getAmount());
             $transaction -> setTraDate($entity -> getDate());
             $transaction -> setTraDescription('Loan for ' . $entity -> getLoaPer() -> getPerName());

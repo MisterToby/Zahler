@@ -42,7 +42,7 @@ class PaymentController extends Controller {
         if ($form -> isValid()) {
             $transaction = new Transaction();
             $transaction -> setTraAccCredit($em -> getReference('ZahlerBundle:Account', Loan::LOAN_ACCOUNT));
-            $transaction -> setTraAccDebit($em -> getReference('ZahlerBundle:Account', $entity -> getDestinationAccount() -> getId()));
+            $transaction -> setTraAccDebit($entity -> getDestinationAccount());
             $transaction -> setTraAmount($entity -> getAmount());
             $transaction -> setTraDate($entity -> getDate());
             $transaction -> setTraDescription('Payment from ' . $entity -> getPayLoa() -> getLoaPer() -> getPerName());
@@ -54,7 +54,7 @@ class PaymentController extends Controller {
             if ($entity -> getInterest() > 0) {
                 $interestTransaction = new Transaction();
                 $interestTransaction -> setTraAccCredit($em -> getReference('ZahlerBundle:Account', Payment::INTEREST_ACCOUNT));
-                $interestTransaction -> setTraAccDebit($em -> getReference('ZahlerBundle:Account', $entity -> getDestinationAccount() -> getId()));
+                $interestTransaction -> setTraAccDebit($entity -> getDestinationAccount());
                 $interestTransaction -> setTraAmount($entity -> getInterest());
                 $interestTransaction -> setTraDate($entity -> getDate());
                 $interestTransaction -> setTraDescription('Interest from ' . $entity -> getPayLoa() -> getLoaPer() -> getPerName());
@@ -181,7 +181,7 @@ class PaymentController extends Controller {
         if ($editForm -> isValid()) {
             $transaction = $entity -> getPayTra();
             $transaction -> setTraAccCredit($em -> getReference('ZahlerBundle:Account', Loan::LOAN_ACCOUNT));
-            $transaction -> setTraAccDebit($em -> getReference('ZahlerBundle:Account', $entity -> getDestinationAccount() -> getId()));
+            $transaction -> setTraAccDebit($entity -> getDestinationAccount());
             $transaction -> setTraAmount($entity -> getAmount());
             $transaction -> setTraDate($entity -> getDate());
             $transaction -> setTraDescription('Payment from ' . $entity -> getPayLoa() -> getLoaPer() -> getPerName());
@@ -192,7 +192,7 @@ class PaymentController extends Controller {
                     $interestTransaction = new Transaction();
                 }
                 $interestTransaction -> setTraAccCredit($em -> getReference('ZahlerBundle:Account', Payment::INTEREST_ACCOUNT));
-                $interestTransaction -> setTraAccDebit($em -> getReference('ZahlerBundle:Account', $entity -> getDestinationAccount() -> getId()));
+                $interestTransaction -> setTraAccDebit($entity -> getDestinationAccount());
                 $interestTransaction -> setTraAmount($entity -> getInterest());
                 $interestTransaction -> setTraDate($entity -> getDate());
                 $interestTransaction -> setTraDescription('Interest from ' . $entity -> getPayLoa() -> getLoaPer() -> getPerName());

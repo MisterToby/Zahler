@@ -25,6 +25,14 @@ ZahlerBundle_loan:
 ZahlerBundle_payment:
         resource: "@ZahlerBundle/Resources/config/routing/payment.yml"
         prefix:   /payment
+        
+ZahlerBundle_debt:
+        resource: "@ZahlerBundle/Resources/config/routing/debt.yml"
+        prefix:   /debt
+        
+ZahlerBundle_debtpayment:
+        resource: "@ZahlerBundle/Resources/config/routing/debtpayment.yml"
+        prefix:   /debtpayment
 
 root:
     path:     /

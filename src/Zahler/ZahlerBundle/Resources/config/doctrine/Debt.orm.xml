@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Zahler\ZahlerBundle\Entity\Debt" table="debt">
+    <indexes>
+      <index name="IDX_DBBF0A8368E7B7C6" columns="deb_per_id"/>
+      <index name="IDX_DBBF0A83631A4633" columns="deb_tra_id"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="debDescription" type="string" column="deb_description" length="255" nullable="true"/>
+    <field name="debInterestRate" type="float" column="deb_interest_rate" precision="10" scale="0" nullable="false"/>
+    <many-to-one field="debTra" target-entity="Transaction">
+      <join-columns>
+        <join-column name="deb_tra_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="debPer" target-entity="Person">
+      <join-columns>
+        <join-column name="deb_per_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>
