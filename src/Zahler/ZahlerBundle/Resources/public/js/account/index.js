@@ -14,7 +14,8 @@ Ext.onReady(function() {
         }, {
             name : 'accname'
         }, {
-            name : 'balance'
+            name : 'balance',
+            type : 'float'
         }]
     });
 
@@ -23,6 +24,7 @@ Ext.onReady(function() {
         // destroy the store if the grid is destroyed
         autoDestroy : true,
         model : 'Account',
+        groupField : 'actname',
         proxy : {
             type : 'ajax',
             url : prefijoUrl + 'account/retrieve',
@@ -40,14 +42,23 @@ Ext.onReady(function() {
     var grid = Ext.create('Ext.grid.Panel', {
         region : 'center',
         store : store,
+        features : [{
+            ftype : 'groupingsummary',
+            groupHeaderTpl : '{name}'
+        }],
         columns : [{
             header : 'Id',
             dataIndex : 'id',
-            flex : 1
+            flex : 1,
+            summaryType : 'count',
+            summaryRenderer : function(value) {
+                return '(' + value + ' accounts)';
+            }
         }, {
             header : 'Type',
             dataIndex : 'actname',
-            flex : 1
+            flex : 1,
+            hidden: true
         }, {
             header : 'Name',
             dataIndex : 'accname',
@@ -57,7 +68,11 @@ Ext.onReady(function() {
             dataIndex : 'balance',
             flex : 1,
             align : 'right',
-            renderer : Ext.util.Format.usMoney
+            renderer : Ext.util.Format.usMoney,
+            summaryType : 'sum',
+            summaryRenderer : function(value) {
+                return Ext.util.Format.usMoney(value);
+            }
         }, {
             xtype : 'actioncolumn',
             width : 30,
