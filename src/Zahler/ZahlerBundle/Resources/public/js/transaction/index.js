@@ -153,6 +153,23 @@ Ext.onReady(function() {
     var grid = Ext.create('Ext.grid.Panel', {
         region : 'center',
         store : store,
+        tbar : [{
+            xtype : 'button',
+            iconCls : 'refresh',
+            scale : 'large',
+            text : 'Refresh',
+            handler : function() {
+                store.load();
+            }
+        }, '->', {
+            xtype : 'button',
+            iconCls : 'logout',
+            scale : 'large',
+            text : 'Log out',
+            handler : function() {
+                window.location = prefijoUrl + 'logout';
+            }
+        }],
         columns : [{
             header : 'Id',
             dataIndex : 'id',

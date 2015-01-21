@@ -58,7 +58,7 @@ Ext.onReady(function() {
             header : 'Type',
             dataIndex : 'actname',
             flex : 1,
-            hidden: true
+            hidden : true
         }, {
             header : 'Name',
             dataIndex : 'accname',
@@ -87,7 +87,15 @@ Ext.onReady(function() {
                 }
             }]
         }],
-        tbar : ['->', {
+        tbar : [{
+            xtype : 'button',
+            iconCls : 'refresh',
+            scale : 'large',
+            text : 'Refresh',
+            handler : function() {
+                store.load();
+            }
+        }, '->', {
             xtype : 'button',
             iconCls : 'logout',
             scale : 'large',

@@ -2,6 +2,10 @@
     background-image: url(../../zahler/images/logout.png) !important;
 }
 
+.refresh {
+    background-image: url(../../zahler/images/refresh.png) !important;
+}
+
 .records_list {
     border: solid;
     text-align: right;
