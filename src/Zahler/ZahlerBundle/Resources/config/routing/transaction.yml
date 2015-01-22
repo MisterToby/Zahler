@@ -6,6 +6,10 @@ transaction_retrieve:
     path:     /retrieve/{accId}
     defaults: { _controller: "ZahlerBundle:Transaction:retrieve" }
     
+transaction_query:
+    path:     /query/
+    defaults: { _controller: "ZahlerBundle:Transaction:query" }
+    
 transaction_js:
     path:     /js/{accId}
     defaults: { _controller: "ZahlerBundle:Transaction:index_js" }

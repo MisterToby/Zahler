@@ -23,6 +23,12 @@ Ext.onReady(function() {
             name : 'creditAmount'
         }, {
             name : 'balance'
+        }, {
+            name : 'traAccCredit'
+        }, {
+            name : 'traAccDebit'
+        }, {
+            name : 'traAmount'
         }]
     });
 
@@ -98,6 +104,8 @@ Ext.onReady(function() {
                 var debitAmount = parseFloat(e.record.get('debitAmount'));
                 var creditAmount = parseFloat(e.record.get('creditAmount'));
                 var amount = 0;
+                var traAccDebit = null;
+                var traAccDebit = null;
                 if (debitAmount > creditAmount) {
                     amount = debitAmount - creditAmount;
                     traAccDebit = accId;
@@ -148,12 +156,34 @@ Ext.onReady(function() {
         }
     });
 
+    storeDescription = Ext.create('Ext.data.Store', {
+        autoDestroy : true,
+        model : 'Transaction',
+        proxy : {
+            type : 'ajax',
+            url : prefijoUrl + 'transaction/query/',
+            reader : {
+                type : 'json',
+                root : 'rows'
+            },
+            extraParams : {
+                account_id : accId
+            }
+        }
+    });
+
     // create the grid and specify what field you want
     // to use for the editor at each column.
     var grid = Ext.create('Ext.grid.Panel', {
         region : 'center',
         store : store,
         tbar : [{
+            xtype : 'textfield',
+            fieldLabel : 'Account',
+            labelWidth : 50,
+            width : 300,
+            readOnly : true
+        }, '->', '-', {
             xtype : 'button',
             iconCls : 'refresh',
             scale : 'large',
@@ -161,7 +191,7 @@ Ext.onReady(function() {
             handler : function() {
                 store.load();
             }
-        }, '->', {
+        }, '-', {
             xtype : 'button',
             iconCls : 'logout',
             scale : 'large',
@@ -189,7 +219,33 @@ Ext.onReady(function() {
             dataIndex : 'traDescription',
             flex : 2,
             editor : {
-                allowBlank : false
+                xtype : 'combo',
+                allowBlank : false,
+                store : storeDescription,
+                displayField : 'traDescription',
+                valueField : 'traDescription',
+                typeAhead : false,
+                hideLabel : true,
+                hideTrigger : true,
+                anchor : '100%',
+                listeners : {
+                    select : function(combo, records) {
+                        var record = records[0];
+                        console.log(records);
+                        var debitAmount_numberfield = Ext.getCmp('debitAmount_numberfield');
+                        var creditAmount_numberfield = Ext.getCmp('creditAmount_numberfield');
+                        var account_id_combo = Ext.getCmp('account_id_combo');
+                        if (record.get('traAccDebit').id == accId) {
+                            account_id_combo.setValue(record.get('traAccCredit').id);
+                            debitAmount_numberfield.setValue(record.get('traAmount'));
+                            creditAmount_numberfield.setValue(0);
+                        } else if (record.get('traAccCredit').id == accId) {
+                            account_id_combo.setValue(record.get('traAccDebit').id);
+                            debitAmount_numberfield.setValue(0);
+                            creditAmount_numberfield.setValue(record.get('traAmount'));
+                        }
+                    }
+                }
             }
         }, {
             header : 'Account',
@@ -204,6 +260,7 @@ Ext.onReady(function() {
                 }
             },
             editor : {
+                id : 'account_id_combo',
                 xtype : 'combo',
                 allowBlank : false,
                 store : storeAccounts,
@@ -218,6 +275,7 @@ Ext.onReady(function() {
             align : 'right',
             renderer : Ext.util.Format.usMoney,
             editor : {
+                id : 'debitAmount_numberfield',
                 xtype : 'numberfield',
                 decimalSeparator : ',',
                 allowBlank : false
@@ -229,6 +287,7 @@ Ext.onReady(function() {
             align : 'right',
             renderer : Ext.util.Format.usMoney,
             editor : {
+                id : 'creditAmount_numberfield',
                 xtype : 'numberfield',
                 decimalSeparator : ',',
                 allowBlank : false

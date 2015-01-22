@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Zahler\ZahlerBundle\Entity\Transaction;
 use Zahler\ZahlerBundle\Form\TransactionType;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 use \DateTime;
 
@@ -25,6 +26,53 @@ class TransactionController extends Controller {
         $array['prefijo_url'] = $this -> get('router') -> generate('root');
         $array['accId'] = $accId;
         return $this -> render('ZahlerBundle:Transaction:index_js.html.twig', $array);
+    }
+
+    public function queryAction() {
+        $em = $this -> getDoctrine() -> getManager();
+        $request = Request::createFromGlobals();
+        $get = $request -> query -> all();
+        
+        $rsm = new ResultSetMapping();
+        $rsm->addEntityResult('ZahlerBundle:Transaction', 'tra');
+        $rsm->addFieldResult('tra', 'id', 'id');
+        $rsm->addFieldResult('tra', 'tra_date', 'traDate');
+        $rsm->addFieldResult('tra', 'tra_description', 'traDescription');
+        $rsm->addFieldResult('tra', 'tra_amount', 'traAmount');
+        $rsm->addJoinedEntityResult('ZahlerBundle:Account', 'accDebit', 'tra', 'traAccDebit');
+        $rsm->addFieldResult('accDebit', 'accdebitid', 'id');
+        $rsm->addFieldResult('accDebit', 'accdebitaccname', 'accName');
+        $rsm->addJoinedEntityResult('ZahlerBundle:Account', 'accCredit', 'tra', 'traAccCredit');
+        $rsm->addFieldResult('accCredit', 'acccreditid', 'id');
+        $rsm->addFieldResult('accCredit', 'acccreditaccname', 'accName');
+
+        $sql = "SELECT transaction.*,
+        accDebit.id AS accdebitid,
+        accDebit.acc_name AS accdebitaccname, 
+        accCredit.id AS acccreditid,
+        accCredit.acc_name AS acccreditaccname 
+        FROM
+        (
+        SELECT tra_description, MAX(tra_date) AS max_date, MAX(id) AS max_id
+        FROM transaction
+        GROUP BY tra_description
+        ) AS grouped_transaction,
+        transaction,
+        account AS accDebit,
+        account AS accCredit
+        WHERE grouped_transaction.tra_description = public.transaction.tra_description AND
+        grouped_transaction.max_date = public.transaction.tra_date AND
+        grouped_transaction.max_id = public.transaction.id AND
+        grouped_transaction.tra_description ILIKE '%{$get['query']}%' AND
+        accDebit.id = transaction.tra_acc_id_debit AND
+        accCredit.id = transaction.tra_acc_id_credit AND
+        (accDebit.id = {$get['account_id']} OR accCredit.id = {$get['account_id']})
+        ORDER BY grouped_transaction.tra_description;";
+        $query = $em->createNativeQuery($sql, $rsm);
+
+        $records = $query -> getArrayResult();
+        
+        return new Response(json_encode($records));
     }
 
     public function retrieveAction($accId) {
