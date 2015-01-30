@@ -87,7 +87,7 @@ Ext.onReady(function() {
                 }
             }]
         }],
-        tbar : [{
+        tbar : ['->', '-', {
             xtype : 'button',
             iconCls : 'refresh',
             scale : 'large',
@@ -95,7 +95,7 @@ Ext.onReady(function() {
             handler : function() {
                 store.load();
             }
-        }, '->', {
+        }, '-', {
             xtype : 'button',
             iconCls : 'logout',
             scale : 'large',

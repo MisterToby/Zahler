@@ -182,7 +182,8 @@ Ext.onReady(function() {
             fieldLabel : 'Account',
             labelWidth : 50,
             width : 300,
-            readOnly : true
+            readOnly : true,
+            value: accName
         }, '->', '-', {
             xtype : 'button',
             iconCls : 'refresh',

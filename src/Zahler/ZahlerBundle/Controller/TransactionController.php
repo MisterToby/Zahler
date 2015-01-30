@@ -22,9 +22,14 @@ class TransactionController extends Controller {
      *
      */
     public function index_jsAction($accId) {
+        $em = $this -> getDoctrine() -> getManager();
+
+        $account = $em -> find('ZahlerBundle:Account', $accId);
+
         $array = array();
         $array['prefijo_url'] = $this -> get('router') -> generate('root');
         $array['accId'] = $accId;
+        $array['accName'] = $account -> __toString();
         return $this -> render('ZahlerBundle:Transaction:index_js.html.twig', $array);
     }
 
@@ -32,19 +37,19 @@ class TransactionController extends Controller {
         $em = $this -> getDoctrine() -> getManager();
         $request = Request::createFromGlobals();
         $get = $request -> query -> all();
-        
+
         $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('ZahlerBundle:Transaction', 'tra');
-        $rsm->addFieldResult('tra', 'id', 'id');
-        $rsm->addFieldResult('tra', 'tra_date', 'traDate');
-        $rsm->addFieldResult('tra', 'tra_description', 'traDescription');
-        $rsm->addFieldResult('tra', 'tra_amount', 'traAmount');
-        $rsm->addJoinedEntityResult('ZahlerBundle:Account', 'accDebit', 'tra', 'traAccDebit');
-        $rsm->addFieldResult('accDebit', 'accdebitid', 'id');
-        $rsm->addFieldResult('accDebit', 'accdebitaccname', 'accName');
-        $rsm->addJoinedEntityResult('ZahlerBundle:Account', 'accCredit', 'tra', 'traAccCredit');
-        $rsm->addFieldResult('accCredit', 'acccreditid', 'id');
-        $rsm->addFieldResult('accCredit', 'acccreditaccname', 'accName');
+        $rsm -> addEntityResult('ZahlerBundle:Transaction', 'tra');
+        $rsm -> addFieldResult('tra', 'id', 'id');
+        $rsm -> addFieldResult('tra', 'tra_date', 'traDate');
+        $rsm -> addFieldResult('tra', 'tra_description', 'traDescription');
+        $rsm -> addFieldResult('tra', 'tra_amount', 'traAmount');
+        $rsm -> addJoinedEntityResult('ZahlerBundle:Account', 'accDebit', 'tra', 'traAccDebit');
+        $rsm -> addFieldResult('accDebit', 'accdebitid', 'id');
+        $rsm -> addFieldResult('accDebit', 'accdebitaccname', 'accName');
+        $rsm -> addJoinedEntityResult('ZahlerBundle:Account', 'accCredit', 'tra', 'traAccCredit');
+        $rsm -> addFieldResult('accCredit', 'acccreditid', 'id');
+        $rsm -> addFieldResult('accCredit', 'acccreditaccname', 'accName');
 
         $sql = "SELECT transaction.*,
         accDebit.id AS accdebitid,
@@ -68,10 +73,10 @@ class TransactionController extends Controller {
         accCredit.id = transaction.tra_acc_id_credit AND
         (accDebit.id = {$get['account_id']} OR accCredit.id = {$get['account_id']})
         ORDER BY grouped_transaction.tra_description;";
-        $query = $em->createNativeQuery($sql, $rsm);
+        $query = $em -> createNativeQuery($sql, $rsm);
 
         $records = $query -> getArrayResult();
-        
+
         return new Response(json_encode($records));
     }
 

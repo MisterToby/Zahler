@@ -41,6 +41,26 @@
        x2="8.7259808"
        y2="1036.1616"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3826-6"
+       id="linearGradient3836-3"
+       x1="8.7259808"
+       y1="1052.5767"
+       x2="8.7259808"
+       y2="1036.1616"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient3826-6">
+      <stop
+         style="stop-color:#f41616;stop-opacity:1;"
+         offset="0"
+         id="stop3828-6" />
+      <stop
+         style="stop-color:#f8b0b0;stop-opacity:1;"
+         offset="1"
+         id="stop3830-9" />
+    </linearGradient>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -49,9 +69,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.919596"
-     inkscape:cx="7.5271804"
-     inkscape:cy="7.3234859"
+     inkscape:zoom="2.8"
+     inkscape:cx="-66.457797"
+     inkscape:cy="-21.760031"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -68,7 +88,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -95,7 +115,7 @@
        sodipodi:cy="8.2344522"
        sodipodi:rx="4.2931485"
        sodipodi:ry="4.3562827"
-       d="m 12.753176,8.2344522 a 4.2931485,4.3562827 0 1 1 -8.5862968,0 4.2931485,4.3562827 0 1 1 8.5862968,0 z"
+       d="m 12.753176,8.2344522 c 0,2.4059088 -1.922108,4.3562828 -4.2931483,4.3562828 -2.3710405,0 -4.2931485,-1.950374 -4.2931485,-4.3562828 0,-2.4059085 1.922108,-4.3562827 4.2931485,-4.3562827 2.3710403,0 4.2931483,1.9503742 4.2931483,4.3562827 z"
        transform="matrix(1.2527757,0,0,1.2346196,-2.5975171,1034.2218)" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1.04299748;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
@@ -105,5 +125,15 @@
        x="7.6064992"
        y="1041.8085"
        ry="0" />
+    <rect
+       style="opacity:0.3;fill:#ffffff;fill-opacity:1;stroke:none"
+       id="rect3120-4"
+       width="14.910034"
+       height="8.1512384"
+       x="0.53150105"
+       y="1037.301"
+       ry="3.3612759"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
   </g>
 </svg>
