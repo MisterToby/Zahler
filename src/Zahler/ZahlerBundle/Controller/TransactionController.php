@@ -60,6 +60,7 @@ class TransactionController extends Controller {
         (
         SELECT tra_description, MAX(tra_date) AS max_date, MAX(id) AS max_id
         FROM transaction
+        WHERE (tra_acc_id_debit = {$get['account_id']} OR tra_acc_id_credit = {$get['account_id']})
         GROUP BY tra_description
         ) AS grouped_transaction,
         transaction,
