@@ -21,6 +21,7 @@ class PaymentType extends AbstractType
             ->add('amount', 'money', array('currency' => 'COP'))
             ->add('interest', 'money', array('currency' => 'COP'))
         ;
+        
             // ->add('payTraInterest')
             // ->add('payTra')
     }
@@ -31,7 +32,9 @@ class PaymentType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Zahler\ZahlerBundle\Entity\Payment'
+            'data_class' => 'Zahler\ZahlerBundle\Entity\Payment',
+            'csrf_protection' => false,
+            'validation_groups' => false
         ));
     }
 

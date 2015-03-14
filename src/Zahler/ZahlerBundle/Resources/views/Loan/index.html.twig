@@ -1,6 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/zahler/css/main.css') }}" />
     <h1>Loan list</h1>
 
     <table class="records_list">
@@ -11,6 +12,7 @@
                 <th>Date</th>
                 <th>Amount</th>
                 <th>Interest rate</th>
+                <th>Balance</th>
                 <th>Description</th>
                 <th>Actions</th>
             </tr>
@@ -18,21 +20,25 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('loan_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.loaPer.perName }}</td>
-                <td>{{ entity.loaTra.traDate | date('Y-m-d') }}</td>
-                <td>$ {{ entity.loaTra.traAmount | number_format(2, ',', '.') }}</td>
-                <td>{{ entity.loaInterestRate }} %</td>
-                <td>{{ entity.loaDescription }}</td>
+                <td><a href="{{ path('loan_show', { 'id': entity.loa_id }) }}">{{ entity.loa_id }}</a></td>
+                <td>{{ entity['per_name'] }}</td>
+                <td>{{ entity['tra_date'] | date('Y-m-d') }}</td>
+                <td>$ {{ entity['tra_amount'] | number_format(2, ',', '.') }}</td>
+                <td>{{ entity['loa_interest_rate'] }} %</td>
+                {% if entity['balance'] != 0 %}
+                <td style="background-color: #FF8080;">
+                {% else %}
+                <td style="background-color: #8DD35F;">
+                {% endif %}
+                    $ {{ entity['balance'] | number_format(2, ',', '.') }}
+                </td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('loan_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('loan_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                    {{ entity['loa_description'] }}
+                </td>
+                <td>
+                        <a href="{{ path('loan_show', { 'id': entity.id }) }}">show</a>,
+                        <a href="{{ path('loan_edit', { 'id': entity.id }) }}">edit</a>,
+                        <a href="{{ path('payment_new_for_loan', { 'loa_id': entity.loa_id, 'path': path('loan') }) }}">make payment</a>
                 </td>
             </tr>
         {% endfor %}

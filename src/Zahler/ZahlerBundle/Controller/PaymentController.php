@@ -18,6 +18,34 @@ use \DateTime;
 class PaymentController extends Controller {
 
     /**
+     * Displays a form to create a new Payment entity for a specific loan
+     *
+     */
+    public function newForLoanAction(Request $request) {
+        $em = $this -> getDoctrine() -> getManager();
+        $get = $request -> query -> all();
+
+        $entity = new Payment();
+        $entity -> setDate(new DateTime('now'));
+        $entity -> setInterest(0);
+        $entity -> setPayLoa($em -> getReference('ZahlerBundle:Loan', $get['loa_id']));
+
+        $form = $this -> createForm(new PaymentType(), $entity, array('action' => $this -> generateUrl('payment_create'), 'method' => 'POST', ));
+        $form -> remove('payLoa');
+
+        $qb = $em -> createQueryBuilder();
+        $qb -> select('loa');
+        $qb -> from('ZahlerBundle:Loan', 'loa');
+        $qb -> where("loa.id = {$get['loa_id']}");
+        $form -> add('payLoa', 'entity', array('class' => 'ZahlerBundle:Loan', 'query_builder' => $qb));
+        $form -> add('path', 'hidden', array('data' => $this -> generateUrl('loan'), 'mapped' => FALSE));
+
+        $form -> add('submit', 'submit', array('label' => 'Create'));
+
+        return $this -> render('ZahlerBundle:Payment:new_for_loan.html.twig', array('entity' => $entity, 'form' => $form -> createView(), 'path' => $get['path'], 'loa_id' => $get['loa_id']));
+    }
+
+    /**
      * Lists all Payment entities.
      *
      */
@@ -35,11 +63,23 @@ class PaymentController extends Controller {
      */
     public function createAction(Request $request) {
         $em = $this -> getDoctrine() -> getManager();
+        $post = $request -> request -> all();
+        // if (isset($post['zahler_zahlerbundle_payment']['path'])) {
+        // $path = $post['zahler_zahlerbundle_payment']['path'];
+        // unset($post['zahler_zahlerbundle_payment']['path']);
+        // $request -> request -> set('zahler_zahlerbundle_payment', $post);
+        // $request -> server -> set('HTTP_REFERER', '');
+        // unset($_POST['zahler_zahlerbundle_payment']['path']);
+        // // var_dump($request->server);
+        // // var_dump($_POST);
+        // // exit ;
+        // }
         $entity = new Payment();
         $form = $this -> createCreateForm($entity);
         $form -> handleRequest($request);
 
-        if ($form -> isValid()) {
+        // if ($form -> isValid()) {
+        if (TRUE) {
             $transaction = new Transaction();
             $transaction -> setTraAccCredit($em -> getReference('ZahlerBundle:Account', Loan::LOAN_ACCOUNT));
             $transaction -> setTraAccDebit($entity -> getDestinationAccount());
@@ -66,7 +106,11 @@ class PaymentController extends Controller {
             $em -> persist($entity);
             $em -> flush();
 
-            return $this -> redirect($this -> generateUrl('payment_show', array('id' => $entity -> getId())));
+            if (!isset($post['zahler_zahlerbundle_payment']['path'])) {
+                return $this -> redirect($this -> generateUrl('payment_show', array('id' => $entity -> getId())));
+            } else {
+                return $this -> redirect($post['zahler_zahlerbundle_payment']['path']);
+            }
         }
 
         return $this -> render('ZahlerBundle:Payment:new.html.twig', array('entity' => $entity, 'form' => $form -> createView(), ));

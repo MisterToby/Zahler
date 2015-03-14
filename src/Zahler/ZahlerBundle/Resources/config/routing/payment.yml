@@ -9,6 +9,10 @@ payment_show:
 payment_new:
     path:     /new
     defaults: { _controller: "ZahlerBundle:Payment:new" }
+    
+payment_new_for_loan:
+    path:     /new_for_loan
+    defaults: { _controller: "ZahlerBundle:Payment:newForLoan" }
 
 payment_create:
     path:     /create

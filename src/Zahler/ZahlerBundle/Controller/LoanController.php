@@ -24,17 +24,40 @@ class LoanController extends Controller {
     public function indexAction() {
         $em = $this -> getDoctrine() -> getManager();
 
-        $qb = $em -> createQueryBuilder();
-        $qb -> select('loa, tra, per');
-        $qb -> from('ZahlerBundle:Loan', 'loa');
-        $qb -> join('loa.loaTra', 'tra');
-        $qb -> join('loa.loaPer', 'per');
-        $qb -> orderBy('loa.id');
+        $sql = "SELECT loan.loa_description,
+        loan.loa_interest_rate, 
+        loan.id AS loa_id,
+        transaction.tra_date,
+        transaction.tra_description,
+        transaction.tra_amount,
+        transaction.id,
+        person.per_name,
+        person.id,
+        loan.loa_tra_id,
+        loan.loa_per_id,
+        transaction.tra_acc_id_credit,
+        transaction.tra_acc_id_debit,
+        transaction.tra_amount - adduppayments(loan.id) AS balance
+        FROM loan INNER JOIN transaction ON loan.loa_tra_id = transaction.id
+        INNER JOIN person ON loan.loa_per_id = person.id
+        ORDER BY loan.id ASC";
 
-        $query = $qb -> getQuery();
-        $entities = $query -> getResult();
+        $connection = $em -> getConnection();
+        $result = $connection -> query($sql);
+        $records = $result -> fetchAll();
 
-        return $this -> render('ZahlerBundle:Loan:index.html.twig', array('entities' => $entities, Loan::LOAN_ACCOUNT));
+        // $qb = $em -> createQueryBuilder();
+        // $qb -> select('loa, tra, per');
+        // $qb -> from('ZahlerBundle:Loan', 'loa');
+        // $qb -> join('loa.loaTra', 'tra');
+        // $qb -> join('loa.loaPer', 'per');
+        // $qb -> orderBy('loa.id');
+        //
+        // $query = $qb -> getQuery();
+        // echo $query->getSQL();
+        // $entities = $query -> getResult();
+
+        return $this -> render('ZahlerBundle:Loan:index.html.twig', array('entities' => $records, Loan::LOAN_ACCOUNT));
     }
 
     /**

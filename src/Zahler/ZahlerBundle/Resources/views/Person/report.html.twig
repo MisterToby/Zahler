@@ -9,6 +9,7 @@
             <tr>
                 <th>Transaction id</th>
                 <th>Date</th>
+                <th>Description</th>
                 <th>Loan amount</th>
                 <th>Payment amount</th>
                 <th>Interest</th>
@@ -19,6 +20,11 @@
             <tr>
                 <td>{{ entity.id }}</td>
                 <td>{{ entity.traDate | date('Y-m-d') }}</td>
+                <td style="text-align: left;">
+                {% if entity.loans | length > 0 %}
+                    {{ entity.loans[0].loaDescription }}
+                {% endif %}
+                </td>
                 <td>
                 {% if entity.loans | length > 0 %}
                     $ {{ entity.traAmount | number_format(2, ',', '.') }}
