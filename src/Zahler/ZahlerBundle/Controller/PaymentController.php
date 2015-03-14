@@ -64,16 +64,6 @@ class PaymentController extends Controller {
     public function createAction(Request $request) {
         $em = $this -> getDoctrine() -> getManager();
         $post = $request -> request -> all();
-        // if (isset($post['zahler_zahlerbundle_payment']['path'])) {
-        // $path = $post['zahler_zahlerbundle_payment']['path'];
-        // unset($post['zahler_zahlerbundle_payment']['path']);
-        // $request -> request -> set('zahler_zahlerbundle_payment', $post);
-        // $request -> server -> set('HTTP_REFERER', '');
-        // unset($_POST['zahler_zahlerbundle_payment']['path']);
-        // // var_dump($request->server);
-        // // var_dump($_POST);
-        // // exit ;
-        // }
         $entity = new Payment();
         $form = $this -> createCreateForm($entity);
         $form -> handleRequest($request);
