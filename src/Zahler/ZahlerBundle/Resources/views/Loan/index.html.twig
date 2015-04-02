@@ -36,8 +36,8 @@
                     {{ entity['loa_description'] }}
                 </td>
                 <td>
-                        <a href="{{ path('loan_show', { 'id': entity.id }) }}">show</a>,
-                        <a href="{{ path('loan_edit', { 'id': entity.id }) }}">edit</a>,
+                        <a href="{{ path('loan_show', { 'id': entity.loa_id }) }}">show</a>,
+                        <a href="{{ path('loan_edit', { 'id': entity.loa_id }) }}">edit</a>,
                         <a href="{{ path('payment_new_for_loan', { 'loa_id': entity.loa_id, 'path': path('loan') }) }}">make payment</a>
                 </td>
             </tr>
