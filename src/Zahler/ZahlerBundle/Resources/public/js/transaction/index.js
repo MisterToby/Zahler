@@ -32,9 +32,9 @@ Ext.onReady(function() {
         }]
     });
 
-    // create the Data Store
+    var itemsPerPage = 30;
+
     var store = Ext.create('Ext.data.Store', {
-        // destroy the store if the grid is destroyed
         autoDestroy : true,
         model : 'Transaction',
         proxy : {
@@ -42,9 +42,11 @@ Ext.onReady(function() {
             url : prefijoUrl + 'transaction/retrieve/' + accId,
             reader : {
                 type : 'json',
-                root : 'rows'
+                root : 'rows',
+                totalProperty : 'total'
             }
         },
+        pageSize : itemsPerPage,
         listeners : {
             datachanged : function() {
                 for (var i = 0; i < store.getCount(); i++) {
@@ -90,7 +92,15 @@ Ext.onReady(function() {
 
     storeAccounts.load({
         callback : function() {
-            store.load();
+            store.load({
+                params : {
+                    start : 0,
+                    limit : itemsPerPage
+                },
+                callback : function() {
+                    store.loadPage(Math.ceil(store.getTotalCount() / itemsPerPage));
+                }
+            });
         }
     });
 
@@ -183,7 +193,7 @@ Ext.onReady(function() {
             labelWidth : 50,
             width : 300,
             readOnly : true,
-            value: accName
+            value : accName
         }, '->', '-', {
             xtype : 'button',
             iconCls : 'refresh',
@@ -335,7 +345,13 @@ Ext.onReady(function() {
         height : 400,
         // title : 'Transactions',
         frame : true,
-        plugins : [rowEditing]
+        plugins : [rowEditing],
+        dockedItems : [{
+            xtype : 'pagingtoolbar',
+            store : store,
+            dock : 'bottom',
+            displayInfo : true
+        }]
     });
 
     Ext.create('Ext.container.Viewport', {

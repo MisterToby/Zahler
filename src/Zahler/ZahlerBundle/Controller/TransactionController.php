@@ -83,17 +83,26 @@ class TransactionController extends Controller {
 
     public function retrieveAction($accId) {
         $em = $this -> getDoctrine() -> getManager();
+        $request = Request::createFromGlobals();
+        $get = $request->query->all();
 
         // $entities = $em->getRepository('ZahlerBundle:Transaction')->findAll();
-
+        
         $qb = $em -> createQueryBuilder();
-        $qb -> select('tra, accDebit, accCredit');
+        $qb -> select('COUNT(tra)');
         $qb -> from('ZahlerBundle:Transaction', 'tra');
         $qb -> join('tra.traAccDebit', 'accDebit');
         $qb -> join('tra.traAccCredit', 'accCredit');
         $qb -> where("tra.traAccCredit = $accId OR tra.traAccDebit = $accId");
+        
+        $query = $qb -> getQuery();
+        $total = $query -> getSingleScalarResult();
+        
+        $qb -> select('tra, accDebit, accCredit');
         $qb -> orderBy('tra.traDate');
         $qb -> addOrderBy('tra.id');
+        $qb -> setFirstResult($get['start']);
+        $qb -> setMaxResults($get['limit']);
 
         $query = $qb -> getQuery();
         $entities = $query -> getArrayResult();
@@ -114,8 +123,12 @@ class TransactionController extends Controller {
             $entities[$key]['balance'] = $balance;
             $entities[$key]['date'] = $entity['traDate'] -> format('Y-m-d');
         }
+        
+        $array = array();
+        $array['rows'] = $entities;
+        $array['total'] = $total;
 
-        return new Response(json_encode($entities));
+        return new Response(json_encode($array));
     }
 
     /**
