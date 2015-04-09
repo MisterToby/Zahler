@@ -84,20 +84,20 @@ class TransactionController extends Controller {
     public function retrieveAction($accId) {
         $em = $this -> getDoctrine() -> getManager();
         $request = Request::createFromGlobals();
-        $get = $request->query->all();
+        $get = $request -> query -> all();
 
         // $entities = $em->getRepository('ZahlerBundle:Transaction')->findAll();
-        
+
         $qb = $em -> createQueryBuilder();
         $qb -> select('COUNT(tra)');
         $qb -> from('ZahlerBundle:Transaction', 'tra');
         $qb -> join('tra.traAccDebit', 'accDebit');
         $qb -> join('tra.traAccCredit', 'accCredit');
         $qb -> where("tra.traAccCredit = $accId OR tra.traAccDebit = $accId");
-        
+
         $query = $qb -> getQuery();
         $total = $query -> getSingleScalarResult();
-        
+
         $qb -> select('tra, accDebit, accCredit');
         $qb -> orderBy('tra.traDate');
         $qb -> addOrderBy('tra.id');
@@ -108,6 +108,19 @@ class TransactionController extends Controller {
         $entities = $query -> getArrayResult();
 
         $balance = 0;
+
+        if (isset($entities[0])) {
+            $entity = $entities[0];
+
+            $sql = "SELECT workoutbalancebeforetransaction($accId, {$entity['id']}) AS balance;";
+
+            $connection = $em -> getConnection();
+
+            $array = $connection -> query($sql) -> fetchAll();
+
+            $balance = $array[0]['balance'];
+        }
+
         foreach ($entities as $key => $entity) {
             if ($entity['traAccDebit']['id'] == $accId) {
                 $balance += $entity['traAmount'];
@@ -123,7 +136,7 @@ class TransactionController extends Controller {
             $entities[$key]['balance'] = $balance;
             $entities[$key]['date'] = $entity['traDate'] -> format('Y-m-d');
         }
-        
+
         $array = array();
         $array['rows'] = $entities;
         $array['total'] = $total;
