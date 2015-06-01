@@ -28,3 +28,8 @@ debtpayment_delete:
     path:     /{id}/delete
     defaults: { _controller: "ZahlerBundle:DebtPayment:delete" }
     requirements: { _method: post|delete }
+
+debtpayment_retrieve:
+    path:     /retrieve
+    defaults: { _controller: "ZahlerBundle:DebtPayment:retrieve" }
+

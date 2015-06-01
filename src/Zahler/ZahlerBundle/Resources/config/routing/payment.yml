@@ -32,3 +32,8 @@ payment_delete:
     path:     /{id}/delete
     defaults: { _controller: "ZahlerBundle:Payment:delete" }
     requirements: { _method: post|delete }
+
+payment_retrieve:
+    path:     /retrieve
+    defaults: { _controller: "ZahlerBundle:Payment:retrieve" }
+

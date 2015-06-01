@@ -1,0 +1,37 @@
+{
+    "name": "LoansDebts",
+    "settings": {
+        "cmd": {
+            "license": "commercial"
+        },
+        "canvasControls": {
+            "viewportSize": {
+                "name": "Auto Expand",
+                "builtIn": true,
+                "height": null,
+                "width": null
+            }
+        },
+        "urlPrefix": "",
+        "exportPath": ""
+    },
+    "xdsVersion": "3.2.0",
+    "xdsBuild": 193,
+    "schemaVersion": 1,
+    "upgradeVersion": 310000000001,
+    "framework": "ext41",
+    "viewOrderMap": {
+        "view": [
+            "fdd00fb5-a1a2-4a57-9437-867d562ab452"
+        ],
+        "store": [],
+        "controller": [],
+        "model": [],
+        "resource": [
+            "abf8257c-76a5-4180-b2a0-4b86e7918424"
+        ],
+        "app": [
+            "application"
+        ]
+    }
+}

@@ -32,4 +32,8 @@ person_delete:
 person_report:
     path:     /{id}/report
     defaults: { _controller: "ZahlerBundle:Person:report" }
+    
+person_retrieve:
+    path:     /retrieve
+    defaults: { _controller: "ZahlerBundle:Person:retrieve" }
 

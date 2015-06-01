@@ -20,7 +20,7 @@ loan_edit:
     defaults: { _controller: "ZahlerBundle:Loan:edit" }
 
 loan_update:
-    path:     /{id}/update
+    path:     /update/{id}
     defaults: { _controller: "ZahlerBundle:Loan:update" }
     requirements: { _method: post|put }
 
@@ -28,3 +28,8 @@ loan_delete:
     path:     /{id}/delete
     defaults: { _controller: "ZahlerBundle:Loan:delete" }
     requirements: { _method: post|delete }
+
+loan_retrieve:
+    path:     /retrieve
+    defaults: { _controller: "ZahlerBundle:Loan:retrieve" }
+

@@ -31,7 +31,8 @@ class LoanType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Zahler\ZahlerBundle\Entity\Loan'
+            'data_class' => 'Zahler\ZahlerBundle\Entity\Loan',
+            'csrf_protection'   => false
         ));
     }
 

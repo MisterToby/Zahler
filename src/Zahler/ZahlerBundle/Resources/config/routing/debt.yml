@@ -20,7 +20,7 @@ debt_edit:
     defaults: { _controller: "ZahlerBundle:Debt:edit" }
 
 debt_update:
-    path:     /{id}/update
+    path:     /update/{id}
     defaults: { _controller: "ZahlerBundle:Debt:update" }
     requirements: { _method: post|put }
 
@@ -28,3 +28,7 @@ debt_delete:
     path:     /{id}/delete
     defaults: { _controller: "ZahlerBundle:Debt:delete" }
     requirements: { _method: post|delete }
+
+debt_retrieve:
+    path:     /retrieve
+    defaults: { _controller: "ZahlerBundle:Debt:retrieve" }

@@ -31,7 +31,8 @@ class DebtType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Zahler\ZahlerBundle\Entity\Debt'
+            'data_class' => 'Zahler\ZahlerBundle\Entity\Debt',
+            'csrf_protection'   => false
         ));
     }
 

@@ -3,6 +3,7 @@
 namespace Zahler\ZahlerBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Zahler\ZahlerBundle\Entity\Loan;
@@ -16,6 +17,42 @@ use \DateTime;
  *
  */
 class LoanController extends Controller {
+    public function retrieveAction(Request $request) {
+        $get = $request -> query -> all();
+        $em = $this -> getDoctrine() -> getManager();
+
+        $qb = $em -> createQueryBuilder();
+        $qb -> select('COUNT(loa)');
+        $qb -> from('ZahlerBundle:Loan', 'loa');
+        $qb -> where("loa.loaPer = {$get['person_id']}");
+
+        $query = $qb -> getQuery();
+        $count = $query -> getSingleScalarResult();
+
+        $sql = "SELECT loan.id AS loa_id, *
+        FROM loan, transaction
+        WHERE loa_tra_id = transaction.id AND
+        loa_per_id = {$get['person_id']}
+        ORDER BY tra_date, loan.id ASC
+        OFFSET {$get['start']}
+        LIMIT {$get['limit']}";
+
+        $connection = $em -> getConnection();
+        $result = $connection -> query($sql);
+        $records = $result -> fetchAll();
+
+        $array = array();
+        $array['rows'] = $records;
+        $array['count'] = $count;
+
+        return new Response(json_encode($array));
+    }
+
+    public function loans_debtsAction() {
+        $array = array();
+        $array['prefijo_url'] = $this -> get('router') -> generate('root');
+        return $this -> render('ZahlerBundle:Loan:loans_debts.html.twig', $array);
+    }
 
     /**
      * Lists all Loan entities.
@@ -201,7 +238,8 @@ class LoanController extends Controller {
 
             $em -> flush();
 
-            return $this -> redirect($this -> generateUrl('loan_edit', array('id' => $id)));
+            // return $this -> redirect($this -> generateUrl('loan_edit', array('id' => $id)));
+            return new Response('Ok');
         }
 
         return $this -> render('ZahlerBundle:Loan:edit.html.twig', array('entity' => $entity, 'edit_form' => $editForm -> createView(), 'delete_form' => $deleteForm -> createView(), ));

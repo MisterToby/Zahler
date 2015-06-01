@@ -3,6 +3,7 @@
 namespace Zahler\ZahlerBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Zahler\ZahlerBundle\Entity\Payment;
@@ -16,7 +17,36 @@ use \DateTime;
  *
  */
 class PaymentController extends Controller {
+    public function retrieveAction(Request $request) {
+        $get = $request -> query -> all();
+        $em = $this -> getDoctrine() -> getManager();
 
+        $qb = $em -> createQueryBuilder();
+        $qb -> select('COUNT(pay)');
+        $qb -> from('ZahlerBundle:Payment', 'pay');
+        $qb -> where("pay.payLoa = {$get['loa_id']}");
+
+        $query = $qb -> getQuery();
+        $count = $query -> getSingleScalarResult();
+
+        $sql = "SELECT payment.id AS pay_id, *
+        FROM payment, transaction
+        WHERE pay_tra_id = transaction.id AND
+        pay_loa_id = {$get['loa_id']}
+        ORDER BY tra_date, payment.id ASC
+        OFFSET {$get['start']}
+        LIMIT {$get['limit']}";
+
+        $connection = $em -> getConnection();
+        $result = $connection -> query($sql);
+        $records = $result -> fetchAll();
+
+        $array = array();
+        $array['rows'] = $records;
+        $array['count'] = $count;
+
+        return new Response(json_encode($array));
+    }
     /**
      * Displays a form to create a new Payment entity for a specific loan
      *

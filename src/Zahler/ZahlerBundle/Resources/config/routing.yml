@@ -48,3 +48,8 @@ login_check:
 
 logout:
     path:     /logout
+
+loans_debts:
+    path:     /loans_debts
+    defaults: { _controller: "ZahlerBundle:Loan:loans_debts" }
+

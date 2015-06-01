@@ -3,6 +3,7 @@
 namespace Zahler\ZahlerBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Zahler\ZahlerBundle\Entity\DebtPayment;
@@ -18,7 +19,36 @@ use \DateTime;
  */
 class DebtPaymentController extends Controller
 {
+    public function retrieveAction(Request $request) {
+        $get = $request -> query -> all();
+        $em = $this -> getDoctrine() -> getManager();
 
+        $qb = $em -> createQueryBuilder();
+        $qb -> select('COUNT(dep)');
+        $qb -> from('ZahlerBundle:DebtPayment', 'dep');
+        $qb -> where("dep.depDeb = {$get['deb_id']}");
+
+        $query = $qb -> getQuery();
+        $count = $query -> getSingleScalarResult();
+
+        $sql = "SELECT debt_payment.id AS pay_id, *
+        FROM debt_payment, transaction
+        WHERE dep_tra_id = transaction.id AND
+        dep_deb_id = {$get['deb_id']}
+        ORDER BY tra_date, debt_payment.id ASC
+        OFFSET {$get['start']}
+        LIMIT {$get['limit']}";
+
+        $connection = $em -> getConnection();
+        $result = $connection -> query($sql);
+        $records = $result -> fetchAll();
+
+        $array = array();
+        $array['rows'] = $records;
+        $array['count'] = $count;
+
+        return new Response(json_encode($array));
+    }
     /**
      * Lists all DebtPayment entities.
      *

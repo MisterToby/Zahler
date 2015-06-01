@@ -77,7 +77,6 @@ Ext.onReady(function() {
     });
 
     var storeAccounts = Ext.create('Ext.data.Store', {
-        // destroy the store if the grid is destroyed
         autoDestroy : true,
         model : 'Account',
         proxy : {
@@ -182,8 +181,6 @@ Ext.onReady(function() {
         }
     });
 
-    // create the grid and specify what field you want
-    // to use for the editor at each column.
     var grid = Ext.create('Ext.grid.Panel', {
         region : 'center',
         store : store,

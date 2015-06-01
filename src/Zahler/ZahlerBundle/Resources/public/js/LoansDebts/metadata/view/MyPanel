@@ -1,0 +1,454 @@
+{
+    "type": "Ext.panel.Panel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "container|align": "stretch",
+        "designer|initialView": true,
+        "designer|userClassName": "MyPanel",
+        "height": 489,
+        "layout": "vbox",
+        "title": "",
+        "width": 658
+    },
+    "name": "MyPanel",
+    "designerId": "fdd00fb5-a1a2-4a57-9437-867d562ab452",
+    "cn": [
+        {
+            "type": "Ext.grid.Panel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "layout|flex": 1,
+                "title": "People"
+            },
+            "name": "MyGridPanel",
+            "designerId": "ed927571-6e14-4d5b-bd37-a0ee09438fcd",
+            "cn": [
+                {
+                    "type": "Ext.grid.column.Number",
+                    "reference": {
+                        "name": "columns",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "dataIndex": "number",
+                        "text": "Id"
+                    },
+                    "name": "MyNumberColumn",
+                    "designerId": "af8cf4bd-f1e5-437b-b137-56c40472c5b8"
+                },
+                {
+                    "type": "Ext.grid.column.Column",
+                    "reference": {
+                        "name": "columns",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "dataIndex": "string",
+                        "text": "Name"
+                    },
+                    "name": "MyColumn",
+                    "designerId": "3d93de90-5ee3-4e4f-9238-f810206cd37c"
+                },
+                {
+                    "type": "Ext.grid.column.Number",
+                    "reference": {
+                        "name": "columns",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "dataIndex": "number",
+                        "text": "Loans"
+                    },
+                    "name": "MyNumberColumn1",
+                    "designerId": "172762c2-6bdb-4c05-868d-4bc6382212f0"
+                },
+                {
+                    "type": "Ext.grid.column.Number",
+                    "reference": {
+                        "name": "columns",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "dataIndex": "number",
+                        "text": "Debts"
+                    },
+                    "name": "MyNumberColumn2",
+                    "designerId": "932bdf39-7654-4608-8588-aac926a498c6"
+                },
+                {
+                    "type": "Ext.grid.column.Number",
+                    "reference": {
+                        "name": "columns",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "dataIndex": "number",
+                        "text": "Total"
+                    },
+                    "name": "MyNumberColumn3",
+                    "designerId": "0adcc5e9-3b56-4ef3-82c0-ca4931499731"
+                },
+                {
+                    "type": "Ext.grid.View",
+                    "reference": {
+                        "name": "viewConfig",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "name": "MyGridView",
+                    "designerId": "1200d31a-92c9-4820-839d-b32915ef0d76"
+                }
+            ]
+        },
+        {
+            "type": "Ext.panel.Panel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "container|align": "stretch",
+                "height": 173,
+                "layout": "hbox",
+                "layout|flex": 1,
+                "title": ""
+            },
+            "name": "MyPanel1",
+            "designerId": "617f1124-1ec0-4ce1-8f2b-3bfb8dd15129",
+            "cn": [
+                {
+                    "type": "Ext.grid.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "layout|flex": 1,
+                        "title": "Loans"
+                    },
+                    "name": "MyGridPanel1",
+                    "designerId": "19e2460c-f645-43e2-b4fa-105e78523cd7",
+                    "cn": [
+                        {
+                            "type": "Ext.grid.column.Number",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "number",
+                                "text": "Id"
+                            },
+                            "name": "MyNumberColumn4",
+                            "designerId": "ad36bebd-dd8c-4e89-87ca-a556ecad0f07"
+                        },
+                        {
+                            "type": "Ext.grid.column.Date",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "date",
+                                "text": "Date"
+                            },
+                            "name": "MyDateColumn",
+                            "designerId": "3ef7deeb-bdb9-46dd-974f-1d3dd85045ea"
+                        },
+                        {
+                            "type": "Ext.grid.column.Number",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "number",
+                                "text": "Interest rate"
+                            },
+                            "name": "MyNumberColumn6",
+                            "designerId": "923d7980-90c2-482e-8f21-6ac31b76c345"
+                        },
+                        {
+                            "type": "Ext.grid.column.Number",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "number",
+                                "text": "Amount"
+                            },
+                            "name": "MyNumberColumn13",
+                            "designerId": "fb8df42d-69ee-4672-9009-d0c4d7170240"
+                        },
+                        {
+                            "type": "Ext.grid.View",
+                            "reference": {
+                                "name": "viewConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "name": "MyGridView1",
+                            "designerId": "c3f600a0-441f-4946-bbfa-93379f2ca39a"
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.grid.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "layout|flex": 1,
+                        "title": "Debts"
+                    },
+                    "name": "MyGridPanel2",
+                    "designerId": "f25a183d-fe26-472f-9acc-be0c689f17c6",
+                    "cn": [
+                        {
+                            "type": "Ext.grid.column.Number",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "number",
+                                "text": "Id"
+                            },
+                            "name": "MyNumberColumn5",
+                            "designerId": "3dc0fe9e-4b95-4cf9-8539-f20b0fbb56a9"
+                        },
+                        {
+                            "type": "Ext.grid.column.Date",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "date",
+                                "text": "Date"
+                            },
+                            "name": "MyDateColumn1",
+                            "designerId": "098310e0-c517-4ee4-b988-e8daeaf797a2"
+                        },
+                        {
+                            "type": "Ext.grid.column.Number",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "number",
+                                "text": "Interest rate"
+                            },
+                            "name": "MyNumberColumn7",
+                            "designerId": "e298533d-3420-42ba-9058-7f4caf2bcaee"
+                        },
+                        {
+                            "type": "Ext.grid.column.Number",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "number",
+                                "text": "Amount"
+                            },
+                            "name": "MyNumberColumn14",
+                            "designerId": "3411f0d9-f2a4-4e1a-b2b0-96e458d67887"
+                        },
+                        {
+                            "type": "Ext.grid.View",
+                            "reference": {
+                                "name": "viewConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "name": "MyGridView2",
+                            "designerId": "54470c1a-e2b7-4010-bb0c-f61f92a9b80c"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Ext.panel.Panel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "container|align": "stretch",
+                "layout": "hbox",
+                "layout|flex": 1,
+                "title": ""
+            },
+            "name": "MyPanel2",
+            "designerId": "a6fc15d6-d9db-4c58-a17f-c0882ed9dadb",
+            "cn": [
+                {
+                    "type": "Ext.grid.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "layout|flex": 1,
+                        "title": "Payments"
+                    },
+                    "name": "MyGridPanel4",
+                    "designerId": "c87e31ac-8659-456b-9b96-67e6d58cd24e",
+                    "cn": [
+                        {
+                            "type": "Ext.grid.column.Number",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "number",
+                                "text": "Transaction"
+                            },
+                            "name": "MyNumberColumn9",
+                            "designerId": "6d5de40c-5098-4597-a64e-6f2fad08dc33"
+                        },
+                        {
+                            "type": "Ext.grid.column.Date",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "date",
+                                "text": "Date"
+                            },
+                            "name": "MyDateColumn3",
+                            "designerId": "c2bf1bfd-43dc-409a-94fc-4d16a0fc3da2"
+                        },
+                        {
+                            "type": "Ext.grid.column.Number",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "number",
+                                "text": "Amount"
+                            },
+                            "name": "MyNumberColumn10",
+                            "designerId": "3e7653e8-6f02-4f85-b478-224d5b7b0d19"
+                        },
+                        {
+                            "type": "Ext.grid.View",
+                            "reference": {
+                                "name": "viewConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "name": "MyGridView4",
+                            "designerId": "664f9698-729a-4308-8256-4baf6de9e622"
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.grid.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "layout|flex": 1,
+                        "title": "Payments"
+                    },
+                    "name": "MyGridPanel3",
+                    "designerId": "2004a6cc-e332-4c58-ae26-5d3e46e3efad",
+                    "cn": [
+                        {
+                            "type": "Ext.grid.column.Number",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "number",
+                                "text": "Transaction"
+                            },
+                            "name": "MyNumberColumn8",
+                            "designerId": "a5d509a5-dafe-4725-a058-0e286af9eea7"
+                        },
+                        {
+                            "type": "Ext.grid.column.Date",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "date",
+                                "text": "Date"
+                            },
+                            "name": "MyDateColumn2",
+                            "designerId": "e69e68f6-68d5-4df5-8ccc-8e7e3ca06e8d"
+                        },
+                        {
+                            "type": "Ext.grid.column.Number",
+                            "reference": {
+                                "name": "columns",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "dataIndex": "number",
+                                "text": "Amount"
+                            },
+                            "name": "MyNumberColumn11",
+                            "designerId": "508cea5e-5cfb-4a19-ae29-e05ea1716ac8"
+                        },
+                        {
+                            "type": "Ext.grid.View",
+                            "reference": {
+                                "name": "viewConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "name": "MyGridView3",
+                            "designerId": "6abe1b7b-d305-4ddf-a57e-7eb2f55c4497"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
