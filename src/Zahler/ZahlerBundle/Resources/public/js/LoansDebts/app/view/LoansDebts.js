@@ -130,31 +130,6 @@ Ext.define('LoansDebtsApp.view.LoansDebts', {
             }
         });
 
-        Ext.define('LoanPayment', {
-            extend : 'Ext.data.Model',
-            fields : [{
-                name : 'pay_tra_id'
-            }, {
-                name : 'tra_date'
-            }, {
-                name : 'tra_amount'
-            }]
-        });
-
-        var loanPaymentStore = Ext.create('Ext.data.Store', {
-            model : 'LoanPayment',
-            pageSize : pageSize,
-            proxy : {
-                type : 'ajax',
-                url : prefijoUrl + 'payment/retrieve',
-                reader : {
-                    type : 'json',
-                    root : 'rows',
-                    totalProperty : 'count'
-                }
-            }
-        });
-
         Ext.define('DebtPayment', {
             extend : 'Ext.data.Model',
             fields : [{
@@ -179,78 +154,6 @@ Ext.define('LoansDebtsApp.view.LoansDebts', {
                 }
             }
         });
-
-        var panel = {
-            xtype : 'panel',
-            flex : 1,
-            title : '',
-            layout : {
-                type : 'hbox',
-                align : 'stretch'
-            },
-            items : [{
-                xtype : 'gridpanel',
-                flex : 1,
-                title : 'Payments',
-                store : loanPaymentStore,
-                columns : [{
-                    dataIndex : 'pay_tra_id',
-                    text : 'Transaction'
-                }, {
-                    xtype : 'datecolumn',
-                    dataIndex : 'tra_date',
-                    text : 'Date',
-                    format : 'Y-m-d'
-                }, {
-                    xtype : 'numbercolumn',
-                    dataIndex : 'tra_amount',
-                    text : 'Amount'
-                }, {
-                    dataIndex : 'interest',
-                    text : 'Interest transaction',
-                    width : 112
-                }, {
-                    dataIndex : 'interest',
-                    text : 'Interest'
-                }],
-                dockedItems : [{
-                    xtype : 'pagingtoolbar',
-                    store : loanPaymentStore,
-                    dock : 'bottom',
-                    displayInfo : true
-                }]
-            }, {
-                xtype : 'gridpanel',
-                flex : 1,
-                title : 'Payments',
-                store : debtPaymentStore,
-                columns : [{
-                    dataIndex : 'dep_tra_id',
-                    text : 'Transaction'
-                }, {
-                    xtype : 'datecolumn',
-                    dataIndex : 'tra_date',
-                    text : 'Date'
-                }, {
-                    xtype : 'numbercolumn',
-                    dataIndex : 'tra_amount',
-                    text : 'Amount'
-                }, {
-                    dataIndex : 'interest',
-                    text : 'Interest transaction',
-                    width : 112
-                }, {
-                    dataIndex : 'interest',
-                    text : 'Interest'
-                }],
-                dockedItems : [{
-                    xtype : 'pagingtoolbar',
-                    store : debtPaymentStore,
-                    dock : 'bottom',
-                    displayInfo : true
-                }]
-            }]
-        };
 
         Ext.define('Account', {
             extend : 'Ext.data.Model',
@@ -282,6 +185,235 @@ Ext.define('LoansDebtsApp.view.LoansDebts', {
         });
 
         storeAccounts.load();
+
+        Ext.define('LoanPayment', {
+            extend : 'Ext.data.Model',
+            fields : [{
+                name : 'pay_id'
+            }, {
+                name : 'pay_tra_id'
+            }, {
+                name : 'tra_date',
+                type : 'date',
+                dateFormat : 'Y-m-d'
+            }, {
+                name : 'tra_amount'
+            }, {
+                name : 'tra_acc_id_debit'
+            }, {
+                name : 'pay_tra_id_interest'
+            }, {
+                name : 'interest_amount'
+            }]
+        });
+
+        var loanPaymentStore = Ext.create('Ext.data.Store', {
+            model : 'LoanPayment',
+            pageSize : pageSize,
+            proxy : {
+                type : 'ajax',
+                url : prefijoUrl + 'payment/retrieve',
+                reader : {
+                    type : 'json',
+                    root : 'rows',
+                    totalProperty : 'count'
+                }
+            },
+            listeners : {
+                datachanged : function() {
+                    for (var i = 0; i < loanPaymentStore.getCount(); i++) {
+                        var record = loanPaymentStore.getAt(i);
+                        if (record.get('pay_id') == '') {
+                            return true;
+                        }
+                    };
+                    loanPaymentStore.loadData([['', '', new Date(), '']], true);
+                }
+            }
+        });
+
+        var loan_payments_window = Ext.create('Ext.window.Window', {
+            title : 'Loan payments',
+            width : 829,
+            height : 375,
+            layout : 'fit',
+            closeAction : 'hide',
+            items : [{
+                xtype : 'gridpanel',
+                flex : 1,
+                store : loanPaymentStore,
+                columns : [{
+                    dataIndex : 'pay_tra_id',
+                    text : 'Transaction'
+                }, {
+                    xtype : 'datecolumn',
+                    dataIndex : 'tra_date',
+                    text : 'Date',
+                    format : 'Y-m-d',
+                    renderer : Ext.util.Format.dateRenderer('Y-m-d'),
+                    editor : {
+                        xtype : 'datefield',
+                        format : 'Y-m-d',
+                    }
+                }, {
+                    xtype : 'numbercolumn',
+                    dataIndex : 'tra_amount',
+                    text : 'Amount',
+                    editor : {
+                        xtype : 'numberfield'
+                    }
+                }, {
+                    header : 'Destination account',
+                    dataIndex : 'tra_acc_id_debit',
+                    flex : 1,
+                    renderer : function(value) {
+                        var record = storeAccounts.findRecord('id', value);
+                        if (record != null) {
+                            return record.get('fullName');
+                        } else {
+                            return value;
+                        }
+                    },
+                    editor : {
+                        xtype : 'combo',
+                        allowBlank : false,
+                        store : storeAccounts,
+                        valueField : 'id',
+                        displayField : 'fullName',
+                        queryMode : 'local'
+                    }
+                }, {
+                    dataIndex : 'pay_tra_id_interest',
+                    text : 'Interest transaction',
+                    width : 112
+                }, {
+                    xtype : 'numbercolumn',
+                    dataIndex : 'interest_amount',
+                    text : 'Interest',
+                    editor : {
+                        xtype : 'numberfield'
+                    }
+                }, {
+                    xtype : 'actioncolumn',
+                    width : 30,
+                    items : [{
+                        icon : resourcesPath + 'images/delete.png',
+                        tooltip : 'Delete payment',
+                        handler : function(grid, rowIndex, colIndex) {
+                            var callback = function(button) {
+                                if (button == 'yes') {
+                                    var record = loanPaymentStore.getAt(rowIndex);
+                                    var params = {
+                                        '_method' : 'DELETE'
+                                    };
+                                    Ext.Ajax.request({
+                                        url : prefijoUrl + 'payment/delete/' + record.get('pay_id'),
+                                        params : params,
+                                        success : function(response) {
+                                            var text = response.responseText;
+                                            loanPaymentStore.load();
+                                        },
+                                        failure : function(response) {
+                                            var text = response.responseText;
+                                            loanPaymentStore.load();
+                                        }
+                                    });
+                                }
+                            };
+                            Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete this payment?', callback);
+                        }
+                    }]
+                }],
+                dockedItems : [{
+                    xtype : 'pagingtoolbar',
+                    store : loanPaymentStore,
+                    dock : 'bottom',
+                    displayInfo : true
+                }],
+                plugins : [Ext.create('Ext.grid.plugin.RowEditing', {
+                    clicksToEdit : 2,
+                    listeners : {
+                        edit : function(editor, e) {
+                            var params = {
+                                'zahler_zahlerbundle_payment[date][year]' : Ext.Date.format(e.record.get('tra_date'), 'Y'),
+                                'zahler_zahlerbundle_payment[date][month]' : parseInt(Ext.Date.format(e.record.get('tra_date'), 'm')),
+                                'zahler_zahlerbundle_payment[date][day]' : parseInt(Ext.Date.format(e.record.get('tra_date'), 'd')),
+                                'zahler_zahlerbundle_payment[destinationAccount]' : e.record.get('tra_acc_id_debit'),
+                                'zahler_zahlerbundle_payment[amount]' : e.record.get('tra_amount'),
+                                'zahler_zahlerbundle_payment[interest]' : e.record.get('interest_amount'),
+                                'zahler_zahlerbundle_payment[payLoa]' : Ext.getCmp('loans_gridpanel').getSelectionModel().getLastSelected().get('loa_id')
+                            };
+                            if (e.record.get('pay_id') == '') {
+                                Ext.Ajax.request({
+                                    url : prefijoUrl + 'payment/create',
+                                    params : params,
+                                    success : function(response) {
+                                        var text = response.responseText;
+                                        loanPaymentStore.load();
+                                    },
+                                    failure : function(response) {
+                                        var text = response.responseText;
+                                        loanPaymentStore.load();
+                                    }
+                                });
+                            } else {
+                                params._method = 'PUT';
+                                Ext.Ajax.request({
+                                    url : prefijoUrl + 'payment/update/' + e.record.get('pay_id'),
+                                    params : params,
+                                    success : function(response) {
+                                        var text = response.responseText;
+                                        loanPaymentStore.load();
+                                    },
+                                    failure : function(response) {
+                                        var text = response.responseText;
+                                        loanPaymentStore.load();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                })]
+            }]
+        });
+
+        var debt_payments_window = Ext.create('Ext.window.Window', {
+            title : 'Debt payments',
+            width : 561,
+            height : 324,
+            layout : 'fit',
+            closeAction : 'hide',
+            items : [{
+                xtype : 'gridpanel',
+                flex : 1,
+                store : debtPaymentStore,
+                columns : [{
+                    dataIndex : 'dep_tra_id',
+                    text : 'Transaction'
+                }, {
+                    xtype : 'datecolumn',
+                    dataIndex : 'tra_date',
+                    text : 'Date'
+                }, {
+                    xtype : 'numbercolumn',
+                    dataIndex : 'tra_amount',
+                    text : 'Amount'
+                }, {
+                    dataIndex : 'interest',
+                    text : 'Interest transaction',
+                    width : 112
+                }, {
+                    dataIndex : 'interest',
+                    text : 'Interest'
+                }],
+                dockedItems : [{
+                    xtype : 'pagingtoolbar',
+                    store : debtPaymentStore,
+                    dock : 'bottom',
+                    displayInfo : true
+                }]
+            }]
+        });
 
         Ext.applyIf(me, {
             items : [{
@@ -331,6 +463,7 @@ Ext.define('LoansDebtsApp.view.LoansDebts', {
                     }
                 }
             }, {
+                id : 'loans_gridpanel',
                 xtype : 'gridpanel',
                 flex : 1,
                 title : 'Loans',
@@ -392,6 +525,23 @@ Ext.define('LoansDebtsApp.view.LoansDebts', {
                     dataIndex : 'balance',
                     text : 'Balance'
                 }],
+                tbar : [{
+                    xtype : 'button',
+                    text : 'Payments',
+                    scale : 'large',
+                    handler : function() {
+                        // var sm = Ext.getCmp('loans_gridpanel').getSelectionModel();
+                        //
+                        // if (!sm.hasSelection()) {
+                        // Ext.Msg.alert('Information', 'Please select a loan first');
+                        // return;
+                        // }
+
+                        // var record = sm.getLastSelected();
+
+                        loan_payments_window.show();
+                    }
+                }, '-'],
                 dockedItems : [{
                     xtype : 'pagingtoolbar',
                     store : loanStore,
@@ -399,12 +549,14 @@ Ext.define('LoansDebtsApp.view.LoansDebts', {
                     displayInfo : true
                 }],
                 listeners : {
-                    select : function(rowModel, record) {
-                        loanPaymentStore.proxy.extraParams = {
-                            loa_id : record.get('loa_id')
-                        };
+                    select : function(sm, record) {
+                        if (record.get('loa_id') != '') {
+                            loanPaymentStore.proxy.extraParams = {
+                                loa_id : record.get('loa_id')
+                            };
 
-                        loanPaymentStore.load();
+                            loanPaymentStore.load();
+                        }
                     }
                 },
                 plugins : [Ext.create('Ext.grid.plugin.RowEditing', {
@@ -514,6 +666,23 @@ Ext.define('LoansDebtsApp.view.LoansDebts', {
                     dataIndex : 'balance',
                     text : 'Balance'
                 }],
+                tbar : [{
+                    xtype : 'button',
+                    text : 'Payments',
+                    scale : 'large',
+                    handler : function() {
+                        // var sm = Ext.getCmp('loans_gridpanel').getSelectionModel();
+                        //
+                        // if (!sm.hasSelection()) {
+                        // Ext.Msg.alert('Information', 'Please select a loan first');
+                        // return;
+                        // }
+
+                        // var record = sm.getLastSelected();
+
+                        debt_payments_window.show();
+                    }
+                }, '-'],
                 dockedItems : [{
                     xtype : 'pagingtoolbar',
                     store : debtStore,
@@ -522,11 +691,13 @@ Ext.define('LoansDebtsApp.view.LoansDebts', {
                 }],
                 listeners : {
                     select : function(rowModel, record) {
-                        debtPaymentStore.proxy.extraParams = {
-                            deb_id : record.get('deb_id')
-                        };
+                        if (record.get('deb_id') != '') {
+                            debtPaymentStore.proxy.extraParams = {
+                                deb_id : record.get('deb_id')
+                            };
 
-                        debtPaymentStore.load();
+                            debtPaymentStore.load();
+                        }
                     }
                 },
                 plugins : [Ext.create('Ext.grid.plugin.RowEditing', {

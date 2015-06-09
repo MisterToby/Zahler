@@ -24,12 +24,12 @@ payment_edit:
     defaults: { _controller: "ZahlerBundle:Payment:edit" }
 
 payment_update:
-    path:     /{id}/update
+    path:     /update/{id}
     defaults: { _controller: "ZahlerBundle:Payment:update" }
     requirements: { _method: post|put }
 
 payment_delete:
-    path:     /{id}/delete
+    path:     /delete/{id}
     defaults: { _controller: "ZahlerBundle:Payment:delete" }
     requirements: { _method: post|delete }
 

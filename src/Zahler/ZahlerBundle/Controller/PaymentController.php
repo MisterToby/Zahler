@@ -29,11 +29,18 @@ class PaymentController extends Controller {
         $query = $qb -> getQuery();
         $count = $query -> getSingleScalarResult();
 
-        $sql = "SELECT payment.id AS pay_id, *
-        FROM payment, transaction
-        WHERE pay_tra_id = transaction.id AND
+        $sql = "SELECT payment.id AS pay_id,
+        payment_transaction.id AS pay_tra_id,
+        payment_transaction.tra_date AS tra_date,
+        payment_transaction.tra_amount AS tra_amount,
+        payment_transaction.tra_acc_id_debit AS tra_acc_id_debit,
+        pay_tra_id_interest,
+        interest_transaction.tra_amount AS interest_amount
+        FROM payment LEFT JOIN transaction AS interest_transaction ON (pay_tra_id_interest = interest_transaction.id),
+        transaction AS payment_transaction
+        WHERE pay_tra_id = payment_transaction.id AND
         pay_loa_id = {$get['loa_id']}
-        ORDER BY tra_date, payment.id ASC
+        ORDER BY payment_transaction.tra_date, payment.id ASC
         OFFSET {$get['start']}
         LIMIT {$get['limit']}";
 
@@ -47,6 +54,7 @@ class PaymentController extends Controller {
 
         return new Response(json_encode($array));
     }
+
     /**
      * Displays a form to create a new Payment entity for a specific loan
      *
@@ -284,24 +292,26 @@ class PaymentController extends Controller {
      *
      */
     public function deleteAction(Request $request, $id) {
-        $form = $this -> createDeleteForm($id);
-        $form -> handleRequest($request);
+        // $form = $this -> createDeleteForm($id);
+        // $form -> handleRequest($request);
+        //
+        // if ($form -> isValid()) {
+        $em = $this -> getDoctrine() -> getManager();
+        $entity = $em -> getRepository('ZahlerBundle:Payment') -> find($id);
 
-        if ($form -> isValid()) {
-            $em = $this -> getDoctrine() -> getManager();
-            $entity = $em -> getRepository('ZahlerBundle:Payment') -> find($id);
-
-            if (!$entity) {
-                throw $this -> createNotFoundException('Unable to find Payment entity.');
-            }
-
-            $em -> remove($entity);
-            $em -> remove($entity -> getPayTra());
-            $em -> remove($entity -> getPayTraInterest());
-            $em -> flush();
+        if (!$entity) {
+            throw $this -> createNotFoundException('Unable to find Payment entity.');
         }
 
-        return $this -> redirect($this -> generateUrl('payment'));
+        $em -> remove($entity);
+        $em -> remove($entity -> getPayTra());
+        if ($entity -> getPayTraInterest() !== NULL) {
+            $em -> remove($entity -> getPayTraInterest());
+        }
+        $em -> flush();
+        // }
+
+        return new Response('Ok');
     }
 
     /**
